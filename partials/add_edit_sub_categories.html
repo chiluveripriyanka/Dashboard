@@ -5,12 +5,12 @@
                 <div class="col-lg-12">
                     <div class="breadcome-list map-mg-t-40-gl shadow-reset">
                         <div class="breadcome-heading">
-                            <h2>Add / Edit Categories</h2>
+                            <h2>Add / Edit Sub Categories</h2>
                         </div>
                         <ul class="breadcome-menu">
                             <li><a href="#">Home</a> <span class="bread-slash">/</span>
                             </li>
-                            <li><span class="bread-blod">Add / Edit Categories</span>
+                            <li><span class="bread-blod">Add / Edit Sub Categories</span>
                             </li>
                         </ul>
                     </div>
@@ -25,8 +25,6 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="admintab-wrap mg-b-40">
-                        <a href="#/add_edit_sub_categories"><button type="button" class="btn btn-custon-four btn-primary pull-right mg-t-50 mg-b-20 mg-l-20">Add/Edit Sub Categories</button></a>
-                        <a href="#/add_edit_categories"><button type="button" class="btn btn-custon-four btn-primary pull-right mg-t-50 mg-b-20">Add/Edit Categories</button></a>
                         <ul class="nav nav-tabs custom-menu-wrap custon-tab-menu-style1">
                             
                             <!-- <li><a data-toggle="tab" href="#edit_category"><span class="adminpro-icon adminpro-analytics-arrow tab-custon-ic"></span>Edit Category</a>
@@ -41,10 +39,10 @@
                                                 <div class="basic-login-form-ad">
                                                     <div class="row">
                                                         <div class="col-lg-8">
-                                                            <div  ng-controller="AddCategoryController">
+                                                            <div  ng-controller="AddSubCategoryController">
                                                             
                                                             <div class="all-form-element-inner">
-                                                                <form name="addCategoryForm" id="addCategoryForm" ng-submit="submitCategoryForm()" novalidate enctype="multipart/form-data">
+                                                                <form name="addSubCategoryForm" id="addSubCategoryForm" ng-submit="submitSubCategoryForm()" novalidate enctype="multipart/form-data">
                                                                     <div class="form-group-inner">
                                                                         <div class="row mg-b-10" >
                                                                             <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
@@ -61,10 +59,10 @@
                                                                                                  ngf-model-invalid="errorFile">
                                                                                         </div>
                                                                                         <input type="text" id="append-small-btn" placeholder="no file selected">
-                                                                                        <div class="text-left mg-b-30" ng-show="addCategoryForm.file.$error.required">Upload image is required</i><br>
-                                                                                          <i ng-show="addCategoryForm.file.$error.maxSize">File too large 
+                                                                                        <div class="text-left mg-b-30" ng-show="addSubCategoryForm.file.$error.required">Upload image is required</i><br>
+                                                                                          <i ng-show="addSubCategoryForm.file.$error.maxSize">File too large 
                                                                                               {{errorFile.size / 1000000|number:1}}MB: max 2M</i>
-                                                                                          <img ng-show="addCategoryForm.file.$valid" ngf-thumbnail="picFile" class="thumb"> <button ng-click="picFile = null" ng-show="picFile">Remove</button>
+                                                                                          <img ng-show="addSubCategoryForm.file.$valid" ngf-thumbnail="picFile" class="thumb"> <button ng-click="picFile = null" ng-show="picFile">Remove</button>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -77,9 +75,19 @@
                                                                                 <label class="login2 pull-right pull-right-pro">Category Name</label>
                                                                             </div>
                                                                             <div class="col-lg-9">
-                                                                                <input type="text" class="form-control" name="category_name" ng-model="category_name" required>
+                                                                                <input type="text" class="form-control" name="sub_category_name" ng-model="sub_category_name" required>
                                                                             </div>
-                                                                            <p ng-show="addCategoryForm.category_name.$invalid && !addCategoryForm.category_name.$pristine" class="help-block">Enter a Category Name.</p>
+                                                                            <p ng-show="addSubCategoryForm.sub_category_name.$invalid && !addSubCategoryForm.sub_category_name.$pristine" class="help-block">Enter a Category Name.</p>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group-inner">
+                                                                        <div class="row">
+                                                                            <div class="col-lg-3">
+                                                                                <label class="login2 pull-right pull-right-pro">Category Id</label>
+                                                                            </div>
+                                                                            <div class="col-lg-9">
+                                                                                <input type="text" class="form-control" name="cat_id" ng-model="cat_id">
+                                                                            </div>
                                                                         </div>
                                                                     </div>
                                                                     
@@ -90,7 +98,7 @@
                                                                                 <div class="col-lg-9">
                                                                                     <div class="login-horizental cancel-wp pull-left">
                                                                                         <button class="btn btn-white" type="submit">Cancel</button>
-                                                                                        <button class="btn btn-sm btn-primary login-submit-cs" ng-disabled="!addCategoryForm.$valid" ng-click="uploadPic(cat_img)">Submit</button>
+                                                                                        <button class="btn btn-sm btn-primary login-submit-cs" ng-disabled="!addSubCategoryForm.$valid" ng-click="uploadPic(cat_img)">Submit</button>
                                                                                           <span class="progress" ng-show="cat_img.progress >= 0">
                                                                                             <div style="width:{{cat_img.progress}}%" 
                                                                                                 ng-bind="cat_img.progress + '%'"></div>
