@@ -1,4 +1,4 @@
-var app = angular.module('admin_dashboard', ['datatables', 'ngRoute']);
+var app = angular.module('admin_dashboard', ['datatables', 'ngRoute', 'ngFileUpload']);
 app.run(['$rootScope', '$route', function ($rootScope, $route) {
    
 
