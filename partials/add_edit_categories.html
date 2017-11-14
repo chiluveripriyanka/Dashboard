@@ -1,0 +1,123 @@
+    <!-- Breadcome start-->
+    <div class="breadcome-area mg-b-30 mg-t-30">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcome-list map-mg-t-40-gl shadow-reset">
+                        <div class="breadcome-heading">
+                            <h2>Add / Edit Categories</h2>
+                        </div>
+                        <ul class="breadcome-menu">
+                            <li><a href="#">Home</a> <span class="bread-slash">/</span>
+                            </li>
+                            <li><span class="bread-blod">Add / Edit Categories</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Breadcome End-->
+    <!-- tabs start-->
+    <div class="admintab-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="admintab-wrap mg-b-40">
+                        <ul class="nav nav-tabs custom-menu-wrap custon-tab-menu-style1">
+                            <li class="active"><a data-toggle="tab" href="#add_category"><span class="adminpro-icon adminpro-analytics tab-custon-ic"></span>Add Category</a>
+                            </li>
+                            <!-- <li><a data-toggle="tab" href="#edit_category"><span class="adminpro-icon adminpro-analytics-arrow tab-custon-ic"></span>Edit Category</a>
+                            </li> -->
+                        </ul>
+                        <div class="tab-content">
+                            <div id="add_category" class="tab-pane in active animated flipInX custon-tab-style1">
+                                <div class="row">
+                <div class="col-lg-12">
+                    <div class="sparkline12-list mg-t-30">
+                        
+                        <div class="sparkline12-graph">
+                            <div class="basic-login-form-ad">
+                                <div class="row">
+                                    <div class="col-lg-8">
+                                        <div class="all-form-element-inner" ng-controller="AddCategoryController">
+                                            <form name="addCategoryForm" id="addCategoryForm" ng-submit="submitCategoryForm()" novalidate>
+                                                <div class="form-group-inner">
+                                                    <div class="row" ng-class="{ 'has-error' : addCategoryForm.email.$invalid && !addCategoryForm.email.$pristine }">
+                                                        <div class="col-lg-3">
+                                                            <label class="login2 pull-right pull-right-pro">Title</label>
+                                                        </div>
+                                                        <div class="col-lg-9">
+                                                            <input type="text" class="form-control" name="category_title" ng-model="category.category_title" required ng-minlength="3" ng-maxlength="8"/>
+                                                        </div>
+                                                        <p ng-show="addCategoryForm.category_title.$invalid && !addCategoryForm.category_title.$pristine && addCategoryForm.category_title.$error.minlength" class="help-block">Enter a Category Title.</p>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group-inner">
+                                                    <div class="row">
+                                                        <div class="col-lg-3">
+                                                            <label class="login2 pull-right pull-right-pro">Category Name</label>
+                                                        </div>
+                                                        <div class="col-lg-9">
+                                                            <input type="text" class="form-control" name="category_name" ng-model="category.category_name" required ng-minlength="3" ng-maxlength="8"/>
+                                                        </div>
+                                                        <p ng-show="addCategoryForm.category_name.$invalid && !addCategoryForm.category_name.$pristine && addCategoryForm.category_name.$error.minlength" class="help-block">Enter a Category Name.</p>
+                                                    </div>
+                                                </div>
+                                                <!-- <div class="form-group-inner">
+                                                    <div class="row">
+                                                        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+                                                            <label class="login2 pull-right pull-right-pro">File Upload System Right Icon</label>
+                                                        </div>
+                                                        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+                                                            <div class="file-upload-inner file-upload-inner-right ts-forms">
+                                                                <div class="input append-big-btn">
+                                                                    <label class="icon-left" for="append-big-btn">
+                                                                        <i class="fa fa-download"></i>
+                                                                    </label>
+                                                                    <div class="file-button">
+                                                                        Browse
+                                                                        <input type="file" onchange="document.getElementById('append-big-btn').value = this.value;">
+                                                                    </div>
+                                                                    <input type="text" id="append-big-btn" placeholder="no file selected">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div> -->
+                                                <div class="form-group-inner">
+                                                    <div class="login-btn-inner">
+                                                        <div class="row">
+                                                            <div class="col-lg-3"></div>
+                                                            <div class="col-lg-9">
+                                                                <div class="login-horizental cancel-wp pull-left">
+                                                                    <button class="btn btn-white" type="submit">Cancel</button>
+                                                                    <button class="btn btn-sm btn-primary login-submit-cs" type="submit" ng-disabled="addCategoryForm.$invalid">Save Change</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                            </div>
+                            <!-- <div id="edit_category" class="tab-pane animated flipInX custon-tab-style1">
+                                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
+                                <p>when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
+                            </div> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- tabs End-->
+   
