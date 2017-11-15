@@ -26,7 +26,7 @@ app.run(['$rootScope', '$route', function ($rootScope, $route) {
         // }
 
     });
-
+ 
     
 
     $rootScope.domainNameUrl = window.serverIP;
@@ -38,9 +38,14 @@ app.config(function ($routeProvider) {
     .when("/" , {
         templateUrl : "partials/login.html"
     })
+
     .when("/dashboard",{
         templateUrl : "partials/dashboard.html",
         controller: "dashboardController"
+    })
+    .when("/users",{
+        templateUrl : "partials/users.html",
+        controller: "usersController"
     })
 
     .when("/show_categories",{
@@ -104,6 +109,19 @@ app.controller('loginController', function($scope, $location) {
 });
 
 app.controller('dashboardController', function($scope,$http,DTOptionsBuilder, DTColumnBuilder) {
+    $scope.hideHeader = false;
+    $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/get_users_list').success(function(data) {
+        $scope.userData = data.data;
+        console.log(data.data);
+        $scope.vm = {};
+     
+            $scope.vm.dtOptions = DTOptionsBuilder.newOptions()
+              .withOption('order', [0, 'asc']);
+    });
+});
+
+
+app.controller('usersController', function($scope,$http,DTOptionsBuilder, DTColumnBuilder) {
     $scope.hideHeader = false;
     $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/get_users_list').success(function(data) {
         $scope.userData = data.data;
@@ -225,10 +243,13 @@ app.controller('AddSubCategoryController', ['$scope', 'Upload', '$timeout', func
 }]);
 
 app.controller('AddServicesController', ['$scope', 'Upload', '$timeout', function ($scope, Upload, $timeout) {
+    $scope.addServiceForm={"service_description":"","service_name":"","service_price":"","service_duration":"","sub_cat_id":""};
+    
     $scope.uploadServicePic = function(file) {
+        // console.log($scope);return;
         file.upload = Upload.upload({
           url: 'http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_services',
-          data: {service_name: $scope.service_name, sub_cat_id: $scope.sub_cat_id, service_img: $scope.service_img, service_description: $scope.service_description, service_price: $scope.service_price,service_duration:$scope.service_duration},
+          data: {service_name: $scope.addServiceForm.service_name, sub_cat_id: $scope.addServiceForm.sub_cat_id, service_img: file, service_description: $scope.addServiceForm.service_description, service_price: $scope.addServiceForm.service_price,service_duration:$scope.addServiceForm.service_duration},
         });
         file.upload.then(function (response) {
             console.log(response);
