@@ -26,7 +26,7 @@ app.run(['$rootScope', '$route', function ($rootScope, $route) {
         // }
 
     });
-
+ 
     
 
     $rootScope.domainNameUrl = window.serverIP;
@@ -38,9 +38,14 @@ app.config(function ($routeProvider) {
     .when("/" , {
         templateUrl : "partials/login.html"
     })
+
     .when("/dashboard",{
         templateUrl : "partials/dashboard.html",
         controller: "dashboardController"
+    })
+    .when("/users",{
+        templateUrl : "partials/users.html",
+        controller: "usersController"
     })
 
     .when("/show_categories",{
@@ -92,6 +97,19 @@ if($location.$$path=='/'){
 });
 
 app.controller('dashboardController', function($scope,$http,DTOptionsBuilder, DTColumnBuilder) {
+    $scope.hideHeader = false;
+    $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/get_users_list').success(function(data) {
+        $scope.userData = data.data;
+        console.log(data.data);
+        $scope.vm = {};
+     
+            $scope.vm.dtOptions = DTOptionsBuilder.newOptions()
+              .withOption('order', [0, 'asc']);
+    });
+});
+
+
+app.controller('usersController', function($scope,$http,DTOptionsBuilder, DTColumnBuilder) {
     $scope.hideHeader = false;
     $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/get_users_list').success(function(data) {
         $scope.userData = data.data;
