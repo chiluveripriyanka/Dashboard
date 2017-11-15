@@ -55,6 +55,10 @@ app.config(function ($routeProvider) {
     .when("/add_edit_categories",{
         templateUrl : "partials/add_edit_categories.html"
     })
+    .when("/add_services",{
+        templateUrl : "partials/add_services.html",
+        controller: "AddServicesController"
+    })
     .when("/add_edit_sub_categories",{
         templateUrl : "partials/add_edit_sub_categories.html"  
     })
@@ -166,6 +170,44 @@ app.controller('AddSubCategoryController', ['$scope', 'Upload', '$timeout', func
         file.upload = Upload.upload({
           url: 'http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_sub_category',
           data: {sub_category_name: $scope.sub_category_name, cat_id: $scope.cat_id, sub_cat_img: file},
+        });
+        file.upload.then(function (response) {
+            console.log(response);
+          $timeout(function () {
+            file.result = response.data;
+          });
+          if(response.data.status == 'true'){
+            swal({
+                title: "Here's a message!",
+                type: "success",
+                text: response.data.message,
+                confirmButtonText : "Close this window"
+            });
+          }else{
+            swal({
+                title: "Here's a message!",
+                type: "warning",
+                text: response.data.message,
+                confirmButtonText : "Close this window"
+            });
+          }
+        }
+        // , function (response) {
+        //   if (response.status > 0)
+        //     $scope.errorMsg = response.status + ': ' + response.data;
+        // }, function (evt) {
+        //   // Math.min is to fix IE which reports 200% sometimes
+        //   file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+        // }
+        );
+    }
+}]);
+
+app.controller('AddServicesController', ['$scope', 'Upload', '$timeout', function ($scope, Upload, $timeout) {
+    $scope.uploadPic = function(file) {
+        file.upload = Upload.upload({
+          url: 'http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_services',
+          data: {service_name: $scope.service_name, sub_cat_id: $scope.sub_cat_id, service_img: service_img, service_description: service_description, service_price: service_price,service_duration:service_duration},
         });
         file.upload.then(function (response) {
             console.log(response);
