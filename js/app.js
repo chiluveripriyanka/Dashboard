@@ -283,11 +283,28 @@ app.controller('AddServicesController', ['$scope', 'Upload', '$timeout', functio
     }
 }]);
 
-app.controller('AddPackagesController', function($scope, $location) {
+app.controller('AddPackagesController', function($scope, $http, $location) {
     // function to submit the form after all validation has occurred            
-    $scope.submitLoginForm = function() {
-
-        
+    $scope.submitPackageForm = function() {
+        if ($scope.addPackageForm.$valid) {
+            var package_services = "[{'service_id':1,'quantity':" + $scope.package_services[0] + "},{'service_id':2,'quantity':" + $scope.package_services[1] + "}]"
+            var package_on_other_services = "[{'service_id':3,'quantity':" + $scope.package_on_other_services[0] + "},{'service_id':4,'quantity':" + $scope.package_on_other_services[1] + "}]"
+            var data = {
+                package_name: $scope.package_name,
+                package_price: $scope.package_price,
+                package_description: $scope.package_description,
+                package_validity_days: $scope.package_validity_days,
+                package_start_date: $scope.package_start_date,
+                package_end_date: $scope.package_end_date,
+                package_services: package_services,
+                package_on_other_services: package_on_other_services
+            };
+            console.log(data);
+            $http.post('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_package', data)
+            .success(function (response) {
+                console.log(response);
+            })
+        }
 
     };
 

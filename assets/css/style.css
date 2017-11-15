@@ -3486,3 +3486,14 @@ button[disabled]{
 .button_margin{
 	margin-top: -5%;
 }
+.select2-container{
+	width: 100% !important;
+}
+table.dataTable, table.dataTable th, table.dataTable td{
+	font-size: 14px;
+}
+.dataTables_wrapper .dataTables_filter input, div.dataTables_length select{
+	height: 34px;
+    border: 1px solid #ddd;
+    background-color: #fff;
+}
