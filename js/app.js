@@ -204,10 +204,13 @@ app.controller('AddSubCategoryController', ['$scope', 'Upload', '$timeout', func
 }]);
 
 app.controller('AddServicesController', ['$scope', 'Upload', '$timeout', function ($scope, Upload, $timeout) {
+    $scope.addServiceForm={"service_description":"","service_name":"","service_price":"","service_duration":"","sub_cat_id":""};
+    
     $scope.uploadServicePic = function(file) {
+        // console.log($scope);return;
         file.upload = Upload.upload({
           url: 'http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_services',
-          data: {service_name: $scope.service_name, sub_cat_id: $scope.sub_cat_id, service_img: $scope.service_img, service_description: $scope.service_description, service_price: $scope.service_price,service_duration:$scope.service_duration},
+          data: {service_name: $scope.addServiceForm.service_name, sub_cat_id: $scope.addServiceForm.sub_cat_id, service_img: file, service_description: $scope.addServiceForm.service_description, service_price: $scope.addServiceForm.service_price,service_duration:$scope.addServiceForm.service_duration},
         });
         file.upload.then(function (response) {
             console.log(response);

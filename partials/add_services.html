@@ -55,7 +55,7 @@
                                                                                     <div class="input append-small-btn">
                                                                                         <div class="file-button">
                                                                                             Browse
-                                                                                            <input type="file" onchange="document.getElementById('append-small-btn').value = this.value;" ngf-select ng-model="service_img" name="file"    
+                                                                                            <input type="file" onchange="document.getElementById('append-small-btn').value = this.value;" ngf-select ng-model="service_img" name="service_img"    
                                                                                                  accept="image/*" ngf-max-size="2MB" required
                                                                                                  ngf-model-invalid="errorFile">
                                                                                         </div>
@@ -76,7 +76,7 @@
                                                                                 <label class="login2 pull-right pull-right-pro">Service Name</label>
                                                                             </div>
                                                                             <div class="col-lg-9">
-                                                                                <input type="text" class="form-control" name="service_name" ng-model="service_name" required>
+                                                                                <input type="text" class="form-control" name="service_name" ng-model="addServiceForm.service_name" required>
                                                                             </div>
                                                                             <p ng-show="addSubCategoryForm.service_name.$invalid && !addSubCategoryForm.service_name.$pristine" class="help-block">Enter a service name.</p>
                                                                         </div>
@@ -88,7 +88,7 @@
                                                                                     <label class="login2 pull-right pull-right-pro">Service Duration</label>
                                                                                 </div>
                                                                                 <div class="col-lg-9">
-                                                                                    <input type="text" class="form-control" name="service_duration" ng-model="service_duration" required>
+                                                                                    <input type="text" class="form-control" name="service_duration" ng-model="addServiceForm.service_duration" required>
                                                                                 </div>
                                                                                 <p ng-show="addSubCategoryForm.service_duration.$invalid && !addSubCategoryForm.service_duration.$pristine" class="help-block">Enter a service duration.</p>
                                                                             </div>
@@ -100,7 +100,7 @@
                                                                                     <label class="login2 pull-right pull-right-pro">Service Description</label>
                                                                                 </div>
                                                                                 <div class="col-lg-9">
-                                                                                    <input type="text" class="form-control" name="service_description" ng-model="service_description" required>
+                                                                                    <input type="text" class="form-control" name="service_description" ng-model="addServiceForm.service_description" required>
                                                                                 </div>
                                                                                 <p ng-show="addSubCategoryForm.service_description.$invalid && !addSubCategoryForm.service_description.$pristine" class="help-block">Enter a service description.</p>
                                                                             </div>
@@ -112,7 +112,7 @@
                                                                                         <label class="login2 pull-right pull-right-pro">Service Price</label>
                                                                                     </div>
                                                                                     <div class="col-lg-9">
-                                                                                        <input type="number" class="form-control" name="service_price" ng-model="service_price" required>
+                                                                                        <input type="number" class="form-control" name="service_price" ng-model="addServiceForm.service_price" required>
                                                                                     </div>
                                                                                     <p ng-show="addSubCategoryForm.service_price.$invalid && !addSubCategoryForm.service_price.$pristine" class="help-block">Enter a service price.</p>
                                                                                 </div>
@@ -123,7 +123,7 @@
                                                                                 <label class="login2 pull-right pull-right-pro">Sub Category Id</label>
                                                                             </div>
                                                                             <div class="col-lg-9">
-                                                                                <input type="text" class="form-control" name="cat_id" ng-model="cat_id">
+                                                                                <input type="text" class="form-control" name="sub_cat_id" ng-model="addServiceForm.sub_cat_id">
                                                                             </div>
                                                                         </div>
                                                                     </div>
