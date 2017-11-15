@@ -73,18 +73,54 @@
                                                                     <div class="form-group-inner">
                                                                         <div class="row">
                                                                             <div class="col-lg-3">
-                                                                                <label class="login2 pull-right pull-right-pro">Category Name</label>
+                                                                                <label class="login2 pull-right pull-right-pro">Service Name</label>
                                                                             </div>
                                                                             <div class="col-lg-9">
-                                                                                <input type="text" class="form-control" name="sub_category_name" ng-model="sub_category_name" required>
+                                                                                <input type="text" class="form-control" name="service_name" ng-model="service_name" required>
                                                                             </div>
-                                                                            <p ng-show="addSubCategoryForm.sub_category_name.$invalid && !addSubCategoryForm.sub_category_name.$pristine" class="help-block">Enter a Category Name.</p>
+                                                                            <p ng-show="addSubCategoryForm.service_name.$invalid && !addSubCategoryForm.service_name.$pristine" class="help-block">Enter a service name.</p>
                                                                         </div>
                                                                     </div>
+
+                                                                    <div class="form-group-inner">
+                                                                            <div class="row">
+                                                                                <div class="col-lg-3">
+                                                                                    <label class="login2 pull-right pull-right-pro">Service Duration</label>
+                                                                                </div>
+                                                                                <div class="col-lg-9">
+                                                                                    <input type="text" class="form-control" name="service_duration" ng-model="service_duration" required>
+                                                                                </div>
+                                                                                <p ng-show="addSubCategoryForm.service_duration.$invalid && !addSubCategoryForm.service_duration.$pristine" class="help-block">Enter a service duration.</p>
+                                                                            </div>
+                                                                        </div>
+
+                                                                    <div class="form-group-inner">
+                                                                            <div class="row">
+                                                                                <div class="col-lg-3">
+                                                                                    <label class="login2 pull-right pull-right-pro">Service Description</label>
+                                                                                </div>
+                                                                                <div class="col-lg-9">
+                                                                                    <input type="text" class="form-control" name="service_description" ng-model="service_description" required>
+                                                                                </div>
+                                                                                <p ng-show="addSubCategoryForm.service_description.$invalid && !addSubCategoryForm.service_description.$pristine" class="help-block">Enter a service description.</p>
+                                                                            </div>
+                                                                        </div>
+                                                                    
+                                                                        <div class="form-group-inner">
+                                                                                <div class="row">
+                                                                                    <div class="col-lg-3">
+                                                                                        <label class="login2 pull-right pull-right-pro">Service Price</label>
+                                                                                    </div>
+                                                                                    <div class="col-lg-9">
+                                                                                        <input type="number" class="form-control" name="service_price" ng-model="service_price" required>
+                                                                                    </div>
+                                                                                    <p ng-show="addSubCategoryForm.service_price.$invalid && !addSubCategoryForm.service_price.$pristine" class="help-block">Enter a service price.</p>
+                                                                                </div>
+                                                                            </div>    
                                                                     <div class="form-group-inner">
                                                                         <div class="row">
                                                                             <div class="col-lg-3">
-                                                                                <label class="login2 pull-right pull-right-pro">Category Id</label>
+                                                                                <label class="login2 pull-right pull-right-pro">Sub Category Id</label>
                                                                             </div>
                                                                             <div class="col-lg-9">
                                                                                 <input type="text" class="form-control" name="cat_id" ng-model="cat_id">
@@ -99,7 +135,7 @@
                                                                                 <div class="col-lg-9">
                                                                                     <div class="login-horizental cancel-wp pull-left">
                                                                                         <button class="btn btn-white" type="submit">Cancel</button>
-                                                                                        <button class="btn btn-sm btn-primary login-submit-cs" ng-disabled="!addSubCategoryForm.$valid" ng-click="uploadPic(cat_img)">Submit</button>
+                                                                                        <button class="btn btn-sm btn-primary login-submit-cs" ng-disabled="!addSubCategoryForm.$valid" ng-click="uploadServicePic(service_img)">Submit</button>
                                                                                           <span class="progress" ng-show="cat_img.progress >= 0">
                                                                                             <div style="width:{{cat_img.progress}}%" 
                                                                                                 ng-bind="cat_img.progress + '%'"></div>
