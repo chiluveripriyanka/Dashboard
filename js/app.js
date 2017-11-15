@@ -42,6 +42,16 @@ app.config(function ($routeProvider) {
         templateUrl : "partials/dashboard.html",
         controller: "dashboardController"
     })
+
+    .when("/show_categories",{
+        templateUrl : "partials/show_categories.html",
+        controller: "show_categories"
+    })
+
+    .when("/show_sub_categories",{
+        templateUrl : "partials/show_sub_categories.html",
+        controller: "show_sub_categories"
+    })
     .when("/add_edit_categories",{
         templateUrl : "partials/add_edit_categories.html"
     })
@@ -79,9 +89,35 @@ if($location.$$path=='/'){
 
 app.controller('dashboardController', function($scope,$http,DTOptionsBuilder, DTColumnBuilder) {
     $scope.hideHeader = false;
-    $http.get('https://jsonplaceholder.typicode.com/posts').success(function(data) {
-        $scope.userData = data;
-        console.log(data);
+    $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/get_users_list').success(function(data) {
+        $scope.userData = data.data;
+        console.log(data.data);
+        $scope.vm = {};
+     
+            $scope.vm.dtOptions = DTOptionsBuilder.newOptions()
+              .withOption('order', [0, 'asc']);
+    });
+});
+
+
+app.controller('show_categories', function($scope,$http,DTOptionsBuilder, DTColumnBuilder) {
+    $scope.hideHeader = false;
+    $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/show_categories').success(function(data) {
+        $scope.userData = data.data;
+        console.log(data.data);
+        $scope.vm = {};
+     
+            $scope.vm.dtOptions = DTOptionsBuilder.newOptions()
+              .withOption('order', [0, 'asc']);
+    });
+});
+
+
+app.controller('show_sub_categories', function($scope,$http,DTOptionsBuilder, DTColumnBuilder) {
+    $scope.hideHeader = false;
+    $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/show_sub_categories').success(function(data) {
+        $scope.userData = data.data;
+        console.log(data.data);
         $scope.vm = {};
      
             $scope.vm.dtOptions = DTOptionsBuilder.newOptions()
@@ -93,7 +129,7 @@ app.controller('AddCategoryController', ['$scope', 'Upload', '$timeout', functio
     $scope.uploadPic = function(file) {
         file.upload = Upload.upload({
           url: 'http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_category',
-          data: {category_name: $scope.category_name, file: file},
+          data: {category_name: $scope.category_name, cat_img: file},
         });
         file.upload.then(function (response) {
           $timeout(function () {
@@ -129,7 +165,7 @@ app.controller('AddSubCategoryController', ['$scope', 'Upload', '$timeout', func
     $scope.uploadPic = function(file) {
         file.upload = Upload.upload({
           url: 'http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_sub_category',
-          data: {sub_category_name: $scope.sub_category_name, cat_id: $scope.cat_id, file: file},
+          data: {sub_category_name: $scope.sub_category_name, cat_id: $scope.cat_id, sub_cat_img: file},
         });
         file.upload.then(function (response) {
             console.log(response);
