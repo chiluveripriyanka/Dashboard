@@ -1,0 +1,168 @@
+    <!-- Breadcome start-->
+    <div class="breadcome-area mg-b-30 mg-t-30">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcome-list map-mg-t-40-gl shadow-reset">
+                        <div class="breadcome-heading">
+                            <h2>Add Packages</h2>
+                        </div>
+                        <ul class="breadcome-menu">
+                            <li><a href="#">Home</a> <span class="bread-slash">/</span>
+                            </li>
+                            <li><span class="bread-blod">Add Packages</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Breadcome End-->
+    <!-- tabs start-->
+    <div class="admintab-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="admintab-wrap mg-b-40">
+                        <ul class="nav nav-tabs custom-menu-wrap custon-tab-menu-style1">
+                            
+                            <!-- <li><a data-toggle="tab" href="#edit_category"><span class="adminpro-icon adminpro-analytics-arrow tab-custon-ic"></span>Edit Category</a>
+                            </li> -->
+                        </ul>
+                        <div class="tab-content">
+                            <div id="add_category" class="tab-pane in active animated flipInX custon-tab-style1">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="sparkline12-list mg-t-30">
+                                            <div class="sparkline12-graph">
+                                                <div class="basic-login-form-ad">
+                                                    <div class="row">
+                                                        <div class="col-lg-8">
+                                                            <div  ng-controller="AddPackagesController">
+                                                            
+                                                            <div class="all-form-element-inner">
+                                                                <form name="addPackageForm" id="addPackageForm" ng-submit="submitPackageForm()" novalidate>
+                                                                    <div class="form-group-inner">
+                                                                        <div class="row">
+                                                                            <div class="col-lg-3">
+                                                                                <label class="login2 pull-right pull-right-pro">Package Name</label>
+                                                                            </div>
+                                                                            <div class="col-lg-9">
+                                                                                <input type="text" class="form-control" name="package_name" ng-model="package_name" required>
+                                                                            </div>
+                                                                            <p ng-show="addPackageForm.package_name.$invalid && !addPackageForm.package_name.$pristine" class="help-block">Enter a package name.</p>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group-inner">
+                                                                        <div class="row">
+                                                                            <div class="col-lg-3">
+                                                                                <label class="login2 pull-right pull-right-pro">Package Price</label>
+                                                                            </div>
+                                                                            <div class="col-lg-9">
+                                                                                <input type="number" class="form-control" name="package_price" ng-model="package_price" required>
+                                                                            </div>
+                                                                            <p ng-show="addPackageForm.package_price.$invalid && !addPackageForm.package_price.$pristine" class="help-block">Enter a package price.</p>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group-inner">
+                                                                        <div class="row">
+                                                                            <div class="col-lg-3">
+                                                                                <label class="login2 pull-right pull-right-pro">Package Description</label>
+                                                                            </div>
+                                                                            <div class="col-lg-9">
+                                                                                <textarea class="form-control" name="package_description" ng-model="package_description" required cols="5" rows="5" />
+                                                                            </div>
+                                                                            <p ng-show="addPackageForm.package_description.$invalid && !addPackageForm.package_description.$pristine" class="help-block">Enter a package description.</p>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group-inner">
+                                                                        <div class="row">
+                                                                            <div class="col-lg-3">
+                                                                                <label class="login2 pull-right pull-right-pro">Package Validity Days</label>
+                                                                            </div>
+                                                                            <div class="col-lg-9">
+                                                                                <input type="number" class="form-control" name="package_validity_days" ng-model="package_validity_days" required>
+                                                                            </div>
+                                                                            <p ng-show="addPackageForm.package_validity_days.$invalid && !addPackageForm.package_validity_days.$pristine" class="help-block">Enter a package validity days.</p>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group-inner data-custon-pick" id="data_1">
+                                                                        <div class="row">
+                                                                            <div class="col-lg-3">
+                                                                                <label class="login2 pull-right pull-right-pro"><strong>Package Start Date</strong></label>
+                                                                            </div>
+                                                                            <div class="col-lg-9">
+                                                                                <div class="input-group date">
+                                                                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                                                                    <input type="text" class="form-control" value="10/04/2017">
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <!-- <div class="form-group-inner">
+                                                                        <div class="sparkline11-graph">
+                                                                        <div class="input-knob-dial-wrap">
+                                                                            <div class="row">
+                                                                                <div class="col-lg-12">
+                                                                                    <div class="chosen-select-single">
+                                                                                        <label>Multi Select</label>
+                                                                                        <select class="select2_demo_2 form-control" multiple="multiple">
+                                                                                            <option value="Mayotte">Mayotte</option>
+                                                                                            <option value="Mexico">Mexico</option>
+                                                                                            <option value="Micronesia, Federated States of">Micronesia, Federated States of</option>
+                                                                                            <option value="Moldova, Republic of">Moldova, Republic of</option>
+                                                                                            <option value="Monaco">Monaco</option>
+                                                                                            <option value="Mongolia">Mongolia</option>
+                                                                                            <option value="Montenegro">Montenegro</option>
+                                                                                            <option value="Montserrat">Montserrat</option>
+                                                                                            <option value="Morocco">Morocco</option>
+                                                                                            <option value="Mozambique">Mozambique</option>
+                                                                                            <option value="Myanmar">Myanmar</option>
+                                                                                            <option value="Namibia">Namibia</option>
+                                                                                            <option value="Nauru">Nauru</option>
+                                                                                            <option value="Nepal">Nepal</option>
+                                                                                            <option value="Netherlands">Netherlands</option>
+                                                                                            <option value="New Caledonia">New Caledonia</option>
+                                                                                            <option value="New Zealand">New Zealand</option>
+                                                                                            <option value="Nicaragua">Nicaragua</option>
+                                                                                        </select>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div> -->
+                                                                    <div class="form-group-inner">
+                                                                        <div class="login-btn-inner">
+                                                                            <div class="row">
+                                                                                <div class="col-lg-3"></div>
+                                                                                <div class="col-lg-9">
+                                                                                    <div class="login-horizental cancel-wp pull-left">
+                                                                                        <button class="btn btn-white" type="submit">Cancel</button>
+                                                                                        <button type="submit" class="btn btn-sm btn-primary login-submit-cs" ng-disabled="addPackageForm.$invalid">Submit</button>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <div id="edit_category" class="tab-pane animated flipInX custon-tab-style1">
+                                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
+                                <p>when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
+                            </div> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- tabs End-->

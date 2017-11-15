@@ -52,6 +52,10 @@ app.config(function ($routeProvider) {
         templateUrl : "partials/show_sub_categories.html",
         controller: "show_sub_categories"
     })
+    .when("/show_beauty_tips",{
+        templateUrl : "partials/show_beauty_tips.html",
+        controller: "show_beauty_tips"
+    })
     .when("/add_edit_categories",{
         templateUrl : "partials/add_edit_categories.html"
     })
@@ -62,15 +66,23 @@ app.config(function ($routeProvider) {
     .when("/add_edit_sub_categories",{
         templateUrl : "partials/add_edit_sub_categories.html"  
     })
+    .when("/add_beautytip",{
+        templateUrl : "partials/add_beautytip.html" ,
+        controller: "AddBeautyTipController"
+    })
+    .when("/add_packages",{
+        templateUrl : "partials/add_packages.html",
+        controller: "AddPackagesController"
+    })
     .otherwise({
         redirectTo : "/"
     });
 });
 app.controller('loginController', function($scope, $location) {
-console.log($location.$$path);
-if($location.$$path=='/'){
-    $scope.hideHeader = true;
-}
+    console.log($location.$$path);
+    if($location.$$path=='/'){
+        $scope.hideHeader = true;
+    }
     // function to submit the form after all validation has occurred            
     $scope.submitLoginForm = function() {
 
@@ -108,7 +120,6 @@ app.controller('show_categories', function($scope,$http,DTOptionsBuilder, DTColu
     $scope.hideHeader = false;
     $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/show_categories').success(function(data) {
         $scope.userData = data.data;
-        console.log(data.data);
         $scope.vm = {};
      
             $scope.vm.dtOptions = DTOptionsBuilder.newOptions()
@@ -121,7 +132,17 @@ app.controller('show_sub_categories', function($scope,$http,DTOptionsBuilder, DT
     $scope.hideHeader = false;
     $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/show_sub_categories').success(function(data) {
         $scope.userData = data.data;
-        console.log(data.data);
+        $scope.vm = {};
+     
+            $scope.vm.dtOptions = DTOptionsBuilder.newOptions()
+              .withOption('order', [0, 'asc']);
+    });
+});
+
+app.controller('show_beauty_tips', function($scope,$http,DTOptionsBuilder, DTColumnBuilder) {
+    $scope.hideHeader = false;
+    $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/get_beauty_tips').success(function(data) {
+        $scope.tips = data.data;
         $scope.vm = {};
      
             $scope.vm.dtOptions = DTOptionsBuilder.newOptions()
@@ -208,6 +229,55 @@ app.controller('AddServicesController', ['$scope', 'Upload', '$timeout', functio
         file.upload = Upload.upload({
           url: 'http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_services',
           data: {service_name: $scope.service_name, sub_cat_id: $scope.sub_cat_id, service_img: $scope.service_img, service_description: $scope.service_description, service_price: $scope.service_price,service_duration:$scope.service_duration},
+        });
+        file.upload.then(function (response) {
+            console.log(response);
+          $timeout(function () {
+            file.result = response.data;
+          });
+          if(response.data.status == 'true'){
+            swal({
+                title: "Here's a message!",
+                type: "success",
+                text: response.data.message,
+                confirmButtonText : "Close this window"
+            });
+          }else{
+            swal({
+                title: "Here's a message!",
+                type: "warning",
+                text: response.data.message,
+                confirmButtonText : "Close this window"
+            });
+          }
+        }
+        // , function (response) {
+        //   if (response.status > 0)
+        //     $scope.errorMsg = response.status + ': ' + response.data;
+        // }, function (evt) {
+        //   // Math.min is to fix IE which reports 200% sometimes
+        //   file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+        // }
+        );
+    }
+}]);
+
+app.controller('AddPackagesController', function($scope, $location) {
+    // function to submit the form after all validation has occurred            
+    $scope.submitLoginForm = function() {
+
+        
+
+    };
+
+});
+
+app.controller('AddBeautyTipController', ['$scope', 'Upload', '$timeout', function ($scope, Upload, $timeout) {
+    $scope.uploadTip = function(file) {
+        console.log('tip_title:' + $scope.tip_title + 'tip_description:' + $scope.tip_description + 'tip_img:' + file)
+        file.upload = Upload.upload({
+          url: 'http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_tip',
+          data: {tip_title: $scope.tip_title, tip_description: $scope.tip_description, tip_img: file},
         });
         file.upload.then(function (response) {
             console.log(response);
