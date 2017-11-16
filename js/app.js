@@ -61,6 +61,10 @@ app.config(function ($routeProvider) {
         templateUrl : "partials/show_beauty_tips.html",
         controller: "show_beauty_tips"
     })
+    .when("/show_packages",{
+        templateUrl : "partials/show_packages.html",
+        controller: "show_packages"
+    })
     .when("/add_edit_categories",{
         templateUrl : "partials/add_edit_categories.html"
     })
@@ -161,6 +165,18 @@ app.controller('show_beauty_tips', function($scope,$http,DTOptionsBuilder, DTCol
     $scope.hideHeader = false;
     $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/get_beauty_tips').success(function(data) {
         $scope.tips = data.data;
+        $scope.vm = {};
+     
+            $scope.vm.dtOptions = DTOptionsBuilder.newOptions()
+              .withOption('order', [0, 'asc']);
+    });
+});
+
+app.controller('show_packages', function($scope,$http,DTOptionsBuilder, DTColumnBuilder) {
+    $scope.hideHeader = false;
+    $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/get_packages').success(function(data) {
+        $scope.packages = data.data;
+        console.log($scope.packages);
         $scope.vm = {};
      
             $scope.vm.dtOptions = DTOptionsBuilder.newOptions()
@@ -283,8 +299,7 @@ app.controller('AddServicesController', ['$scope', 'Upload', '$timeout', functio
     }
 }]);
 
-app.controller('AddPackagesController', function($scope, $http, $location) {
-    // function to submit the form after all validation has occurred            
+app.controller('AddPackagesController', function($scope, $http, $location) {     
     $scope.submitPackageForm = function() {
         if ($scope.addPackageForm.$valid) {
             var package_services = "[{'service_id':1,'quantity':" + $scope.package_services[0] + "},{'service_id':2,'quantity':" + $scope.package_services[1] + "}]"

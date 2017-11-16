@@ -4,12 +4,12 @@
                 <div class="col-lg-12">
                     <div class="breadcome-list map-mg-t-40-gl shadow-reset">
                         <div class="breadcome-heading">
-                            <h2>Categories Table</h2>
+                            <h2>Packages Table</h2>
                         </div>
                         <ul class="breadcome-menu">
                             <li><a href="#">Home</a> <span class="bread-slash">/</span>
                             </li>
-                            <li><span class="bread-blod">Categories Data</span>
+                            <li><span class="bread-blod">Packages Data</span>
                             </li>
                         </ul>
                     </div>
@@ -40,20 +40,22 @@
                                 <table class="table table-striped" datatable="ng" dt-options="vm.dtOptions">
                                     <thead>
                                       <tr>
-                                        <th>Category Name</th>
-                                        <th>Category Image</th>                                <!-- <th>Actions</th> -->
+                                        <th>Package Name</th>
+                                        <th>Package Price</th>
+                                        <th>Package Description</th>
+                                        <th>Package Validity Days</th>
+                                        <th>Package Start Date</th>
+                                        <th>Package End Date</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                      <tr ng-repeat="user in userData">
-                                        <td>{{ user.category_name }}</td>
-                                        <td><img width=50 ng-src="http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/uploads/{{user.cat_img}}" /></td>
-                                        <!-- <td>
-                                            <div class="btn-group">
-                                                <button type="button" class="btn btn-default btn" ng-click="edit($index);"><i class="glyphicon glyphicon-pencil"></i></button>  
-                                                <button type="button" class="btn btn-default btn" ng-click="delete();"><i class="glyphicon glyphicon-trash"></i></button> 
-                                            </div>
-                                        </td> -->
+                                      <tr ng-repeat="package in packages">
+                                        <td>{{ package.package_name }}</td>
+                                        <td>{{ package.package_price }}</td>
+                                        <td>{{ package.package_description }}</td>
+                                        <td>{{ package.package_validity_days }}</td>
+                                        <td>{{ package.package_start_date }}</td>
+                                        <td>{{ package.package_end_date }}</td>
                                       </tr>
                                     </tbody>
                                   </table>
