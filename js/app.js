@@ -1,4 +1,4 @@
-var app = angular.module('admin_dashboard', ['datatables', 'ngRoute', 'ngFileUpload']);
+var app = angular.module('admin_dashboard', ['datatables', 'ngRoute', 'ngFileUpload', 'angularjs-dropdown-multiselect']);
 app.run(['$rootScope', '$route', function ($rootScope, $route) {
    
 
@@ -299,11 +299,50 @@ app.controller('AddServicesController', ['$scope', 'Upload', '$timeout', functio
     }
 }]);
 
-app.controller('AddPackagesController', function($scope, $http, $location) {     
+app.controller('AddPackagesController', function($scope, $http, $location) {    
+    $scope.servicesInfo = [{
+        service_name: "Test service1",
+        service_id: 1,
+        quantity: 2
+      }, {
+        service_name: "Test service2",
+        service_id: 2,
+        quantity: 2
+      }];
+
+    $scope.selected_services = [];
+    $scope.selected_services_settings = {
+        template: '<b>{{option.service_name}}</b>',
+        searchField: 'service_name',
+        // enableSearch: true,
+         selectionLimit: 1,
+        // selectedToTop: true // Doesn't work
+    };
+    $scope.servicesOtherInfo = [{
+        service_name: "Test service3",
+        service_id: 3,
+        discount: 10
+      }, {
+        service_name: "Test service4",
+        service_id: 4,
+        discount: 10
+      }];
+
+    $scope.selected_other_services = [];
+    $scope.selected_other_services_settings = {
+        template: '<b>{{option.service_name}}</b>',
+        searchField: 'service_name',
+        // enableSearch: true,
+         selectionLimit: 1,
+        // selectedToTop: true // Doesn't work
+    };
+  
+    $scope.selected_services_customTexts = {buttonDefaultText: 'Select Services'};
+    $scope.selected_other_services_customTexts = {buttonDefaultText: 'Select Other Services'}; 
     $scope.submitPackageForm = function() {
         if ($scope.addPackageForm.$valid) {
-            var package_services = "[{'service_id':1,'quantity':" + $scope.package_services[0] + "},{'service_id':2,'quantity':" + $scope.package_services[1] + "}]"
-            var package_on_other_services = "[{'service_id':3,'quantity':" + $scope.package_on_other_services[0] + "},{'service_id':4,'quantity':" + $scope.package_on_other_services[1] + "}]"
+            var package_services = $scope.selected_services;
+            var package_on_other_services = $scope.selected_other_services;
             var data = {
                 package_name: $scope.package_name,
                 package_price: $scope.package_price,
@@ -320,7 +359,6 @@ app.controller('AddPackagesController', function($scope, $http, $location) {
                 console.log(response);
             })
         }
-
     };
 
 });

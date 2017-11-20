@@ -33,6 +33,7 @@
                         </ul>
                         <div class="tab-content">
                             <div id="add_category" class="tab-pane in active animated flipInX custon-tab-style1">
+
                                 <div class="row">
                                     <div class="col-lg-12">
                                         <div class="sparkline12-list mg-t-30">
@@ -93,13 +94,11 @@
                                                                                     <div class="col-lg-3">
                                                                                         <label><strong>Package Services</strong></label>
                                                                                     </div>
-                                                                                    <div class="col-lg-9">
-                                                                                        <select class="select2_demo_2 form-control" multiple="multiple" name="package_services" ng-model="package_services" required>
-                                                                                            <option value="2">Service 1</option>
-                                                                                            <option value="2">Service 2</option>
-                                                                                        </select>
+                                                                                    <div class="col-lg-4 text-left">
+                                                                                        <div ng-dropdown-multiselect="" options="servicesInfo"selected-model="selected_services"
+                                                                                             extra-settings="selected_services_settings"
+                                                                                             translation-texts="selected_services_customTexts"></div>
                                                                                     </div>
-                                                                                    <p ng-show="addPackageForm.package_services.$invalid && !addPackageForm.package_services.$pristine" class="help-block">Select package services.</p>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -109,13 +108,12 @@
                                                                                     <div class="col-lg-3">
                                                                                         <label><strong>Package On Other Services</strong></label>
                                                                                     </div>
-                                                                                    <div class="col-lg-9">
-                                                                                        <select class="select2_demo_2 form-control" multiple="multiple"  name="package_on_other_services" ng-model="package_on_other_services" required>
-                                                                                            <option value="3">Service 3</option>
-                                                                                            <option value="10">Service 4</option>
-                                                                                        </select>
+                                                                                    <div class="col-lg-4 text-left">
+                                                                                        <div ng-dropdown-multiselect="" options="servicesOtherInfo"selected-model="selected_other_services"
+                                                                                             extra-settings="selected_other_services_settings"
+                                                                                             translation-texts="selected_other_services_customTexts">
+                                                                                              </div>
                                                                                     </div>
-                                                                                    <p ng-show="addPackageForm.package_on_other_services.$invalid && !addPackageForm.package_on_other_services.$pristine" class="help-block">Select package on other services.</p>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
