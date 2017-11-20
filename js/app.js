@@ -315,7 +315,7 @@ app.controller('AddPackagesController', function($scope, $http, $location) {
         template: '<b>{{option.service_name}}</b>',
         searchField: 'service_name',
         // enableSearch: true,
-         selectionLimit: 1,
+        //selectionLimit: 1,
         // selectedToTop: true // Doesn't work
     };
     $scope.servicesOtherInfo = [{
@@ -333,7 +333,7 @@ app.controller('AddPackagesController', function($scope, $http, $location) {
         template: '<b>{{option.service_name}}</b>',
         searchField: 'service_name',
         // enableSearch: true,
-         selectionLimit: 1,
+        //selectionLimit: 1,
         // selectedToTop: true // Doesn't work
     };
   
