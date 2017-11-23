@@ -83,6 +83,11 @@ app.config(function ($routeProvider) {
         templateUrl : "partials/add_packages.html",
         controller: "AddPackagesController"
     })
+
+    .when("/add_product",{
+        templateUrl : "partials/add_product.html",
+        controller: "AddProductsController"
+    })
     .otherwise({
         redirectTo : "/"
     });
@@ -259,13 +264,13 @@ app.controller('AddSubCategoryController', ['$scope', 'Upload', '$timeout', func
 }]);
 
 app.controller('AddServicesController', ['$scope', 'Upload', '$timeout', function ($scope, Upload, $timeout) {
-    $scope.addServiceForm={"service_description":"","service_name":"","service_price":"","service_duration":"","sub_cat_id":""};
+    // $scope.addServiceForm={"service_description":"","service_name":"","service_price":"","service_duration":"","sub_cat_id":""};
     
     $scope.uploadServicePic = function(file) {
         // console.log($scope);return;
         file.upload = Upload.upload({
           url: 'http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_services',
-          data: {service_name: $scope.addServiceForm.service_name, sub_cat_id: $scope.addServiceForm.sub_cat_id, service_img: file, service_description: $scope.addServiceForm.service_description, service_price: $scope.addServiceForm.service_price,service_duration:$scope.addServiceForm.service_duration},
+          data: {service_name: $scope.addServicesForm.service_name, sub_cat_id: $scope.addServicesForm.sub_cat_id, service_img: file, service_description: $scope.addServicesForm.service_description, service_price: $scope.addServicesForm.service_price,service_duration:$scope.addServicesForm.service_duration},
         });
         file.upload.then(function (response) {
             console.log(response);
@@ -288,6 +293,45 @@ app.controller('AddServicesController', ['$scope', 'Upload', '$timeout', functio
             });
           }
         }
+        // , function (response) {
+        //   if (response.status > 0)
+        //     $scope.errorMsg = response.status + ': ' + response.data;
+        // }, function (evt) {
+        //   // Math.min is to fix IE which reports 200% sometimes
+        //   file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+        // }
+        );
+    }
+}]);
+
+app.controller('AddProductsController', ['$scope', 'Upload', '$timeout','$http', function ($scope, Upload, $timeout,$http) {
+    // $scope.addProductForm={"product_description":"","product_name":"","product_price":"","product_offer_price":""};
+    
+    $scope.submitProductForm = function() {
+        // console.log($scope);return;
+        var data = {product_name: $scope.product_name, product_price: $scope.product_price, product_offer_price: $scope.product_offer_price, product_description: $scope.product_description};
+        console.log(data);
+        $http.post('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_product', data)
+        .success(function (response) {
+            console.log(response);
+            if(response.status == 'true'){
+                swal({
+                    title: "Here's a message!",
+                    type: "success",
+                    text: response.message,
+                    confirmButtonText : "Close this window"
+                });
+              }else{
+                swal({
+                    title: "Here's a message!",
+                    type: "warning",
+                    text: response.message,
+                    confirmButtonText : "Close this window"
+                });
+              }
+        }
+        
+        
         // , function (response) {
         //   if (response.status > 0)
         //     $scope.errorMsg = response.status + ': ' + response.data;
