@@ -88,21 +88,29 @@
                                                                                 <p ng-show="addPackageForm.package_validity_days.$invalid && !addPackageForm.package_validity_days.$pristine" class="help-block">Enter a package validity days.</p>
                                                                             </div>
                                                                         </div>
-                                                                        <div class="form-group-inner">
+                                                                        <div class="form-group-inner" ng-controller="MultiDropDownController">
                                                                             <div class="chosen-select-single">
                                                                                 <div class="row">
                                                                                     <div class="col-lg-3">
                                                                                         <label><strong>Package Services</strong></label>
                                                                                     </div>
                                                                                     <div class="col-lg-4 text-left">
-                                                                                        <div ng-dropdown-multiselect="" options="servicesInfo"selected-model="selected_services"
-                                                                                             extra-settings="selected_services_settings"
-                                                                                             translation-texts="selected_services_customTexts"></div>
+                                                                                        <multiselect placeholder="Select packages..."
+                                                                                                       ms-model="multiselect.selected"
+                                                                                                       ms-config="multiselect.config"
+                                                                                                       ms-options="multiselect.options">
+                                                                                          </multiselect>
+                                                                                          <hr>
+                                                                                          <!-- <small class="text-muted">
+                                                                                            <p><b>Selected users:</b> {{displayUsers()}}</p>
+                                                                                            
+                                                                                          </small> -->
+
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
-                                                                        <div class="form-group-inner">
+                                                                        <!-- <div class="form-group-inner">
                                                                             <div class="row">
                                                                                 <div class="chosen-select-single">
                                                                                     <div class="col-lg-3">
@@ -116,7 +124,7 @@
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
-                                                                        </div>
+                                                                        </div> -->
                                                                         <div class="date-picker-inner">
                                                                             <div class="form-group-inner data-custon-pick" id="data_1">
                                                                                 <div class="row">

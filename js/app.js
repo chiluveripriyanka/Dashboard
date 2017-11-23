@@ -1,4 +1,4 @@
-var app = angular.module('admin_dashboard', ['datatables', 'ngRoute', 'ngFileUpload', 'angularjs-dropdown-multiselect']);
+var app = angular.module('admin_dashboard', ['datatables', 'ngRoute', 'ngFileUpload', 'aurbano.multiselect']);
 app.run(['$rootScope', '$route', function ($rootScope, $route) {
    
 
@@ -298,51 +298,51 @@ app.controller('AddServicesController', ['$scope', 'Upload', '$timeout', functio
         );
     }
 }]);
-
+app.controller('MultiDropDownController', ['$scope', '$http', '$sce',
+    function($scope, $http, $sce) {
+    
+    $scope.multiselect = {
+      selected: [],
+      options: [],
+      config: {
+        hideOnBlur: false,
+        showSelected: false,
+        itemTemplate: function(item){
+          return $sce.trustAsHtml(item.package_name);
+        },
+        labelTemplate: function(item){
+          return $sce.trustAsHtml(item.package_name);
+        }
+      }
+    };
+    
+    $scope.displayUsers = function(){
+      return $scope.multiselect.selected.map(function(each){
+        return each.package_services;
+      }).join(', ');
+    };
+    
+    $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/get_packages')
+      .success(function(data){
+        // Prepare the fake data
+        var data_final = data.data;
+        $scope.multiselect.options = data_final.map(function(item){
+          return {
+            package_name: item.package_name,
+            package_services: item.package_services
+          };
+        });
+        
+      }).error(function(err){
+        console.error(err);
+      });
+  }]);
 app.controller('AddPackagesController', function($scope, $http, $location) {    
-    $scope.servicesInfo = [{
-        service_name: "Test service1",
-        service_id: 1,
-        quantity: 2
-      }, {
-        service_name: "Test service2",
-        service_id: 2,
-        quantity: 2
-      }];
-
-    $scope.selected_services = [];
-    $scope.selected_services_settings = {
-        template: '<b>{{option.service_name}}</b>',
-        searchField: 'service_name',
-        // enableSearch: true,
-        //selectionLimit: 1,
-        // selectedToTop: true // Doesn't work
-    };
-    $scope.servicesOtherInfo = [{
-        service_name: "Test service3",
-        service_id: 3,
-        discount: 10
-      }, {
-        service_name: "Test service4",
-        service_id: 4,
-        discount: 10
-      }];
-
-    $scope.selected_other_services = [];
-    $scope.selected_other_services_settings = {
-        template: '<b>{{option.service_name}}</b>',
-        searchField: 'service_name',
-        // enableSearch: true,
-        //selectionLimit: 1,
-        // selectedToTop: true // Doesn't work
-    };
-  
-    $scope.selected_services_customTexts = {buttonDefaultText: 'Select Services'};
-    $scope.selected_other_services_customTexts = {buttonDefaultText: 'Select Other Services'}; 
     $scope.submitPackageForm = function() {
         if ($scope.addPackageForm.$valid) {
             var package_services = $scope.selected_services;
-            var package_on_other_services = $scope.selected_other_services;
+            //console.log(package_services);
+            var package_on_other_services = angular.toJson( $scope.selected_other_services);
             var data = {
                 package_name: $scope.package_name,
                 package_price: $scope.package_price,
@@ -353,7 +353,7 @@ app.controller('AddPackagesController', function($scope, $http, $location) {
                 package_services: package_services,
                 package_on_other_services: package_on_other_services
             };
-            console.log(data);
+            //console.log(data);
             $http.post('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_package', data)
             .success(function (response) {
                 console.log(response);
