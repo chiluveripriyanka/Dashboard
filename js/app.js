@@ -1,4 +1,4 @@
-var app = angular.module('admin_dashboard', ['datatables', 'ngRoute', 'ngFileUpload', 'aurbano.multiselect']);
+var app = angular.module('admin_dashboard', ['datatables', 'ngRoute', 'ngFileUpload', 'angularjs-dropdown-multiselect']);
 app.run(['$rootScope', '$route', function ($rootScope, $route) {
    
 
@@ -83,10 +83,10 @@ app.config(function ($routeProvider) {
         templateUrl : "partials/add_packages.html",
         controller: "AddPackagesController"
     })
-    .when("/add_product",{
-        templateUrl : "partials/add_product.html",
-        controller: "AddProductsController"
-    })
+     .when("/add_product",{     
+         templateUrl : "partials/add_product.html",      
+         controller: "AddProductsController"     
+     })
     .otherwise({
         redirectTo : "/"
     });
@@ -341,51 +341,52 @@ app.controller('AddProductsController', ['$scope', 'Upload', '$timeout','$http',
         );
     }
 }]);
-app.controller('MultiDropDownController', ['$scope', '$http', '$sce',
-    function($scope, $http, $sce) {
-    
-    $scope.multiselect = {
-      selected: [],
-      options: [],
-      config: {
-        hideOnBlur: false,
-        showSelected: false,
-        itemTemplate: function(item){
-          return $sce.trustAsHtml(item.package_name);
-        },
-        labelTemplate: function(item){
-          return $sce.trustAsHtml(item.package_name);
-        }
-      }
-    };
-    
-    $scope.displayUsers = function(){
-      return $scope.multiselect.selected.map(function(each){
-        return each.package_services;
-      }).join(', ');
-    };
-    
+app.controller('AddPackagesController', function($scope, $http, $location) {  
     $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/get_packages')
       .success(function(data){
         // Prepare the fake data
         var data_final = data.data;
-        $scope.multiselect.options = data_final.map(function(item){
+        $scope.servicesInfo = data_final.map(function(item){
+
+            $scope.selected_services = [];
+              $scope.selected_services_settings = {
+                template: '<b>{{option.package_services}}</b>',
+                //searchField: 'name',
+                //enableSearch: true,
+                //selectionLimit: 4,
+                //selectedToTop: true // Doesn't work
+              };
+
           return {
-            package_name: item.package_name,
             package_services: item.package_services
           };
         });
+        $scope.servicesOtherInfo = data_final.map(function(item){
+
+            $scope.selected_other_services = [];
+              $scope.selected_other_services_settings = {
+                template: '<b>{{option.item.package_name}}</b>',
+                //searchField: 'name',
+                //enableSearch: true,
+                //selectionLimit: 4,
+                //selectedToTop: true // Doesn't work
+              };
+
+          return {
+            package_on_other_services: item.package_on_other_services
+          };
+        });
         
-      }).error(function(err){
-        console.error(err);
-      });
-  }]);
-app.controller('AddPackagesController', function($scope, $http, $location) {    
+        
+      })
+    
+    $scope.selected_services_customTexts = {buttonDefaultText: 'Select Services'};
+    $scope.selected_other_services_customTexts = {buttonDefaultText: 'Select Other Services'}; 
     $scope.submitPackageForm = function() {
         if ($scope.addPackageForm.$valid) {
             var package_services = $scope.selected_services;
             //console.log(package_services);
-            var package_on_other_services = angular.toJson( $scope.selected_other_services);
+            var package_on_other_services = $scope.selected_other_services;
             var data = {
                 package_name: $scope.package_name,
                 package_price: $scope.package_price,
