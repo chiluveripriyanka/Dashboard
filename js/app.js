@@ -126,6 +126,14 @@ app.controller('dashboardController', function($scope,$http,DTOptionsBuilder, DT
             $scope.vm.dtOptions = DTOptionsBuilder.newOptions()
               .withOption('order', [0, 'asc']);
     });
+    $http.post('http://localhost:8000/get_my_orders').success(function(data) {
+        $scope.ordersData = data.data;
+        console.log(data.data);
+        $scope.vm = {};
+     
+            $scope.vm.dtOptions = DTOptionsBuilder.newOptions()
+              .withOption('order', [0, 'asc']);
+    });
 });
 
 
@@ -386,7 +394,7 @@ app.controller('AddPackagesController', function($scope, $http, $location) {
         if ($scope.addPackageForm.$valid) {
             var package_services = $scope.selected_services;
             console.log(package_services);
-            var package_on_other_services = angular.toJson( $scope.selected_other_services);
+            var package_on_other_services = $scope.selected_other_services;
 
             var data = {
                 package_name: $scope.package_name,
@@ -398,8 +406,9 @@ app.controller('AddPackagesController', function($scope, $http, $location) {
                 package_services: package_services,
                 package_on_other_services: package_on_other_services
             };
-            //console.log(data);
-            $http.post('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_package', data)
+            console.log('package_on_other_services: ',typeof package_on_other_services);
+            console.log('package_services: ',typeof package_services);
+            $http.post('http://localhost:8000/add_package', data)
             .success(function (response) {
                 console.log(response);
             })
