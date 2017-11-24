@@ -1515,6 +1515,7 @@ ul.comment-action-st li a{
 }
 .messages-scrollbar, .dashone-comment.dashtwo-comment{
 	height: 503px;
+	overflow: auto;
 }
 .dashtwo-messages .dashtwo-messsage-title{
 	font-size: 15px;
