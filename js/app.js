@@ -118,7 +118,7 @@ app.controller('loginController', function($scope, $location) {
 
 app.controller('dashboardController', function($scope,$http,DTOptionsBuilder, DTColumnBuilder) {
     $scope.hideHeader = false;
-    $http.post('http://localhost:8000/get_testimonials').success(function(data) {
+    $http.post('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/get_testimonials').success(function(data) {
         $scope.userData = data.data;
         console.log(data.data);
         $scope.vm = {};
@@ -126,7 +126,7 @@ app.controller('dashboardController', function($scope,$http,DTOptionsBuilder, DT
             $scope.vm.dtOptions = DTOptionsBuilder.newOptions()
               .withOption('order', [0, 'asc']);
     });
-    $http.post('http://localhost:8000/get_my_orders').success(function(data) {
+    $http.post('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/get_my_orders').success(function(data) {
         $scope.ordersData = data.data;
         console.log(data.data);
         $scope.vm = {};
