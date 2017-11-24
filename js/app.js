@@ -118,7 +118,7 @@ app.controller('loginController', function($scope, $location) {
 
 app.controller('dashboardController', function($scope,$http,DTOptionsBuilder, DTColumnBuilder) {
     $scope.hideHeader = false;
-    $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/get_users_list').success(function(data) {
+    $http.post('http://localhost:8000/get_testimonials').success(function(data) {
         $scope.userData = data.data;
         console.log(data.data);
         $scope.vm = {};
@@ -384,7 +384,7 @@ app.controller('AddPackagesController', function($scope, $http, $location) {
     $scope.submitPackageForm = function() {
         if ($scope.addPackageForm.$valid) {
             var package_services = $scope.selected_services;
-            //console.log(package_services);
+            console.log(package_services);
             var package_on_other_services = angular.toJson( $scope.selected_other_services);
             var data = {
                 package_name: $scope.package_name,

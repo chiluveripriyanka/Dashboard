@@ -183,7 +183,7 @@
                 <div class="sparkline11-list shadow-reset mg-tb-30">
                     <div class="sparkline11-hd">
                         <div class="main-sparkline11-hd">
-                            <h1>Your daily feed</h1>
+                            <h1>Testimonials</h1>
                             <div class="sparkline11-outline-icon">
                                 <span class="sparkline11-collapse-link"><i class="fa fa-chevron-up"></i></span>
                                 <span><i class="fa fa-wrench"></i></span>
@@ -192,7 +192,26 @@
                         </div>
                     </div>
                     <div class="sparkline11-graph dashone-comment dashtwo-comment comment-scrollbar">
-                        <div class="daily-feed-list">
+                       <div ng-repeat="testimonial in userData">
+                            <div class="daily-feed-list">
+                                <div class="daily-feed-img">
+                                    <a href="#"><img src="assets/img/notification/5.jpg" alt="" />
+                                    </a>
+                                </div>
+                                <div class="daily-feed-content">
+                                    <h4><span class="feed-author">Holika</span> posted message on <span class="feed-author">Smith</span>.</h4>
+                                    <p class="res-ds-n-t">Today 5:60 pm - 12.06.2014</p>
+                                    <p class="message-feed-single">{{testimonial.description}}</p>
+                                    <div class="feed-like-bt">
+                                        <a class="btn btn-xs btn-white-like"><i class="fa fa-thumbs-up"></i> Like </a>
+                                        <a class="btn btn-xs btn-white-like"><i class="fa fa-heart"></i> Love </a>
+                                    </div>
+                                    <span class="feed-ago">5m ago</span>
+                                </div>
+                            </div>
+                            <div class="clear"></div>
+                       </div>
+                        <!-- <div class="daily-feed-list">
                             <div class="daily-feed-img">
                                 <a href="#"><img src="assets/img/notification/1.jpg" alt="" />
                                 </a>
@@ -240,23 +259,7 @@
                             </div>
                         </div>
                         <div class="clear"></div>
-                        <div class="daily-feed-list">
-                            <div class="daily-feed-img">
-                                <a href="#"><img src="assets/img/notification/5.jpg" alt="" />
-                                </a>
-                            </div>
-                            <div class="daily-feed-content">
-                                <h4><span class="feed-author">Holika</span> posted message on <span class="feed-author">Smith</span>.</h4>
-                                <p class="res-ds-n-t">Today 5:60 pm - 12.06.2014</p>
-                                <p class="message-feed-single">If you earn a BS in Justice of the Studies at GCU, you may be on able to pursue a career in an exciting field! Check out some future career options by reading our blog.</p>
-                                <div class="feed-like-bt">
-                                    <a class="btn btn-xs btn-white-like"><i class="fa fa-thumbs-up"></i> Like </a>
-                                    <a class="btn btn-xs btn-white-like"><i class="fa fa-heart"></i> Love </a>
-                                </div>
-                                <span class="feed-ago">5m ago</span>
-                            </div>
-                        </div>
-                        <div class="clear"></div>
+                       
                         <div class="daily-feed-list">
                             <div class="daily-feed-img">
                                 <a href="#"><img src="assets/img/notification/6.jpg" alt="" />
@@ -279,7 +282,7 @@
                                 <p class="res-ds-n-t">Today 5:60 pm - 12.06.2014</p>
                                 <span class="feed-ago">5m ago</span>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>
