@@ -355,47 +355,49 @@ app.controller('AddPackagesController', function($scope, $http, $location) {
         // Prepare the fake data
         var data_final = data.data;
         $scope.servicesInfo = data_final.map(function(item){
-
-            $scope.selected_services = [];
-              $scope.selected_services_settings = {
-                template: '<b>{{option.package_services}}</b>',
-                //searchField: 'name',
-                //enableSearch: true,
-                //selectionLimit: 4,
-                //selectedToTop: true // Doesn't work
+            return {
+                package_services: item.package_services,
+                package_name:item.package_name
               };
-
-          return {
-            package_services: item.package_services
-          };
         });
         $scope.servicesOtherInfo = data_final.map(function(item){
-
-            $scope.selected_other_services = [];
-              $scope.selected_other_services_settings = {
-                template: '<b>{{option.item.package_name}}</b>',
-                //searchField: 'name',
-                //enableSearch: true,
-                //selectionLimit: 4,
-                //selectedToTop: true // Doesn't work
-              };
-
-          return {
-            package_on_other_services: item.package_on_other_services
-          };
+            return {
+                package_on_other_services: item.package_on_other_services,
+                package_name:item.package_name
+            };
         });
-        
-        
-      })
-    
+    })
+
+    $scope.selected_services = [];
+    $scope.selected_services_settings = {
+        template: '<b>{{option.package_name}}</b>',
+        searchField: 'package_name',
+        enableSearch: true,
+        //selectionLimit: 4,
+    };
+    $scope.selected_other_services = [];
+    $scope.selected_other_services_settings = {
+        template: '<b>{{option.package_name}}</b>',
+        searchField: 'package_name',
+        enableSearch: true,
+        //selectionLimit: 4,
+    };
     $scope.selected_services_customTexts = {buttonDefaultText: 'Select Services'};
     $scope.selected_other_services_customTexts = {buttonDefaultText: 'Select Other Services'}; 
     $scope.submitPackageForm = function() {
         if ($scope.addPackageForm.$valid) {
-            var package_services = $scope.selected_services;
-            console.log(package_services);
-            var package_on_other_services = $scope.selected_other_services;
-
+            var services = $scope.selected_services;
+            var package_services = [];
+            for(var i=0;i<services.length;i++){
+                $scope.selected_services = services[i].package_services;
+                package_services.push($scope.selected_services);
+            }
+            var other_services = $scope.selected_other_services;
+            var package_on_other_services = [];
+            for(var i=0;i<other_services.length;i++){
+                $scope.selected_other_services = other_services[i].package_on_other_services;
+                package_on_other_services.push($scope.selected_other_services);
+            }
             var data = {
                 package_name: $scope.package_name,
                 package_price: $scope.package_price,
@@ -406,23 +408,40 @@ app.controller('AddPackagesController', function($scope, $http, $location) {
                 package_services: package_services,
                 package_on_other_services: package_on_other_services
             };
-            console.log('package_on_other_services: ',typeof package_on_other_services);
-            console.log('package_services: ',typeof package_services);
-            $http.post('http://localhost:8000/add_package', data)
-            .success(function (response) {
-                console.log(response);
-            })
+            console.log(data);
+
+            $http.post('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_package', data)
+                .success(function (response) {
+                    console.log(response);
+                    if(response.status == 'true'){
+                        swal({
+                            title: "Here's a message!",
+                            type: "success",
+                            text: response.message,
+                            confirmButtonText : "Close this window"
+                        });
+                    }else{
+                        swal({
+                            title: "Here's a message!",
+                            type: "warning",
+                            text: response.message,
+                            confirmButtonText : "Close this window"
+                        });
+                    }
+                })
+
         }
     };
 
 });
 
 app.controller('AddBeautyTipController', ['$scope', 'Upload', '$timeout', function ($scope, Upload, $timeout) {
+
     $scope.uploadTip = function(file) {
-        console.log('tip_title:' + $scope.tip_title + 'tip_description:' + $scope.tip_description + 'tip_img:' + file)
+        console.log('tip_video:' + $scope.tip_video);
         file.upload = Upload.upload({
-          url: 'http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_tip',
-          data: {tip_title: $scope.tip_title, tip_description: $scope.tip_description, tip_img: file},
+          url: 'http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_beauty_tips',
+          data: {tip_title: $scope.tip_title, tip_description: $scope.tip_description, tip_img: file, tip_category: $scope.tip_category, tip_id: $scope.tip_id, tip_video: $scope.tip_video},
         });
         file.upload.then(function (response) {
             console.log(response);

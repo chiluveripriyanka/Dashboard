@@ -3536,3 +3536,13 @@ table.dataTable thead tr th:last-child, table.dataTable tbody th:last-child, tab
 .multiselect .dropdown-menu > li > a{
     white-space: normal;
 }
+.sweet-alert .btn{
+	font-size: 14px;
+}
+.sweet-alert p{
+	font-size: 16px;
+}
+
+.sweet-alert h2{
+	font-size: 20px;
+}

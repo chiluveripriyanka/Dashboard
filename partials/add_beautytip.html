@@ -68,9 +68,29 @@
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group-inner">
+                                                                        <div class="row">
+                                                                            <div class="col-lg-3">
+                                                                                <label class="login2 pull-right pull-right-pro">Tip Category</label>
+                                                                            </div>
+                                                                            <div class="col-lg-9">
+                                                                                <input type="number" class="form-control" name="tip_category" ng-model="tip_category">
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group-inner">
+                                                                        <div class="row">
+                                                                            <div class="col-lg-3">
+                                                                                <label class="login2 pull-right pull-right-pro">Tip Id</label>
+                                                                            </div>
+                                                                            <div class="col-lg-9">
+                                                                                <input type="number" class="form-control" name="tip_id" ng-model="tip_id">
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group-inner">
                                                                         <div class="row mg-b-10" >
                                                                             <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-                                                                                <label class="login2 pull-right pull-right-pro">Image</label>
+                                                                                <label class="login2 pull-right pull-right-pro">Tip Image</label>
                                                                             </div>
                                                                             <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
                                                                                 
@@ -79,7 +99,7 @@
                                                                                         <div class="file-button">
                                                                                             Browse
                                                                                             <input type="file" onchange="document.getElementById('append-small-btn').value = this.value;" ngf-select ng-model="tip_img" name="tip_img"    
-                                                                                                 accept="image/*" ngf-max-size="2MB" required
+                                                                                                 accept="image/*" ngf-max-size="200000000MB" required
                                                                                                  ngf-model-invalid="errorFile">
                                                                                         </div>
                                                                                         <input type="text" id="append-small-btn" placeholder="no file selected">
@@ -91,7 +111,31 @@
                                                                                 </div>
                                                                             </div>
                                                                         </div>
-
+                                                                    </div>
+                                                                    <div class="form-group-inner">
+                                                                        <div class="row mg-b-10" >
+                                                                            <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+                                                                                <label class="login2 pull-right pull-right-pro">Tip Video</label>
+                                                                            </div>
+                                                                            <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+                                                                                
+                                                                                <div class="file-upload-inner file-upload-inner-right ts-forms">
+                                                                                    <div class="input append-small-btn1">
+                                                                                        <div class="file-button">
+                                                                                            Browse
+                                                                                            <input type="file" onchange="document.getElementById('append-small-btn1').value = this.value;" ngf-select ng-model="tip_video" name="tip_video"    
+                                                                                                 accept="video/*" ngf-max-size="200000000MB" required
+                                                                                                 ngf-model-invalid="errorFile">
+                                                                                        </div>
+                                                                                        <input type="text" id="append-small-btn1" placeholder="no file selected">
+                                                                                        <div class="text-left mg-b-30" ng-show="addBeautyTipForm.file.$error.required">Upload video is required</i><br>
+                                                                                          <i ng-show="addBeautyTipForm.file.$error.maxSize">File too large 
+                                                                                              {{errorFile.size / 200000000|number:1}}MB: max 2M</i>
+                                                                                          <img ng-show="addBeautyTipForm.file.$valid" ngf-thumbnail="picFile" class="thumb"> <button ng-click="picFile = null" ng-show="picFile">Remove</button>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
                                                                     </div>
                                                                     <div class="form-group-inner">
                                                                         <div class="login-btn-inner">
