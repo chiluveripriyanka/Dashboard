@@ -3537,12 +3537,11 @@ table.dataTable thead tr th:last-child, table.dataTable tbody th:last-child, tab
     white-space: normal;
 }
 .sweet-alert .btn{
-	font-size: 14px;
+	font-size: 14px !important;
 }
 .sweet-alert p{
 	font-size: 16px;
 }
-
 .sweet-alert h2{
 	font-size: 20px;
 }
