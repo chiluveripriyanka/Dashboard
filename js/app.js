@@ -47,12 +47,14 @@ app.config(function ($routeProvider) {
         templateUrl : "partials/users.html",
         controller: "usersController"
     })
-
+    .when("/show_services",{
+        templateUrl : "partials/show_services.html",
+        controller: "show_services"
+    })
     .when("/show_categories",{
         templateUrl : "partials/show_categories.html",
         controller: "show_categories"
     })
-
     .when("/show_sub_categories",{
         templateUrl : "partials/show_sub_categories.html",
         controller: "show_sub_categories"
@@ -142,7 +144,32 @@ app.controller('usersController', function($scope,$http,DTOptionsBuilder, DTColu
     });
 });
 
+app.controller('show_services', function($scope,$http,DTOptionsBuilder, DTColumnBuilder) {
+    $scope.hideHeader = false;
+    $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/get_services').success(function(data) {
+        $scope.servicesData = data.data;
+        $scope.vm = {};
+     
+            $scope.vm.dtOptions = DTOptionsBuilder.newOptions()
+              .withOption('order', [0, 'asc']);
+    });
+    $scope.editCategory = function(id) {
+        //alert(id);
+        $scope.categoriesgetData = [{
+            cat_id:1,
+            cat_img:'nm.jpg',
+            category_name:'sdsdd'
+        }]
+        $scope.showModal = true;
+    };
+    $scope.ok = function() {
+      $scope.showModal = false;
+    };
 
+    $scope.cancel = function() {
+      $scope.showModal = false;
+    };
+});
 app.controller('show_categories', function($scope,$http,DTOptionsBuilder, DTColumnBuilder) {
     $scope.hideHeader = false;
     $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/show_categories').success(function(data) {
@@ -178,7 +205,7 @@ app.controller('show_sub_categories', function($scope,$http,DTOptionsBuilder, DT
               .withOption('order', [0, 'asc']);
     });
     $scope.editSubCategory = function(id) {
-        //alert(id);
+        alert(id);
         $scope.categoriesgetData = [{
             cat_id:1,
             cat_img:'nm.jpg',
@@ -205,7 +232,7 @@ app.controller('show_beauty_tips', function($scope,$http,DTOptionsBuilder, DTCol
               .withOption('order', [0, 'asc']);
     });
     $scope.editTip = function(id) {
-        //alert(id);
+        alert(id);
         $scope.tipData = [{
             tip_title:'tip title',
             tip_description:'tip desc',

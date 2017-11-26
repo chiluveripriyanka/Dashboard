@@ -4,12 +4,12 @@
                 <div class="col-lg-12">
                     <div class="breadcome-list map-mg-t-40-gl shadow-reset">
                         <div class="breadcome-heading">
-                            <h2>Sub Categories Table</h2>
+                            <h2>Services Table</h2>
                         </div>
                         <ul class="breadcome-menu">
                             <li><a href="#">Home</a> <span class="bread-slash">/</span>
                             </li>
-                            <li><span class="bread-blod">Sub Categories Data</span>
+                            <li><span class="bread-blod">Services Data</span>
                             </li>
                         </ul>
                     </div>
@@ -22,7 +22,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="sparkline8-list button_margin">
-                        <a href="#/add_sub_categories"><button type="button" class="btn btn-custon-four btn-primary pull-right mg-t-50 mg-b-20">Add Sub Category</button></a>
+                        <a href="#/add_categories"><button type="button" class="btn btn-custon-four btn-primary pull-right mg-t-50 mg-b-20">Add Services</button></a>
                         <ul class="nav nav-tabs custom-menu-wrap custon-tab-menu-style1">
                             
                         </ul>
@@ -31,22 +31,26 @@
                                 <table class="table table-striped" datatable="ng" dt-options="vm.dtOptions">
                                     <thead>
                                       <tr>
-                                        <th>Category Name</th>
-                                        <th>Sub Category Name</th>
-                                        <th>Sub Category Image</th>
-                                        <th>Actions</th>
+                                        <th>Service Name</th>
+                                        <th>Service Description</th>
+                                        <th>Service Price</th>
+                                        <th>Service Duration</th>
+                                        <th>Service Image</th>
+                                        <!-- <th>Actions</th> -->
                                     </tr>
                                     </thead>
                                     <tbody>
-                                      <tr ng-repeat="subCategory in subcategoriesgetData">
-                                        <td>{{ subCategory.category_name }}</td>
-                                        <td>{{ subCategory.sub_category_name }}</td>
-                                        <td><img width="50" ng-src="http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/uploads/{{subCategory.sub_cat_img}}" /></td>
-                                        <td class="v-middle">
+                                      <tr ng-repeat="service in servicesData">
+                                        <td>{{ service.service_name }}</td>
+                                        <td>{{ service.service_description }}</td>
+                                        <td>{{ service.service_price }}</td>
+                                        <td>{{ service.service_duration }}</td>
+                                        <td><img width="50" ng-src="http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/uploads/{{service.service_img}}" /></td>
+                                        <!-- <td class="v-middle">
                                             <div class="btn-group">
-                                                <button type="button" class="btn btn-default btn" ng-click="editSubCategory(subCategory.sub_cat_id)"><i class="glyphicon glyphicon-pencil"></i></button>  
+                                                <button type="button" class="btn btn-default btn" ng-click="editCategory(category.cat_id)"><i class="glyphicon glyphicon-pencil"></i></button>  
                                             </div>
-                                        </td>
+                                        </td> -->
                                       </tr>
                                     </tbody>
                                   </table>
@@ -59,45 +63,13 @@
     </div>
     <div modal="showModal" close="cancel()">
         <div class="modal-header">
-            <h4>Edit Sub Category</h4>
+            <h4>Edit Category</h4>
         </div>
         <div class="modal-body">
-            <div  ng-controller="EditSubCategoryController">
+            <div  ng-controller="EditCategoryController">
                 <div class="all-form-element-inner">
                     <div ng-repeat="category in categoriesgetData">
-                        <form name="editSubCategoryForm" id="editSubCategoryForm" novalidate enctype="multipart/form-data">
-                            <div class="form-group-inner">
-                                <div class="row">
-                                    <div class="col-lg-3">
-                                        <label class="login2 pull-right pull-right-pro">Category Name</label>
-                                    </div>
-                                    <div class="col-lg-9">
-                                        <input type="text" class="form-control" name="category_name" ng-model="category.category_name" required>
-                                    </div>
-                                    <p ng-show="editSubCategoryForm.category_name.$invalid && !editSubCategoryForm.category_name.$pristine" class="help-block">Enter a Category Name.</p>
-                                </div>
-                            </div>
-                            <div class="form-group-inner">
-                                <div class="row">
-                                    <div class="col-lg-3">
-                                        <label class="login2 pull-right pull-right-pro">Category Name</label>
-                                    </div>
-                                    <div class="col-lg-9">
-                                        <input type="text" class="form-control" name="sub_category_name" ng-model="category.sub_category_name" required>
-                                    </div>
-                                    <p ng-show="editSubCategoryForm.category_name.$invalid && !editSubCategoryForm.category_name.$pristine" class="help-block">Enter a Category Name.</p>
-                                </div>
-                            </div>
-                            <div class="form-group-inner">
-                                <div class="row">
-                                    <div class="col-lg-3">
-                                        <label class="login2 pull-right pull-right-pro">Category Id</label>
-                                    </div>
-                                    <div class="col-lg-9">
-                                        <input type="text" class="form-control" name="cat_id" ng-model="category.cat_id">
-                                    </div>
-                                </div>
-                            </div>
+                        <form name="editCategoryForm" id="editCategoryForm" novalidate enctype="multipart/form-data">
                             <div class="form-group-inner">
                                 <div class="row mg-b-10" >
                                     <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
@@ -109,17 +81,29 @@
                                             <div class="input append-small-btn">
                                                 <div class="file-button">
                                                     Browse
-                                                    <input type="file" onchange="document.getElementById('append-small-btn').value = this.value;" ngf-select ng-model="category.cat_img" name="cat_img" accept="image/*" ngf-max-size="2MB" required
+                                                    <input type="file" onchange="document.getElementById('append-small-btn').value = this.value;" ngf-select ng-model="category.cat_img" name="cat_img"    
+                                                         accept="image/*" ngf-max-size="2MB" required
                                                          ngf-model-invalid="errorFile">
                                                 </div>
-                                                <input type="text" id="append-small-btn" placeholder="no file selected" ng-model="category.cat_img">
-                                                <div class="text-left mg-b-30" ng-show="editSubCategoryForm.file.$error.required">Upload image is required</i><br>
-                                                  <i ng-show="editSubCategoryForm.file.$error.maxSize">File too large 
+                                                <input type="text" id="append-small-btn" ng-model="category.cat_img" placeholder="no file selected">
+                                                <div class="text-left mg-b-30" ng-show="editCategoryForm.file.$error.required">Upload image is required</i><br>
+                                                  <i ng-show="editCategoryForm.file.$error.maxSize">File too large 
                                                       {{errorFile.size / 1000000|number:1}}MB: max 2M</i>
-                                                  <img ng-show="editSubCategoryForm.file.$valid" ngf-thumbnail="picFile" class="thumb"> <button ng-click="picFile = null" ng-show="picFile">Remove</button>
+                                                  <img ng-show="editCategoryForm.file.$valid" ngf-thumbnail="picFile" class="thumb"> <button ng-click="picFile = null" ng-show="picFile">Remove</button>
                                             </div>
                                         </div>
                                     </div>
+                                </div>
+                            </div>
+                            <div class="form-group-inner">
+                                <div class="row">
+                                    <div class="col-lg-3">
+                                        <label class="login2 pull-right pull-right-pro">Category Name</label>
+                                    </div>
+                                    <div class="col-lg-9">
+                                        <input type="text" class="form-control" name="category_name" ng-model="category.category_name" required>
+                                    </div>
+                                    <p ng-show="editCategoryForm.category_name.$invalid && !editCategoryForm.category_name.$pristine" class="help-block">Enter a Category Name.</p>
                                 </div>
                             </div>
                             <div class="form-group-inner">
@@ -129,7 +113,7 @@
                                         <div class="col-lg-9">
                                             <div class="login-horizental cancel-wp pull-left">
                                                 <button class="btn btn-white" type="submit" ng-click="cancel()">Cancel</button>
-                                                <button class="btn btn-sm btn-primary login-submit-cs"  ng-click="updateSubCategoryForm(category)">Submit</button>
+                                                <button class="btn btn-sm btn-primary login-submit-cs"  ng-click="updateCategoryForm(category)">Submit</button>
                                               <span class="progress" ng-show="cat_img.progress >= 0">
                                                 <div style="width:{{cat_img.progress}}%" 
                                                     ng-bind="cat_img.progress + '%'"></div>
@@ -150,4 +134,4 @@
           <button class="btn btn-success" ng-click="ok()">Okay</button>
           <button class="btn" ng-click="cancel()">Cancel</button>
         </div> -->
-    </div>   
+    </div>    
