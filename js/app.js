@@ -1,4 +1,4 @@
-var app = angular.module('admin_dashboard', ['datatables', 'ngRoute', 'ngFileUpload', 'angularjs-dropdown-multiselect']);
+var app = angular.module('admin_dashboard', ['datatables', 'ngRoute', 'ngFileUpload', 'angularjs-dropdown-multiselect', 'ui.bootstrap.modal']);
 app.run(['$rootScope', '$route', function ($rootScope, $route) {
    
 
@@ -65,15 +65,15 @@ app.config(function ($routeProvider) {
         templateUrl : "partials/show_packages.html",
         controller: "show_packages"
     })
-    .when("/add_edit_categories",{
-        templateUrl : "partials/add_edit_categories.html"
+    .when("/add_categories",{
+        templateUrl : "partials/add_categories.html"
     })
     .when("/add_services",{
         templateUrl : "partials/add_services.html",
         controller: "AddServicesController"
     })
-    .when("/add_edit_sub_categories",{
-        templateUrl : "partials/add_edit_sub_categories.html"  
+    .when("/add_sub_categories",{
+        templateUrl : "partials/add_sub_categories.html"  
     })
     .when("/add_beautytip",{
         templateUrl : "partials/add_beautytip.html" ,
@@ -98,7 +98,6 @@ app.controller('loginController', function($scope, $location) {
     }
     // function to submit the form after all validation has occurred            
     $scope.submitLoginForm = function() {
-
         // check to make sure the form is completely valid
         if ($scope.loginForm.$valid) {
             if($scope.user.password=='admin@123' && $scope.user.email=='user@digitalrupay.com'){
@@ -108,12 +107,8 @@ app.controller('loginController', function($scope, $location) {
                 $scope.authStatus =true;
                 console.log('auth failed',$scope.user);
             }
-            
-            
         }
-
     };
-
 });
 
 app.controller('dashboardController', function($scope,$http,DTOptionsBuilder, DTColumnBuilder) {
@@ -122,8 +117,7 @@ app.controller('dashboardController', function($scope,$http,DTOptionsBuilder, DT
         $scope.userData = data.data;
         console.log(data.data);
         $scope.vm = {};
-     
-            $scope.vm.dtOptions = DTOptionsBuilder.newOptions()
+        $scope.vm.dtOptions = DTOptionsBuilder.newOptions()
               .withOption('order', [0, 'asc']);
     });
     $http.post('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/get_my_orders').success(function(data) {
@@ -143,8 +137,7 @@ app.controller('usersController', function($scope,$http,DTOptionsBuilder, DTColu
         $scope.userData = data.data;
         console.log(data.data);
         $scope.vm = {};
-     
-            $scope.vm.dtOptions = DTOptionsBuilder.newOptions()
+        $scope.vm.dtOptions = DTOptionsBuilder.newOptions()
               .withOption('order', [0, 'asc']);
     });
 });
@@ -153,24 +146,54 @@ app.controller('usersController', function($scope,$http,DTOptionsBuilder, DTColu
 app.controller('show_categories', function($scope,$http,DTOptionsBuilder, DTColumnBuilder) {
     $scope.hideHeader = false;
     $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/show_categories').success(function(data) {
-        $scope.userData = data.data;
+        $scope.categoriesData = data.data;
         $scope.vm = {};
      
             $scope.vm.dtOptions = DTOptionsBuilder.newOptions()
               .withOption('order', [0, 'asc']);
     });
+    $scope.editCategory = function(id) {
+        //alert(id);
+        $scope.categoriesgetData = [{
+            cat_id:1,
+            cat_img:'nm.jpg',
+            category_name:'sdsdd'
+        }]
+        $scope.showModal = true;
+    };
+    $scope.ok = function() {
+      $scope.showModal = false;
+    };
+
+    $scope.cancel = function() {
+      $scope.showModal = false;
+    };
 });
-
-
 app.controller('show_sub_categories', function($scope,$http,DTOptionsBuilder, DTColumnBuilder) {
     $scope.hideHeader = false;
     $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/show_sub_categories').success(function(data) {
-        $scope.userData = data.data;
+        $scope.subcategoriesgetData = data.data;
         $scope.vm = {};
-     
-            $scope.vm.dtOptions = DTOptionsBuilder.newOptions()
+        $scope.vm.dtOptions = DTOptionsBuilder.newOptions()
               .withOption('order', [0, 'asc']);
     });
+    $scope.editSubCategory = function(id) {
+        //alert(id);
+        $scope.categoriesgetData = [{
+            cat_id:1,
+            cat_img:'nm.jpg',
+            category_name:'test category',
+            sub_category_name: 'test sub category'
+        }]
+        $scope.showModal = true;
+    };
+    $scope.ok = function() {
+      $scope.showModal = false;
+    };
+
+    $scope.cancel = function() {
+      $scope.showModal = false;
+    };
 });
 
 app.controller('show_beauty_tips', function($scope,$http,DTOptionsBuilder, DTColumnBuilder) {
@@ -178,20 +201,36 @@ app.controller('show_beauty_tips', function($scope,$http,DTOptionsBuilder, DTCol
     $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/get_beauty_tips').success(function(data) {
         $scope.tips = data.data;
         $scope.vm = {};
-     
-            $scope.vm.dtOptions = DTOptionsBuilder.newOptions()
+        $scope.vm.dtOptions = DTOptionsBuilder.newOptions()
               .withOption('order', [0, 'asc']);
     });
-});
+    $scope.editTip = function(id) {
+        //alert(id);
+        $scope.tipData = [{
+            tip_title:'tip title',
+            tip_description:'tip desc',
+            tip_id:1,
+            tip_category:3,
+            tip_img:'tip.img',
+            tip_video: 'tip.mp4'
+        }]
+        $scope.showModal = true;
+    };
+    $scope.ok = function() {
+      $scope.showModal = false;
+    };
 
+    $scope.cancel = function() {
+      $scope.showModal = false;
+    };
+});
 app.controller('show_packages', function($scope,$http,DTOptionsBuilder, DTColumnBuilder) {
     $scope.hideHeader = false;
     $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/get_packages').success(function(data) {
         $scope.packages = data.data;
         console.log($scope.packages);
         $scope.vm = {};
-     
-            $scope.vm.dtOptions = DTOptionsBuilder.newOptions()
+        $scope.vm.dtOptions = DTOptionsBuilder.newOptions()
               .withOption('order', [0, 'asc']);
     });
 });
@@ -221,15 +260,22 @@ app.controller('AddCategoryController', ['$scope', 'Upload', '$timeout', functio
                 confirmButtonText : "Close this window"
             });
           }
-        }
-        // , function (response) {
-        //   if (response.status > 0)
-        //     $scope.errorMsg = response.status + ': ' + response.data;
-        // }, function (evt) {
-        //   // Math.min is to fix IE which reports 200% sometimes
-        //   file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
-        // }
-        );
+        });
+    }
+}]);
+app.controller('EditCategoryController', ['$scope', 'Upload', '$timeout', function ($scope, Upload, $timeout) {
+    $scope.updateCategoryForm = function(info) {
+        console.log('category_name:' + info.category_name + 'category_img' + info.cat_img);
+        var file = info.cat_img;
+        file.upload = Upload.upload({
+          url: 'http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_category',
+          data: {category_name: info.category_name, cat_img: info.cat_img},
+        });
+        file.upload.then(function (response) {
+          $timeout(function () {
+            file.result = response.data;
+        });
+      })
     }
 }]);
 app.controller('AddSubCategoryController', ['$scope', 'Upload', '$timeout', function ($scope, Upload, $timeout) {
@@ -269,15 +315,27 @@ app.controller('AddSubCategoryController', ['$scope', 'Upload', '$timeout', func
         );
     }
 }]);
-
+app.controller('EditSubCategoryController', ['$scope', 'Upload', '$timeout', function ($scope, Upload, $timeout) {
+    $scope.updateSubCategoryForm = function(info) {
+        console.log('sub_category_name:' + info.sub_category_name +'category_name:' + info.category_name + 'category_img' + info.cat_img);
+        var file = info.cat_img;
+        file.upload = Upload.upload({
+          url: 'http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_sub_category',
+          data: {category_name: info.category_name, cat_img: info.cat_img},
+        });
+        file.upload.then(function (response) {
+          $timeout(function () {
+            file.result = response.data;
+        });
+      })
+    }
+}]);
 app.controller('AddServicesController', ['$scope', 'Upload', '$timeout', function ($scope, Upload, $timeout) {
-    // $scope.addServiceForm={"service_description":"","service_name":"","service_price":"","service_duration":"","sub_cat_id":""};
-    
     $scope.uploadServicePic = function(file) {
-        // console.log($scope);return;
+        //console.log($scope.service_name + $scope.service_duration + $scope.service_description + $scope.service_price + $scope.sub_cat_id);
         file.upload = Upload.upload({
           url: 'http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_services',
-          data: {service_name: $scope.addServicesForm.service_name, sub_cat_id: $scope.addServicesForm.sub_cat_id, service_img: file, service_description: $scope.addServicesForm.service_description, service_price: $scope.addServicesForm.service_price,service_duration:$scope.addServicesForm.service_duration},
+           data: {service_name: $scope.service_name, sub_cat_id: $scope.sub_cat_id, service_img: file, service_description: $scope.service_description, service_price: $scope.service_price,service_duration:$scope.service_duration},
         });
         file.upload.then(function (response) {
             console.log(response);
@@ -299,15 +357,7 @@ app.controller('AddServicesController', ['$scope', 'Upload', '$timeout', functio
                 confirmButtonText : "Close this window"
             });
           }
-        }
-        // , function (response) {
-        //   if (response.status > 0)
-        //     $scope.errorMsg = response.status + ': ' + response.data;
-        // }, function (evt) {
-        //   // Math.min is to fix IE which reports 200% sometimes
-        //   file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
-        // }
-        );
+        });
     }
 }]);
 
@@ -385,6 +435,7 @@ app.controller('AddPackagesController', function($scope, $http, $location) {
     $scope.selected_services_customTexts = {buttonDefaultText: 'Select Services'};
     $scope.selected_other_services_customTexts = {buttonDefaultText: 'Select Other Services'}; 
     $scope.submitPackageForm = function() {
+        
         if ($scope.addPackageForm.$valid) {
             var services = $scope.selected_services;
             var package_services = [];
@@ -408,11 +459,9 @@ app.controller('AddPackagesController', function($scope, $http, $location) {
                 package_services: package_services,
                 package_on_other_services: package_on_other_services
             };
-            console.log(data);
-
+            //console.log(data);
             $http.post('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_package', data)
                 .success(function (response) {
-                    console.log(response);
                     if(response.status == 'true'){
                         swal({
                             title: "Here's a message!",
@@ -472,5 +521,20 @@ app.controller('AddBeautyTipController', ['$scope', 'Upload', '$timeout', functi
         //   file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
         // }
         );
+    }
+}]);
+app.controller('EditTipController', ['$scope', 'Upload', '$timeout', function ($scope, Upload, $timeout) {
+    $scope.updateTip = function(info) {
+        console.log('tip_title:' + info.tip_title + 'tip_category:' + info.tip_category + 'tip_desc' + info.tip_description + 'tip_id:' + info.tip_id, 'tip_img:' + info.tip_img + 'tip_video:' + info.tip_video);
+        var file = info.tip_img;
+        file.upload = Upload.upload({
+          url: 'http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_sub_category',
+          data: {tip_title:info.tip_title,tip_category:info.tip_category,tip_desc:info.tip_description,ip_id:info.tip_id,tip_img:info.tip_img,tip_video:info.tip_video},
+        });
+        file.upload.then(function (response) {
+          $timeout(function () {
+            file.result = response.data;
+        });
+      })
     }
 }]);
