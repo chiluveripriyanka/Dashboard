@@ -45,47 +45,47 @@
                                                                 <div class="all-form-element-inner">
                                                                     <form name="addPackageForm" id="addPackageForm" ng-submit="submitPackageForm()" novalidate>
                                                                         <div class="form-group-inner">
-                                                                            <div class="row">
+                                                                            <div class="row"ng-class="{ 'has-error' : addPackageForm.package_name.$invalid && !addPackageForm.package_name.$pristine }">
                                                                                 <div class="col-lg-3">
                                                                                     <label class="login2 pull-right pull-right-pro">Package Name</label>
                                                                                 </div>
                                                                                 <div class="col-lg-9">
                                                                                     <input type="text" class="form-control" name="package_name" ng-model="package_name" required>
+                                                                                    <p ng-show="addPackageForm.package_name.$invalid && !addPackageForm.package_name.$pristine" class="help-block">Enter a package name.</p>
                                                                                 </div>
-                                                                                <p ng-show="addPackageForm.package_name.$invalid && !addPackageForm.package_name.$pristine" class="help-block">Enter a package name.</p>
                                                                             </div>
                                                                         </div>
                                                                         <div class="form-group-inner">
-                                                                            <div class="row">
+                                                                            <div class="row"ng-class="{ 'has-error' : addPackageForm.package_price.$invalid && !addPackageForm.package_price.$pristine }">
                                                                                 <div class="col-lg-3">
                                                                                     <label class="login2 pull-right pull-right-pro">Package Price</label>
                                                                                 </div>
                                                                                 <div class="col-lg-9">
                                                                                     <input type="number" class="form-control" name="package_price" ng-model="package_price" required>
+                                                                                    <p ng-show="addPackageForm.package_price.$invalid && !addPackageForm.package_price.$pristine" class="help-block">Enter a package price.</p>
                                                                                 </div>
-                                                                                <p ng-show="addPackageForm.package_price.$invalid && !addPackageForm.package_price.$pristine" class="help-block">Enter a package price.</p>
                                                                             </div>
                                                                         </div>
                                                                         <div class="form-group-inner">
-                                                                            <div class="row">
+                                                                            <div class="row" ng-class="{ 'has-error' : addPackageForm.package_description.$invalid && !addPackageForm.package_description.$pristine }">
                                                                                 <div class="col-lg-3">
                                                                                     <label class="login2 pull-right pull-right-pro">Package Description</label>
                                                                                 </div>
                                                                                 <div class="col-lg-9">
                                                                                     <textarea class="form-control" name="package_description" ng-model="package_description" required cols="5" rows="5" />
+                                                                                    <p ng-show="addPackageForm.package_description.$invalid && !addPackageForm.package_description.$pristine" class="help-block">Enter a package description.</p>
                                                                                 </div>
-                                                                                <p ng-show="addPackageForm.package_description.$invalid && !addPackageForm.package_description.$pristine" class="help-block">Enter a package description.</p>
                                                                             </div>
                                                                         </div>
                                                                         <div class="form-group-inner">
-                                                                            <div class="row">
+                                                                            <div class="row"ng-class="{ 'has-error' : addPackageForm.package_validity_days.$invalid && !addPackageForm.package_validity_days.$pristine }">
                                                                                 <div class="col-lg-3">
                                                                                     <label class="login2 pull-right pull-right-pro">Package Validity Days</label>
                                                                                 </div>
                                                                                 <div class="col-lg-9">
                                                                                     <input type="number" class="form-control" name="package_validity_days" ng-model="package_validity_days" required>
+                                                                                    <p ng-show="addPackageForm.package_validity_days.$invalid && !addPackageForm.package_validity_days.$pristine" class="help-block">Enter a package validity days.</p>
                                                                                 </div>
-                                                                                <p ng-show="addPackageForm.package_validity_days.$invalid && !addPackageForm.package_validity_days.$pristine" class="help-block">Enter a package validity days.</p>
                                                                             </div>
                                                                         </div>
                                                                         <div class="form-group-inner">

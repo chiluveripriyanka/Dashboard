@@ -44,46 +44,47 @@
                                                             
                                                             <div class="all-form-element-inner">
                                                                 <form name="addBeautyTipForm" id="addBeautyTipForm"  novalidate enctype="multipart/form-data">
-                                                                    
                                                                     <div class="form-group-inner">
-                                                                        <div class="row">
+                                                                        <div class="row" ng-class="{ 'has-error' : addBeautyTipForm.tip_title.$invalid && !addBeautyTipForm.tip_title.$pristine }">
                                                                             <div class="col-lg-3">
                                                                                 <label class="login2 pull-right pull-right-pro">Tip Title</label>
                                                                             </div>
                                                                             <div class="col-lg-9">
                                                                                 <input type="text" class="form-control" name="tip_title" ng-model="tip_title" required>
+                                                                                <p ng-show="addBeautyTipForm.tip_title.$invalid && !addBeautyTipForm.tip_title.$pristine" class="help-block">Enter a Tip Name.</p>
                                                                             </div>
-                                                                            <p ng-show="addBeautyTipForm.tip_title.$invalid && !addBeautyTipForm.tip_title.$pristine" class="help-block">Enter a Tip Name.</p>
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group-inner">
-                                                                        <div class="row">
+                                                                        <div class="row" ng-class="{ 'has-error' : addBeautyTipForm.tip_description.$invalid && !addBeautyTipForm.tip_description.$pristine }">
                                                                             <div class="col-lg-3">
                                                                                 <label class="login2 pull-right pull-right-pro">Tip Description</label>
                                                                             </div>
                                                                             <div class="col-lg-9">
                                                                                 <textarea class="form-control" name="tip_description" ng-model="tip_description" required cols="5" rows="5" />
+                                                                                <p ng-show="addBeautyTipForm.tip_description.$invalid && !addBeautyTipForm.tip_description.$pristine" class="help-block">Enter a tip description.</p>
                                                                             </div>
-                                                                            <p ng-show="addBeautyTipForm.tip_description.$invalid && !addBeautyTipForm.tip_description.$pristine" class="help-block">Enter a tip description.</p>
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group-inner">
-                                                                        <div class="row">
+                                                                        <div class="row" ng-class="{ 'has-error' : addBeautyTipForm.tip_category.$invalid && !addBeautyTipForm.tip_category.$pristine }">
                                                                             <div class="col-lg-3">
                                                                                 <label class="login2 pull-right pull-right-pro">Tip Category</label>
                                                                             </div>
                                                                             <div class="col-lg-9">
-                                                                                <input type="number" class="form-control" name="tip_category" ng-model="tip_category">
+                                                                                <input type="number" class="form-control" name="tip_category" ng-model="tip_category" required>
+                                                                                <p ng-show="addBeautyTipForm.tip_category.$invalid && !addBeautyTipForm.tip_category.$pristine" class="help-block">Enter a tip Category.</p>
                                                                             </div>
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group-inner">
-                                                                        <div class="row">
+                                                                        <div class="row" ng-class="{ 'has-error' : addBeautyTipForm.tip_id.$invalid && !addBeautyTipForm.tip_id.$pristine }">
                                                                             <div class="col-lg-3">
                                                                                 <label class="login2 pull-right pull-right-pro">Tip Id</label>
                                                                             </div>
                                                                             <div class="col-lg-9">
-                                                                                <input type="number" class="form-control" name="tip_id" ng-model="tip_id">
+                                                                                <input type="number" class="form-control" name="tip_id" ng-model="tip_id" required>
+                                                                                <p ng-show="addBeautyTipForm.tip_id.$invalid && !addBeautyTipForm.tip_id.$pristine" class="help-block">Enter a tip Id.</p>
                                                                             </div>
                                                                         </div>
                                                                     </div>

@@ -70,23 +70,24 @@
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group-inner">
-                                                                        <div class="row">
+                                                                        <div class="row" ng-class="{ 'has-error' : addSubCategoryForm.sub_category_name.$invalid && !addSubCategoryForm.sub_category_name.$pristine }">
                                                                             <div class="col-lg-3">
                                                                                 <label class="login2 pull-right pull-right-pro">Category Name</label>
                                                                             </div>
                                                                             <div class="col-lg-9">
                                                                                 <input type="text" class="form-control" name="sub_category_name" ng-model="sub_category_name" required>
+                                                                                <p ng-show="addSubCategoryForm.sub_category_name.$invalid && !addSubCategoryForm.sub_category_name.$pristine" class="help-block">Enter a Category Name.</p>
                                                                             </div>
-                                                                            <p ng-show="addSubCategoryForm.sub_category_name.$invalid && !addSubCategoryForm.sub_category_name.$pristine" class="help-block">Enter a Category Name.</p>
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group-inner">
-                                                                        <div class="row">
+                                                                        <div class="row" ng-class="{ 'has-error' : addSubCategoryForm.cat_id.$invalid && !addSubCategoryForm.cat_id.$pristine }">
                                                                             <div class="col-lg-3">
                                                                                 <label class="login2 pull-right pull-right-pro">Category Id</label>
                                                                             </div>
                                                                             <div class="col-lg-9">
-                                                                                <input type="text" class="form-control" name="cat_id" ng-model="cat_id">
+                                                                                <input type="number" class="form-control" name="cat_id" ng-model="cat_id" required>
+                                                                                <p ng-show="addSubCategoryForm.cat_id.$invalid && !addSubCategoryForm.cat_id.$pristine" class="help-block">Enter a Category Id.</p>
                                                                             </div>
                                                                         </div>
                                                                     </div>

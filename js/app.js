@@ -93,6 +93,18 @@ app.config(function ($routeProvider) {
         redirectTo : "/"
     });
 });
+app.directive('loading', function () {
+    return {
+        restrict: 'E',
+        replace:true,
+        template: '<p><img src="assets/img/loading.gif"/></p>', // Define a template where the image will be initially loaded while waiting for the ajax request to complete
+        link: function (scope, element, attr) {
+            scope.$watch('loading', function (val) {
+                val = val ? $(element).show() : $(element).hide();  // Show or Hide the loading image   
+            }); 
+        }
+    }
+});
 app.controller('loginController', function($scope, $location) {
     console.log($location.$$path);
     if($location.$$path=='/'){
@@ -135,18 +147,25 @@ app.controller('dashboardController', function($scope,$http,DTOptionsBuilder, DT
 
 app.controller('usersController', function($scope,$http,DTOptionsBuilder, DTColumnBuilder) {
     $scope.hideHeader = false;
+    $scope.loading = true; // Show loading image
     $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/get_users_list').success(function(data) {
+        $scope.loading = false; // hide loading image on ajax success
         $scope.userData = data.data;
         console.log(data.data);
         $scope.vm = {};
         $scope.vm.dtOptions = DTOptionsBuilder.newOptions()
-              .withOption('order', [0, 'asc']);
+              .withOption('order', [0, 'asc'],'processing', true)
+              .withLanguage( {
+                  loadingRecords: "Please wait - loading..."
+                } )
     });
 });
 
 app.controller('show_services', function($scope,$http,DTOptionsBuilder, DTColumnBuilder) {
     $scope.hideHeader = false;
+    $scope.loading = true;
     $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/get_services').success(function(data) {
+        $scope.loading = false;
         $scope.servicesData = data.data;
         $scope.vm = {};
      
@@ -302,6 +321,21 @@ app.controller('EditCategoryController', ['$scope', 'Upload', '$timeout', functi
           $timeout(function () {
             file.result = response.data;
         });
+        if(response.data.status == 'true'){
+            swal({
+                title: "Here's a message!",
+                type: "success",
+                text: response.data.message,
+                confirmButtonText : "Close this window"
+            });
+        }else{
+            swal({
+                title: "Here's a message!",
+                type: "warning",
+                text: response.data.message,
+                confirmButtonText : "Close this window"
+            });
+        }
       })
     }
 }]);
@@ -348,12 +382,27 @@ app.controller('EditSubCategoryController', ['$scope', 'Upload', '$timeout', fun
         var file = info.cat_img;
         file.upload = Upload.upload({
           url: 'http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_sub_category',
-          data: {category_name: info.category_name, cat_img: info.cat_img},
+          data: {category_name: info.category_name, cat_img: info.cat_img, sub_category_name: info.sub_category_name, cat_id : info.cat_id},
         });
         file.upload.then(function (response) {
           $timeout(function () {
             file.result = response.data;
         });
+        if(response.data.status == 'true'){
+            swal({
+                title: "Here's a message!",
+                type: "success",
+                text: response.data.message,
+                confirmButtonText : "Close this window"
+            });
+        }else{
+            swal({
+                title: "Here's a message!",
+                type: "warning",
+                text: response.data.message,
+                confirmButtonText : "Close this window"
+            });
+        }
       })
     }
 }]);
@@ -562,6 +611,21 @@ app.controller('EditTipController', ['$scope', 'Upload', '$timeout', function ($
           $timeout(function () {
             file.result = response.data;
         });
+        if(response.data.status == 'true'){
+            swal({
+                title: "Here's a message!",
+                type: "success",
+                text: response.data.message,
+                confirmButtonText : "Close this window"
+            });
+        }else{
+            swal({
+                title: "Here's a message!",
+                type: "warning",
+                text: response.data.message,
+                confirmButtonText : "Close this window"
+            });
+        }
       })
     }
 }]);

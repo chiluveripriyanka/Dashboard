@@ -3481,7 +3481,7 @@ ul.profile-contact-menu {
     margin-bottom:15px;
 }
 button[disabled]{
-	opacity: 0.4;
+	opacity: 0.4 !important;
     cursor: not-allowed;
 }
 .button_margin{
@@ -3567,4 +3567,7 @@ table.dataTable thead tr th:last-child, table.dataTable tbody th:last-child, tab
 }
 .modal-header h4{
 	margin: 0 !important;
+}
+.has-error p.help-block{
+	text-align: left;
 }
