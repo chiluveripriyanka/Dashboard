@@ -85,10 +85,14 @@ app.config(function ($routeProvider) {
         templateUrl : "partials/add_packages.html",
         controller: "AddPackagesController"
     })
-     .when("/add_product",{     
-         templateUrl : "partials/add_product.html",      
-         controller: "AddProductsController"     
-     })
+    .when("/add_product",{     
+        templateUrl : "partials/add_product.html",      
+        controller: "AddProductsController"     
+    })
+    .when("/show_products",{
+        templateUrl : "partials/show_products.html",
+        controller: "show_products" 
+    })
     .otherwise({
         redirectTo : "/"
     });
@@ -199,13 +203,18 @@ app.controller('show_categories', function($scope,$http,DTOptionsBuilder, DTColu
               .withOption('order', [0, 'asc']);
     });
     $scope.editCategory = function(id) {
-        //alert(id);
-        $scope.categoriesgetData = [{
-            cat_id:1,
-            cat_img:'nm.jpg',
-            category_name:'sdsdd'
-        }]
         $scope.showModal = true;
+        for (i in $scope.categoriesData) {
+            //Getting the person details from scope based on id
+            if ($scope.categoriesData[i].cat_id == id) {
+                $scope.categoriesByIdData = {
+                    cat_id: $scope.categoriesData[i].cat_id,
+                    category_name: $scope.categoriesData[i].category_name,
+                    cat_img: $scope.categoriesData[i].cat_img
+                };
+                console.log($scope.categoriesByIdData);
+            }
+        }
     };
     $scope.ok = function() {
       $scope.showModal = false;
@@ -224,14 +233,19 @@ app.controller('show_sub_categories', function($scope,$http,DTOptionsBuilder, DT
               .withOption('order', [0, 'asc']);
     });
     $scope.editSubCategory = function(id) {
-        alert(id);
-        $scope.categoriesgetData = [{
-            cat_id:1,
-            cat_img:'nm.jpg',
-            category_name:'test category',
-            sub_category_name: 'test sub category'
-        }]
         $scope.showModal = true;
+        for (i in $scope.subcategoriesgetData) {
+            //Getting the person details from scope based on id
+            if ($scope.subcategoriesgetData[i].sub_cat_id == id) {
+                $scope.subCategoriesByIdData = {
+                    cat_id: $scope.subcategoriesgetData[i].cat_id,
+                    category_name: $scope.subcategoriesgetData[i].category_name,
+                    cat_img: $scope.subcategoriesgetData[i].cat_img,
+                    sub_category_name:$scope.subcategoriesgetData[i].sub_category_name
+                };
+                console.log($scope.subCategoriesByIdData);
+            }
+        }
     };
     $scope.ok = function() {
       $scope.showModal = false;
@@ -280,6 +294,16 @@ app.controller('show_packages', function($scope,$http,DTOptionsBuilder, DTColumn
               .withOption('order', [0, 'asc']);
     });
 });
+app.controller('show_products', function($scope,$http,DTOptionsBuilder, DTColumnBuilder) {
+    $scope.hideHeader = false;
+    $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/get_products').success(function(data) {
+        $scope.products = data.data;
+        console.log($scope.products);
+        $scope.vm = {};
+        $scope.vm.dtOptions = DTOptionsBuilder.newOptions()
+              .withOption('order', [0, 'asc']);
+    });
+});
 
 app.controller('AddCategoryController', ['$scope', 'Upload', '$timeout', function ($scope, Upload, $timeout) {
     $scope.uploadPic = function(file) {
@@ -310,35 +334,36 @@ app.controller('AddCategoryController', ['$scope', 'Upload', '$timeout', functio
     }
 }]);
 app.controller('EditCategoryController', ['$scope', 'Upload', '$timeout', function ($scope, Upload, $timeout) {
-    $scope.updateCategoryForm = function(info) {
-        console.log('category_name:' + info.category_name + 'category_img' + info.cat_img);
-        var file = info.cat_img;
+    $scope.updateCategoryForm = function() {
+        console.log($scope.categoriesByIdData);
+        var file = $scope.categoriesByIdData.cat_img;
         file.upload = Upload.upload({
           url: 'http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_category',
-          data: {category_name: info.category_name, cat_img: info.cat_img},
+          data: {category_name: $scope.categoriesByIdData.category_name, cat_img: file},
         });
         file.upload.then(function (response) {
           $timeout(function () {
             file.result = response.data;
-        });
-        if(response.data.status == 'true'){
+          });
+          if(response.data.status == 'true'){
             swal({
                 title: "Here's a message!",
                 type: "success",
                 text: response.data.message,
                 confirmButtonText : "Close this window"
             });
-        }else{
+          }else{
             swal({
                 title: "Here's a message!",
                 type: "warning",
                 text: response.data.message,
                 confirmButtonText : "Close this window"
             });
-        }
-      })
+          }
+        });
     }
 }]);
+
 app.controller('AddSubCategoryController', ['$scope', 'Upload', '$timeout', function ($scope, Upload, $timeout) {
     $scope.uploadPic = function(file) {
         file.upload = Upload.upload({
@@ -377,33 +402,34 @@ app.controller('AddSubCategoryController', ['$scope', 'Upload', '$timeout', func
     }
 }]);
 app.controller('EditSubCategoryController', ['$scope', 'Upload', '$timeout', function ($scope, Upload, $timeout) {
-    $scope.updateSubCategoryForm = function(info) {
-        console.log('sub_category_name:' + info.sub_category_name +'category_name:' + info.category_name + 'category_img' + info.cat_img);
-        var file = info.cat_img;
+    $scope.updateSubCategoryForm = function() {
+        console.log($scope.subCategoriesByIdData);
+        var file = $scope.subCategoriesByIdData.cat_img;
+        console.log($scope.subCategoriesByIdData.cat_img);
         file.upload = Upload.upload({
           url: 'http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_sub_category',
-          data: {category_name: info.category_name, cat_img: info.cat_img, sub_category_name: info.sub_category_name, cat_id : info.cat_id},
+          data: {category_name: $scope.subCategoriesByIdData.category_name, cat_img: file, sub_category_name: $scope.subCategoriesByIdData.sub_category_name, cat_id : $scope.subCategoriesByIdData.cat_id},
         });
         file.upload.then(function (response) {
           $timeout(function () {
             file.result = response.data;
-        });
-        if(response.data.status == 'true'){
+          });
+          if(response.data.status == 'true'){
             swal({
                 title: "Here's a message!",
                 type: "success",
                 text: response.data.message,
                 confirmButtonText : "Close this window"
             });
-        }else{
+          }else{
             swal({
                 title: "Here's a message!",
                 type: "warning",
                 text: response.data.message,
                 confirmButtonText : "Close this window"
             });
-        }
-      })
+          }
+        });
     }
 }]);
 app.controller('AddServicesController', ['$scope', 'Upload', '$timeout', function ($scope, Upload, $timeout) {

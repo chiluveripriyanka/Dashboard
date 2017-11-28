@@ -64,7 +64,7 @@
         <div class="modal-body">
             <div  ng-controller="EditSubCategoryController">
                 <div class="all-form-element-inner">
-                    <div ng-repeat="category in categoriesgetData">
+                    <div>
                         <form name="editSubCategoryForm" id="editSubCategoryForm" novalidate enctype="multipart/form-data">
                             <div class="form-group-inner">
                                 <div class="row">
@@ -72,7 +72,7 @@
                                         <label class="login2 pull-right pull-right-pro">Category Name</label>
                                     </div>
                                     <div class="col-lg-9">
-                                        <input type="text" class="form-control" name="category_name" ng-model="category.category_name" required>
+                                        <input type="text" class="form-control" name="category_name" ng-model="subCategoriesByIdData.category_name" required>
                                     </div>
                                     <p ng-show="editSubCategoryForm.category_name.$invalid && !editSubCategoryForm.category_name.$pristine" class="help-block">Enter a Category Name.</p>
                                 </div>
@@ -83,7 +83,7 @@
                                         <label class="login2 pull-right pull-right-pro">Sub Category Name</label>
                                     </div>
                                     <div class="col-lg-9">
-                                        <input type="text" class="form-control" name="sub_category_name" ng-model="category.sub_category_name" required>
+                                        <input type="text" class="form-control" name="sub_category_name" ng-model="subCategoriesByIdData.sub_category_name" required>
                                     </div>
                                     <p ng-show="editSubCategoryForm.category_name.$invalid && !editSubCategoryForm.category_name.$pristine" class="help-block">Enter a Sub Category Name.</p>
                                 </div>
@@ -94,7 +94,7 @@
                                         <label class="login2 pull-right pull-right-pro">Category Id</label>
                                     </div>
                                     <div class="col-lg-9">
-                                        <input type="text" class="form-control" name="cat_id" ng-model="category.cat_id">
+                                        <input type="text" class="form-control" name="cat_id" ng-model="subCategoriesByIdData.cat_id">
                                     </div>
                                 </div>
                             </div>
@@ -109,7 +109,7 @@
                                             <div class="input append-small-btn">
                                                 <div class="file-button">
                                                     Browse
-                                                    <input type="file" onchange="document.getElementById('append-small-btn').value = this.value;" ngf-select ng-model="category.cat_img" name="cat_img" accept="image/*" ngf-max-size="2MB" required
+                                                    <input type="file" onchange="document.getElementById('append-small-btn').value = this.value;" ngf-select ng-model="subCategoriesByIdData.cat_img" name="cat_img" accept="image/*" ngf-max-size="2MB" required
                                                          ngf-model-invalid="errorFile">
                                                 </div>
                                                 <input type="text" id="append-small-btn" placeholder="no file selected" ng-model="category.cat_img">
@@ -129,7 +129,7 @@
                                         <div class="col-lg-9">
                                             <div class="login-horizental cancel-wp pull-left">
                                                 <button class="btn btn-white" type="submit" ng-click="cancel()">Cancel</button>
-                                                <button class="btn btn-sm btn-primary login-submit-cs"  ng-click="updateSubCategoryForm(category)">Submit</button>
+                                                <button class="btn btn-sm btn-primary login-submit-cs" ng-click="updateSubCategoryForm()">Submit</button>
                                               <span class="progress" ng-show="cat_img.progress >= 0">
                                                 <div style="width:{{cat_img.progress}}%" 
                                                     ng-bind="cat_img.progress + '%'"></div>

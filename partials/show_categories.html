@@ -46,6 +46,7 @@
                                             </div>
                                         </td>
                                       </tr>
+
                                     </tbody>
                                   </table>
                             </div>
@@ -60,10 +61,13 @@
             <h4>Edit Category</h4>
         </div>
         <div class="modal-body">
+                                      <!-- <input type="hidden" data-ng-model="newperson.cat_id" />
+                                      <b>Name:</b>
+                <input type="text" name="Name" id="Name" data-ng-model="newperson.category_name" placeholder="Name" required /> -->
             <div  ng-controller="EditCategoryController">
                 <div class="all-form-element-inner">
-                    <div ng-repeat="category in categoriesgetData">
-                        <form name="editCategoryForm" id="editCategoryForm" novalidate enctype="multipart/form-data">
+                    <div >
+                        <form name="editCategoryForm" id="editCategoryForm" ng-submit="submitCategoryForm()" novalidate enctype="multipart/form-data">
                             <div class="form-group-inner">
                                 <div class="row mg-b-10" >
                                     <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
@@ -75,11 +79,11 @@
                                             <div class="input append-small-btn">
                                                 <div class="file-button">
                                                     Browse
-                                                    <input type="file" onchange="document.getElementById('append-small-btn').value = this.value;" ngf-select ng-model="category.cat_img" name="cat_img"    
-                                                         accept="image/*" ngf-max-size="2MB" required
+                                                    <input type="file" onchange="document.getElementById('append-small-btn').value = this.value;" ngf-select ng-model="categoriesByIdData.cat_img" name="cat_img"    
+                                                         accept="image/*" ngf-max-size="2MB" 
                                                          ngf-model-invalid="errorFile">
                                                 </div>
-                                                <input type="text" id="append-small-btn" ng-model="category.cat_img" placeholder="no file selected">
+                                                <input type="text" id="append-small-btn" placeholder="no file selected" ng-model="categoriesByIdData.cat_img">
                                                 <div class="text-left mg-b-30" ng-show="editCategoryForm.file.$error.required">Upload image is required</i><br>
                                                   <i ng-show="editCategoryForm.file.$error.maxSize">File too large 
                                                       {{errorFile.size / 1000000|number:1}}MB: max 2M</i>
@@ -90,16 +94,17 @@
                                 </div>
                             </div>
                             <div class="form-group-inner">
-                                <div class="row">
+                                <div class="row"ng-class="{ 'has-error' : editCategoryForm.category_name.$invalid && !editCategoryForm.category_name.$pristine }">
                                     <div class="col-lg-3">
                                         <label class="login2 pull-right pull-right-pro">Category Name</label>
                                     </div>
                                     <div class="col-lg-9">
-                                        <input type="text" class="form-control" name="category_name" ng-model="category.category_name" required>
+                                        <input type="text" class="form-control" name="category_name" ng-model="categoriesByIdData.category_name" required>
+                                        <p ng-show="editCategoryForm.category_name.$invalid && !editCategoryForm.category_name.$pristine" class="help-block">Enter a Category Name.</p>
                                     </div>
-                                    <p ng-show="editCategoryForm.category_name.$invalid && !editCategoryForm.category_name.$pristine" class="help-block">Enter a Category Name.</p>
                                 </div>
                             </div>
+                            
                             <div class="form-group-inner">
                                 <div class="login-btn-inner">
                                     <div class="row">
@@ -107,13 +112,13 @@
                                         <div class="col-lg-9">
                                             <div class="login-horizental cancel-wp pull-left">
                                                 <button class="btn btn-white" type="submit" ng-click="cancel()">Cancel</button>
-                                                <button class="btn btn-sm btn-primary login-submit-cs"  ng-click="updateCategoryForm(category)">Submit</button>
-                                              <span class="progress" ng-show="cat_img.progress >= 0">
-                                                <div style="width:{{cat_img.progress}}%" 
-                                                    ng-bind="cat_img.progress + '%'"></div>
-                                              </span>
-                                              <span ng-show="cat_img.result">Upload Successful</span>
-                                              <span class="err" ng-show="errorMsg">{{errorMsg}}</span>
+                                                <button class="btn btn-sm btn-primary login-submit-cs" ng-disabled="!editCategoryForm.$valid" ng-click="updateCategoryForm()">Submit</button>
+                                                  <span class="progress" ng-show="cat_img.progress >= 0">
+                                                    <div style="width:{{cat_img.progress}}%" 
+                                                        ng-bind="cat_img.progress + '%'"></div>
+                                                  </span>
+                                                  <span ng-show="cat_img.result">Upload Successful</span>
+                                                  <span class="err" ng-show="errorMsg">{{errorMsg}}</span>
                                             </div>
                                         </div>
                                     </div>
