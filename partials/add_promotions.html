@@ -1,0 +1,180 @@
+    <!-- Breadcome start-->
+    <div class="breadcome-area mg-b-30 mg-t-30">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcome-list map-mg-t-40-gl shadow-reset">
+                        <div class="breadcome-heading">
+                            <h2>Add Promotions</h2>
+                        </div>
+                        <ul class="breadcome-menu">
+                            <li><a href="#">Home</a> <span class="bread-slash">/</span>
+                            </li>
+                            <li><span class="bread-blod">Add Promotions</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Breadcome End-->
+    <!-- tabs start-->
+    <div class="admintab-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="admintab-wrap mg-b-40 button_margin">
+                        <!-- <a href="#/add_edit_sub_categories"><button type="button" class="btn btn-custon-four btn-primary pull-right mg-t-50 mg-b-20 mg-l-20">Add/Edit Sub Categories</button></a> -->
+                        <a href="#/show_promotions"><button type="button" class="btn btn-custon-four btn-primary pull-right mg-t-50 mg-b-20">Show Promotions</button></a>
+                        <ul class="nav nav-tabs custom-menu-wrap custon-tab-menu-style1">
+                            
+                            <!-- <li><a data-toggle="tab" href="#edit_category"><span class="adminpro-icon adminpro-analytics-arrow tab-custon-ic"></span>Edit Category</a>
+                            </li> -->
+                        </ul>
+                        <div class="tab-content">
+                            <div id="add_category" class="tab-pane in active animated flipInX custon-tab-style1">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="sparkline12-list mg-t-30">
+                                            <div class="sparkline12-graph">
+                                                <div class="basic-login-form-ad">
+                                                    <div class="row">
+                                                        <div class="col-lg-8">
+                                                            <div  ng-controller="AddPromotionsController">
+                                                                <div class="all-form-element-inner">
+                                                                    <form name="addPromotionForm" id="addPromotionForm" ng-submit="submitCategoryForm()" novalidate enctype="multipart/form-data">
+                                                                        <div class="form-group-inner">
+                                                                            <div class="row" ng-class="{ 'has-error' : addPromotionForm.promotion_name.$invalid && !addPromotionForm.promotion_name.$pristine }">
+                                                                                <div class="col-lg-3">
+                                                                                    <label class="login2 pull-right pull-right-pro">Promotion Name</label>
+                                                                                </div>
+                                                                                <div class="col-lg-9">
+                                                                                    <input type="text" class="form-control" name="promotion_name" ng-model="promotion_name" required>
+                                                                                    <p ng-show="addPromotionForm.promotion_name.$invalid && !addPromotionForm.promotion_name.$pristine" class="help-block">Enter a Promotion Name.</p>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-group-inner">
+                                                                            <div class="row mg-b-10" >
+                                                                                <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+                                                                                    <label class="login2 pull-right pull-right-pro">Image</label>
+                                                                                </div>
+                                                                                <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+                                                                                    
+                                                                                    <div class="file-upload-inner file-upload-inner-right ts-forms">
+                                                                                        <div class="input append-small-btn">
+                                                                                            <div class="file-button">
+                                                                                                Browse
+                                                                                                <input type="file" onchange="document.getElementById('append-small-btn').value = this.value;" ngf-select ng-model="promotion_img" name="promotion_img"    
+                                                                                                     accept="image/*" ngf-max-size="2MB" required
+                                                                                                     ngf-model-invalid="errorFile">
+                                                                                            </div>
+                                                                                            <input type="text" id="append-small-btn" placeholder="no file selected">
+                                                                                            <div class="text-left mg-b-30" ng-show="addPromotionForm.file.$error.required">Upload image is required</i><br>
+                                                                                              <i ng-show="addPromotionForm.file.$error.maxSize">File too large 
+                                                                                                  {{errorFile.size / 1000000|number:1}}MB: max 2M</i>
+                                                                                              <img ng-show="addPromotionForm.file.$valid" ngf-thumbnail="picFile" class="thumb"> <button ng-click="picFile = null" ng-show="picFile">Remove</button>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-group-inner">
+                                                                            <div class="row"ng-class="{ 'has-error' : addPromotionForm.promotion_description.$invalid && !addPromotionForm.promotion_description.$pristine }">
+                                                                                <div class="col-lg-3">
+                                                                                    <label class="login2 pull-right pull-right-pro">Promotion Description</label>
+                                                                                </div>
+                                                                                <div class="col-lg-9">
+                                                                                    <textarea class="form-control" name="promotion_description" ng-model="promotion_description" required cols="5" rows="5"/>
+                                                                                    <p ng-show="addPromotionForm.promotion_description.$invalid && !addPromotionForm.promotion_description.$pristine" class="help-block">Enter a Promotion Description.</p>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-group-inner">
+                                                                            <div class="row" ng-class="{ 'has-error' : addPromotionForm.promotion_type.$invalid && !addPromotionForm.promotion_type.$pristine }">
+                                                                                <div class="col-lg-3">
+                                                                                    <label class="login2 pull-right pull-right-pro">Promotion Type</label>
+                                                                                </div>
+                                                                                <div class="col-lg-9">
+                                                                                    <input type="number" class="form-control" name="promotion_type" ng-model="promotion_type" required />
+                                                                                    <p ng-show="addPromotionForm.promotion_type.$invalid && !addPromotionForm.promotion_type.$pristine" class="help-block">Enter a Promotion Type.</p>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="date-picker-inner">
+                                                                            <div class="form-group-inner data-custon-pick" id="data_1">
+                                                                                <div class="row" ng-class="{ 'has-error' : addPromotionForm.from_date.$invalid && !addPromotionForm.from_date.$pristine }">
+                                                                                    <div class="col-lg-3">
+                                                                                        <label class="login2 pull-right pull-right-pro"><strong>Promotion Start Date</strong></label>
+                                                                                    </div>
+                                                                                    <div class="col-lg-9">
+                                                                                        <div class="input-group date">
+                                                                                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                                                                            <input type="text" class="form-control" value="10/04/2017"  name="from_date" ng-model="from_date" required>
+                                                                                        </div>
+                                                                                        <p ng-show="addPromotionForm.from_date.$invalid && !addPromotionForm.from_date.$pristine" class="help-block">Select promotion start date.</p>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="date-picker-inner">
+                                                                            <div class="form-group-inner data-custon-pick" id="data_1">
+                                                                                <div class="row" ng-class="{ 'has-error' : addPromotionForm.end_date.$invalid && !addPromotionForm.end_date.$pristine }">
+                                                                                    <div class="col-lg-3">
+                                                                                        <label class="login2 pull-right pull-right-pro"><strong>Promotion End Date</strong></label>
+                                                                                    </div>
+                                                                                    <div class="col-lg-9">
+                                                                                        <div class="input-group date">
+                                                                                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                                                                            <input type="text" class="form-control" value="10/04/2017"  name="end_date" ng-model="end_date" required>
+                                                                                        </div>
+                                                                                        <p ng-show="addPromotionForm.end_date.$invalid && !addPromotionForm.end_date.$pristine" class="help-block">Select Promotion end date.</p>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-group-inner">
+                                                                            <div class="login-btn-inner">
+                                                                                <div class="row">
+                                                                                    <div class="col-lg-3"></div>
+                                                                                    <div class="col-lg-9">
+                                                                                        <div class="login-horizental cancel-wp pull-left">
+                                                                                            <button class="btn btn-white" type="submit">Cancel</button>
+                                                                                            <button class="btn btn-sm btn-primary login-submit-cs" ng-disabled="!addPromotionForm.$valid" ng-click="addPromotion(promotion_img)">Submit</button>
+                                                                                            <span ng-show="isLoading" class="ml20">
+                                                                                                <img src="assets/img/loading.gif" class="loading_image"/>
+                                                                                            </span>
+                                                                                              <span class="progress" ng-show="promotion_img.progress >= 0">
+                                                                                                <div style="width:{{promotion_img.progress}}%" 
+                                                                                                    ng-bind="promotion_img.progress + '%'"></div>
+                                                                                              </span>
+                                                                                              <span ng-show="promotion_img.result">Upload Successful</span>
+                                                                                              <span class="err" ng-show="errorMsg">{{errorMsg}}</span>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- tabs End-->
+   <!-- datapicker JS
+        ============================================ -->
+    <script src="assets/js/datapicker/bootstrap-datepicker.js"></script>
+    <script src="assets/js/datapicker/datepicker-active.js"></script>

@@ -44,7 +44,8 @@
                                         <td><img width="50" ng-src="http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/uploads/{{tip.tip_img}}" /></td>
                                         <td class="v-middle">
                                             <div class="btn-group">
-                                                <button type="button" class="btn btn-default btn" ng-click="editTip(tip.tip_id)"><i class="glyphicon glyphicon-pencil"></i></button>  
+                                                <button type="button" class="btn btn-default btn" ng-click="editTip(tip.tip_id)"><i class="glyphicon glyphicon-pencil"></i></button> 
+                                                <!-- <button type="button" class="btn btn-default btn" ng-click="deleteTip(tip.tip_id)"><i class="glyphicon glyphicon-trash"></i></button> -->  
                                             </div>
                                         </td>
                                       </tr>
@@ -64,47 +65,28 @@
         <div class="modal-body">
             <div  ng-controller="EditTipController">
                 <div class="all-form-element-inner">
-                    <div ng-repeat="tip in tipData">
+                    <div>
                         <form name="editBeautyTipForm" id="editBeautyTipForm"  novalidate enctype="multipart/form-data">
+                            <input type="hidden" name="tip_id" ng-model="tipsByIdData.tip_id">
                             <div class="form-group-inner">
-                                <div class="row">
+                                <div class="row" ng-class="{ 'has-error' : editBeautyTipForm.tip_title.$invalid && !editBeautyTipForm.tip_title.$pristine }">
                                     <div class="col-lg-3">
                                         <label class="login2 pull-right pull-right-pro">Tip Title</label>
                                     </div>
                                     <div class="col-lg-9">
-                                        <input type="text" class="form-control" name="tip_title" ng-model="tip.tip_title" required>
+                                        <input type="text" class="form-control" name="tip_title" ng-model="tipsByIdData.tip_title" required>
+                                        <p ng-show="editBeautyTipForm.tip_title.$invalid && !editBeautyTipForm.tip_title.$pristine" class="help-block">Enter a Tip Name.</p>
                                     </div>
-                                    <p ng-show="editBeautyTipForm.tip_title.$invalid && !editBeautyTipForm.tip_title.$pristine" class="help-block">Enter a Tip Name.</p>
                                 </div>
                             </div>
                             <div class="form-group-inner">
-                                <div class="row">
+                                <div class="row"  ng-class="{ 'has-error' : editBeautyTipForm.tip_description.$invalid && !editBeautyTipForm.tip_description.$pristine }">
                                     <div class="col-lg-3">
                                         <label class="login2 pull-right pull-right-pro">Tip Description</label>
                                     </div>
                                     <div class="col-lg-9">
-                                        <textarea class="form-control" name="tip_description" ng-model="tip.tip_description" required cols="5" rows="5" />
-                                    </div>
-                                    <p ng-show="editBeautyTipForm.tip_description.$invalid && !editBeautyTipForm.tip_description.$pristine" class="help-block">Enter a tip description.</p>
-                                </div>
-                            </div>
-                            <div class="form-group-inner">
-                                <div class="row">
-                                    <div class="col-lg-3">
-                                        <label class="login2 pull-right pull-right-pro">Tip Category</label>
-                                    </div>
-                                    <div class="col-lg-9">
-                                        <input type="number" class="form-control" name="tip_category" ng-model="tip.tip_category">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group-inner">
-                                <div class="row">
-                                    <div class="col-lg-3">
-                                        <label class="login2 pull-right pull-right-pro">Tip Id</label>
-                                    </div>
-                                    <div class="col-lg-9">
-                                        <input type="number" class="form-control" name="tip_id" ng-model="tip.tip_id">
+                                        <textarea class="form-control" name="tip_description" ng-model="tipsByIdData.tip_description" required cols="5" rows="5" />
+                                        <p ng-show="editBeautyTipForm.tip_description.$invalid && !editBeautyTipForm.tip_description.$pristine" class="help-block">Enter a tip description.</p>
                                     </div>
                                 </div>
                             </div>
@@ -119,39 +101,14 @@
                                             <div class="input append-small-btn">
                                                 <div class="file-button">
                                                     Browse
-                                                    <input type="file" onchange="document.getElementById('append-small-btn').value = this.value;" ngf-select ng-model="tip_img" name="tip_img"    
+                                                    <input type="file" onchange="document.getElementById('append-small-btn').value = this.value;" ngf-select ng-model="tipsByIdData.tip_img" name="tip_img"    
                                                          accept="image/*" ngf-max-size="200000000MB" required
                                                          ngf-model-invalid="errorFile">
                                                 </div>
-                                                <input type="text" id="append-small-btn" placeholder="no file selected" ng-model="tip.tip_img">
+                                                <input type="text" id="append-small-btn" placeholder="no file selected" ng-model="tipsByIdData.tip_img">
                                                 <div class="text-left mg-b-30" ng-show="editBeautyTipForm.file.$error.required">Upload image is required</i><br>
                                                   <i ng-show="editBeautyTipForm.file.$error.maxSize">File too large 
                                                       {{errorFile.size / 1000000|number:1}}MB: max 2M</i>
-                                                  <img ng-show="editBeautyTipForm.file.$valid" ngf-thumbnail="picFile" class="thumb"> <button ng-click="picFile = null" ng-show="picFile">Remove</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group-inner">
-                                <div class="row mg-b-10" >
-                                    <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-                                        <label class="login2 pull-right pull-right-pro">Tip Video</label>
-                                    </div>
-                                    <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
-                                        
-                                        <div class="file-upload-inner file-upload-inner-right ts-forms">
-                                            <div class="input append-small-btn1">
-                                                <div class="file-button">
-                                                    Browse
-                                                    <input type="file" onchange="document.getElementById('append-small-btn1').value = this.value;" ngf-select ng-model="tip_video" name="tip_video"    
-                                                         accept="video/*" ngf-max-size="200000000MB" required
-                                                         ngf-model-invalid="errorFile">
-                                                </div>
-                                                <input type="text" id="append-small-btn1" placeholder="no file selected" ng-model="tip.tip_video">
-                                                <div class="text-left mg-b-30" ng-show="editBeautyTipForm.file.$error.required">Upload video is required</i><br>
-                                                  <i ng-show="editBeautyTipForm.file.$error.maxSize">File too large 
-                                                      {{errorFile.size / 200000000|number:1}}MB: max 2M</i>
                                                   <img ng-show="editBeautyTipForm.file.$valid" ngf-thumbnail="picFile" class="thumb"> <button ng-click="picFile = null" ng-show="picFile">Remove</button>
                                             </div>
                                         </div>
@@ -165,7 +122,7 @@
                                         <div class="col-lg-9">
                                             <div class="login-horizental cancel-wp pull-left">
                                                 <button class="btn btn-white" type="submit" ng-click="cancel()">Cancel</button>
-                                                <button class="btn btn-sm btn-primary login-submit-cs" ng-click="updateTip(tip)">Submit</button>
+                                                <button class="btn btn-sm btn-primary login-submit-cs" ng-click="updateTip()">Submit</button>
                                                   <span class="progress" ng-show="tip_img.progress >= 0">
                                                     <div style="width:{{tip_img.progress}}%" 
                                                         ng-bind="tip_img.progress + '%'"></div>

@@ -38,7 +38,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                      <tr ng-repeat="subCategory in subcategoriesgetData">
+                                        <tr ng-repeat="subCategory in subcategoriesgetData">
                                         <td>{{ subCategory.category_name }}</td>
                                         <td>{{ subCategory.sub_category_name }}</td>
                                         <td><img width="50" ng-src="http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/uploads/{{subCategory.sub_cat_img}}" /></td>
@@ -66,6 +66,7 @@
                 <div class="all-form-element-inner">
                     <div>
                         <form name="editSubCategoryForm" id="editSubCategoryForm" novalidate enctype="multipart/form-data">
+                            <input type="hidden" class="form-control" name="sub_cat_id" ng-model="subCategoriesByIdData.sub_cat_id" required>
                             <div class="form-group-inner">
                                 <div class="row">
                                     <div class="col-lg-3">
@@ -89,16 +90,6 @@
                                 </div>
                             </div>
                             <div class="form-group-inner">
-                                <div class="row">
-                                    <div class="col-lg-3">
-                                        <label class="login2 pull-right pull-right-pro">Category Id</label>
-                                    </div>
-                                    <div class="col-lg-9">
-                                        <input type="text" class="form-control" name="cat_id" ng-model="subCategoriesByIdData.cat_id">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group-inner">
                                 <div class="row mg-b-10" >
                                     <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
                                         <label class="login2 pull-right pull-right-pro">Image</label>
@@ -109,10 +100,11 @@
                                             <div class="input append-small-btn">
                                                 <div class="file-button">
                                                     Browse
-                                                    <input type="file" onchange="document.getElementById('append-small-btn').value = this.value;" ngf-select ng-model="subCategoriesByIdData.cat_img" name="cat_img" accept="image/*" ngf-max-size="2MB" required
+                                                    <input type="file" onchange="document.getElementById('append-small-btn').value = this.value;" ngf-select ng-model="subCategoriesByIdData.sub_cat_img" name="cat_img" accept="image/*" ngf-max-size="2MB" required
                                                          ngf-model-invalid="errorFile">
                                                 </div>
-                                                <input type="text" id="append-small-btn" placeholder="no file selected" ng-model="category.cat_img">
+                                                <input type="text" id="append-small-btn" placeholder="no file selected" ng-model="subCategoriesByIdData.sub_cat_img">
+                                                <img width="50" class="mg-t-10" ng-src="http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/uploads/{{subCategoriesByIdData.sub_cat_img}}" />
                                                 <div class="text-left mg-b-30" ng-show="editSubCategoryForm.file.$error.required">Upload image is required</i><br>
                                                   <i ng-show="editSubCategoryForm.file.$error.maxSize">File too large 
                                                       {{errorFile.size / 1000000|number:1}}MB: max 2M</i>

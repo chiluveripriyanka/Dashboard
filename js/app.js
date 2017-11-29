@@ -1,18 +1,5 @@
 var app = angular.module('admin_dashboard', ['datatables', 'ngRoute', 'ngFileUpload', 'angularjs-dropdown-multiselect', 'ui.bootstrap.modal']);
 app.run(['$rootScope', '$route', function ($rootScope, $route) {
-   
-
-    // $rootScope.$watch(function () {
-    //     return sessionStorage.getItem('chIns_ngSession');
-    // }, function (newVal) {
-
-    //     if (newVal === null) {
-    //         $rootScope.userAuth = false;
-    //     } else {
-    //         $rootScope.userAuth = true;
-    //     }
-    // });
-
     $rootScope.$on('$routeChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
         console.log(toState.originalPath);
         if(toState.originalPath!='/'){
@@ -21,16 +8,8 @@ app.run(['$rootScope', '$route', function ($rootScope, $route) {
         else{
             $rootScope.isLoggedin= false;
         }
-        // if (toState.originalPath != "quotesListing") {
-        //     angular.element(document.body.querySelectorAll(".chIns_bottomSelectedCompaniesWrapperQL")).remove();
-        // }
-
     });
- 
-    
-
     $rootScope.domainNameUrl = window.serverIP;
-
 }]);
 
 app.config(function ($routeProvider) {
@@ -38,7 +17,6 @@ app.config(function ($routeProvider) {
     .when("/" , {
         templateUrl : "partials/login.html"
     })
-
     .when("/dashboard",{
         templateUrl : "partials/dashboard.html",
         controller: "dashboardController"
@@ -50,6 +28,10 @@ app.config(function ($routeProvider) {
     .when("/show_services",{
         templateUrl : "partials/show_services.html",
         controller: "show_services"
+    })
+    .when("/show_promotions",{
+        templateUrl : "partials/show_promotions.html",
+        controller: "show_promotions"
     })
     .when("/show_categories",{
         templateUrl : "partials/show_categories.html",
@@ -88,6 +70,10 @@ app.config(function ($routeProvider) {
     .when("/add_product",{     
         templateUrl : "partials/add_product.html",      
         controller: "AddProductsController"     
+    })
+    .when("/add_promotions",{
+        templateUrl : "partials/add_promotions.html",
+        controller: "AddPromotionsController"
     })
     .when("/show_products",{
         templateUrl : "partials/show_products.html",
@@ -165,6 +151,7 @@ app.controller('usersController', function($scope,$http,DTOptionsBuilder, DTColu
     });
 });
 
+/* services start */
 app.controller('show_services', function($scope,$http,DTOptionsBuilder, DTColumnBuilder) {
     $scope.hideHeader = false;
     $scope.loading = true;
@@ -172,35 +159,56 @@ app.controller('show_services', function($scope,$http,DTOptionsBuilder, DTColumn
         $scope.loading = false;
         $scope.servicesData = data.data;
         $scope.vm = {};
-     
-            $scope.vm.dtOptions = DTOptionsBuilder.newOptions()
-              .withOption('order', [0, 'asc']);
+        $scope.vm.dtOptions = DTOptionsBuilder.newOptions()
+            .withOption('order', [0, 'asc']);
     });
-    $scope.editCategory = function(id) {
-        //alert(id);
-        $scope.categoriesgetData = [{
-            cat_id:1,
-            cat_img:'nm.jpg',
-            category_name:'sdsdd'
-        }]
-        $scope.showModal = true;
-    };
-    $scope.ok = function() {
-      $scope.showModal = false;
-    };
-
-    $scope.cancel = function() {
-      $scope.showModal = false;
-    };
 });
+app.controller('AddServicesController', ['$scope', 'Upload', '$timeout', '$location', function ($scope, Upload, $timeout, $location) {
+    $scope.isLoading = false;
+    $scope.uploadServicePic = function(file) {
+        $scope.isLoading = true;
+        //console.log($scope.service_name + $scope.service_duration + $scope.service_description + $scope.service_price + $scope.sub_cat_id);
+        file.upload = Upload.upload({
+          url: 'http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_services',
+           data: {service_name: $scope.service_name, sub_cat_id: $scope.sub_cat_id, service_img: file, service_description: $scope.service_description, service_price: $scope.service_price,service_duration:$scope.service_duration},
+        });
+        file.upload.then(function (response) {
+            $scope.isLoading = false;
+            $timeout(function () {
+                file.result = response.data;
+            });
+            if(response.data.status = true){
+                swal({
+                    title: "Here's a message!",
+                    type: "success",
+                    text: response.data.message,
+                    confirmButtonText : "Close this window"
+                },function(){
+                    $scope.$apply(function() {
+                        $location.path('/show_services');
+                    });
+                });
+            }else{
+                swal({
+                    title: "Here's a message!",
+                    type: "warning",
+                    text: response.data.message,
+                    confirmButtonText : "Close this window"
+                });
+            } 
+        });
+    }
+}]);
+/* services end */
+
+/* Categories start */
 app.controller('show_categories', function($scope,$http,DTOptionsBuilder, DTColumnBuilder) {
     $scope.hideHeader = false;
     $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/show_categories').success(function(data) {
         $scope.categoriesData = data.data;
         $scope.vm = {};
-     
-            $scope.vm.dtOptions = DTOptionsBuilder.newOptions()
-              .withOption('order', [0, 'asc']);
+        $scope.vm.dtOptions = DTOptionsBuilder.newOptions()
+            .withOption('order', [0, 'asc']);
     });
     $scope.editCategory = function(id) {
         $scope.showModal = true;
@@ -224,6 +232,100 @@ app.controller('show_categories', function($scope,$http,DTOptionsBuilder, DTColu
       $scope.showModal = false;
     };
 });
+app.controller('AddCategoryController', ['$scope', 'Upload', '$timeout', '$location', function ($scope, Upload, $timeout, $location) {
+    $scope.isLoading = false;
+    $scope.uploadPic = function(file) {
+        $scope.isLoading = true;
+        file.upload = Upload.upload({
+          url: 'http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_category',
+          data: {category_name: $scope.category_name, cat_img: file},
+        });
+        file.upload.then(function (response) {
+            $scope.isLoading = false;
+            $timeout(function () {
+                file.result = response.data;
+            });
+            if(response.data.status = true){
+                swal({
+                    title: "Here's a message!",
+                    type: "success",
+                    text: response.data.message,
+                    confirmButtonText : "Close this window"
+                },function(){
+                    $scope.$apply(function() {
+                        $location.path('/show_categories');
+                    });
+                })
+            }else{
+                swal({
+                    title: "Here's a message!",
+                    type: "warning",
+                    text: response.data.message,
+                    confirmButtonText : "Close this window"
+                });
+            }
+        });
+    }
+}]);
+app.controller('EditCategoryController', ['$scope', 'Upload', '$http', '$route', '$timeout', function ($scope, Upload, $http, $route, $timeout) {
+    $scope.updateCategoryForm = function() {
+        var file = $scope.categoriesByIdData.cat_img;
+        file.upload = Upload.upload({
+          url: 'http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_category',
+          data: {category_name: $scope.categoriesByIdData.category_name, cat_img: file, cat_id : $scope.categoriesByIdData.cat_id},
+        });
+        if(file.upload){
+            file.upload.then(function (response) {
+                $timeout(function () {
+                    file.result = response.data;
+                });
+                if(response.data.status = true){
+                    swal({
+                        title: "Here's a message!",
+                        type: "success",
+                        text: response.data.message,
+                        confirmButtonText : "Close this window"
+                    },function(){
+                        $route.reload();
+                    })
+                }else{
+                    swal({
+                        title: "Here's a message!",
+                        type: "warning",
+                        text: response.data.message,
+                        confirmButtonText : "Close this window"
+                    });
+                }
+            });
+        }
+        else{
+            var formData = new FormData();
+            formData.append('cat_img', $scope.categoriesByIdData.cat_img);
+            formData.append('cat_id', $scope.categoriesByIdData.cat_id);
+            formData.append('category_name', $scope.categoriesByIdData.category_name);
+            $http.post('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_category', formData, {
+                transformRequest: angular.identity,
+                headers: {'Content-Type': undefined}
+            })
+            .success(function (response) {
+                console.log(response);
+                if(response.status = true){
+                    swal({
+                        title: "Here's a message!",
+                        type: "success",
+                        text: response.message,
+                        confirmButtonText : "Close this window"
+                    },function(){
+                        $route.reload();
+                    })
+                }
+            })
+        }
+    }
+}]);
+/* Categories end */
+
+/* Sub Categories start */
 app.controller('show_sub_categories', function($scope,$http,DTOptionsBuilder, DTColumnBuilder) {
     $scope.hideHeader = false;
     $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/show_sub_categories').success(function(data) {
@@ -238,9 +340,9 @@ app.controller('show_sub_categories', function($scope,$http,DTOptionsBuilder, DT
             //Getting the person details from scope based on id
             if ($scope.subcategoriesgetData[i].sub_cat_id == id) {
                 $scope.subCategoriesByIdData = {
-                    cat_id: $scope.subcategoriesgetData[i].cat_id,
+                    sub_cat_id: $scope.subcategoriesgetData[i].sub_cat_id,
                     category_name: $scope.subcategoriesgetData[i].category_name,
-                    cat_img: $scope.subcategoriesgetData[i].cat_img,
+                    sub_cat_img: $scope.subcategoriesgetData[i].sub_cat_img,
                     sub_category_name:$scope.subcategoriesgetData[i].sub_category_name
                 };
                 console.log($scope.subCategoriesByIdData);
@@ -255,7 +357,108 @@ app.controller('show_sub_categories', function($scope,$http,DTOptionsBuilder, DT
       $scope.showModal = false;
     };
 });
+app.controller('AddSubCategoryController', ['$scope', 'Upload', '$timeout', '$location', function ($scope, Upload, $timeout, $location) {
+    $scope.isLoading = false;
+    $scope.uploadPic = function(file) {
+        $scope.isLoading = true;
+        file.upload = Upload.upload({
+          url: 'http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_sub_category',
+          data: {sub_category_name: $scope.sub_category_name, cat_id: $scope.cat_id, sub_cat_img: file},
+        });
+        file.upload.then(function (response) {
+            $scope.isLoading = false;
+            $timeout(function () {
+                file.result = response.data;
+            });
+            if(response.data.status == true){
+                swal({
+                    title: "Here's a message!",
+                    type: "success",
+                    text: response.data.message,
+                    confirmButtonText : "Close this window"
+                },function(){
+                    $scope.$apply(function() {
+                        $location.path('/show_sub_categories');
+                    });
+                });
+            }else{
+                swal({
+                    title: "Here's a message!",
+                    type: "warning",
+                    text: response.data.message,
+                    confirmButtonText : "Close this window"
+                });
+            }
+        }
+        // , function (response) {
+        //   if (response.status > 0)
+        //     $scope.errorMsg = response.status + ': ' + response.data;
+        // }, function (evt) {
+        //   // Math.min is to fix IE which reports 200% sometimes
+        //   file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+        // }
+        );
+    }
+}]);
+app.controller('EditSubCategoryController', ['$scope', 'Upload', '$timeout', '$http', '$route', function ($scope, Upload, $timeout, $http, $route) {
+    $scope.updateSubCategoryForm = function() {
+        var file = $scope.subCategoriesByIdData.sub_cat_img;
+        file.upload = Upload.upload({
+          url: 'http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_sub_category',
+          data: {category_name: $scope.subCategoriesByIdData.category_name, sub_cat_img: file, sub_category_name: $scope.subCategoriesByIdData.sub_category_name, sub_cat_id : $scope.subCategoriesByIdData.sub_cat_id},
+        });
+        if(file.upload){
+            file.upload.then(function (response) {
+                $timeout(function () {
+                    file.result = response.data;
+                });
+                if(response.data.status = true){
+                    swal({
+                        title: "Here's a message!",
+                        type: "success",
+                        text: response.data.message,
+                        confirmButtonText : "Close this window"
+                    },function(){
+                        $route.reload();
+                    })
+                }else{
+                    swal({
+                        title: "Here's a message!",
+                        type: "warning",
+                        text: response.data.message,
+                        confirmButtonText : "Close this window"
+                    });
+                }
+            });
+        }
+        else{
+            var formData = new FormData();
+            formData.append('sub_cat_img', $scope.subCategoriesByIdData.sub_cat_img);
+            formData.append('sub_cat_id', $scope.subCategoriesByIdData.sub_cat_id);
+            formData.append('category_name', $scope.subCategoriesByIdData.category_name);
+            formData.append('sub_category_name', $scope.subCategoriesByIdData.sub_category_name);
+            $http.post('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_sub_category', formData, {
+                transformRequest: angular.identity,
+                headers: {'Content-Type': undefined}
+            })
+            .success(function (response) {
+                if(response.status = true){
+                    swal({
+                        title: "Here's a message!",
+                        type: "success",
+                        text: response.message,
+                        confirmButtonText : "Close this window"
+                    },function(){
+                        $route.reload();
+                    })
+                }
+            })
+        }
+    }
+}]);
+/* Sub Categories end */
 
+/* Beauty tips start */
 app.controller('show_beauty_tips', function($scope,$http,DTOptionsBuilder, DTColumnBuilder) {
     $scope.hideHeader = false;
     $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/get_beauty_tips').success(function(data) {
@@ -265,17 +468,42 @@ app.controller('show_beauty_tips', function($scope,$http,DTOptionsBuilder, DTCol
               .withOption('order', [0, 'asc']);
     });
     $scope.editTip = function(id) {
-        alert(id);
-        $scope.tipData = [{
-            tip_title:'tip title',
-            tip_description:'tip desc',
-            tip_id:1,
-            tip_category:3,
-            tip_img:'tip.img',
-            tip_video: 'tip.mp4'
-        }]
         $scope.showModal = true;
+        for (i in $scope.tips) {
+            //Getting the person details from scope based on id
+            if ($scope.tips[i].tip_id == id) {
+                $scope.tipsByIdData = {
+                    tip_id: $scope.tips[i].tip_id,
+                    tip_title: $scope.tips[i].tip_title,
+                    tip_description: $scope.tips[i].tip_description,
+                    tip_img: $scope.tips[i].tip_img
+                };
+                console.log($scope.tipsByIdData);
+            }
+        }
     };
+    $scope.deleteTip = function(id){
+        alert(id);
+        var tip_id = id;
+        swal({
+          title: 'Are you sure?',
+          text: "You want to delete",
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Yes, delete it!'
+        }, function (isConfirm) {
+            if (isConfirm) {
+                $http.post('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/delete_tip', tip_id)
+                .success(function(){
+                    swal(
+                      'Deleted!',
+                      'Your file has been deleted.',
+                      'success'
+                    )
+                })
+            }
+        })
+    }
     $scope.ok = function() {
       $scope.showModal = false;
     };
@@ -284,6 +512,101 @@ app.controller('show_beauty_tips', function($scope,$http,DTOptionsBuilder, DTCol
       $scope.showModal = false;
     };
 });
+app.controller('AddBeautyTipController', ['$scope', 'Upload', '$timeout', '$location', function ($scope, Upload, $timeout, $location) {
+    $scope.isLoading = false;
+    $scope.uploadTip = function(file) {
+        $scope.isLoading = true;
+        file.upload = Upload.upload({
+          url: 'http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_beauty_tips',
+          data: {tip_title: $scope.tip_title, tip_description: $scope.tip_description, tip_img: file, tip_category: $scope.tip_category, tip_id: $scope.tip_id, tip_video: $scope.tip_video},
+        });
+        file.upload.then(function (response) {
+            $scope.isLoading = false;
+            $timeout(function () {
+                file.result = response.data;
+            });
+            if(response.data.status = true){
+                swal({
+                    title: "Here's a message!",
+                    type: "success",
+                    text: response.data.message,
+                    confirmButtonText : "Close this window"
+                },function(){
+                    $scope.$apply(function() {
+                        $location.path('/show_beauty_tips');
+                    });
+                });
+            }else{
+                swal({
+                    title: "Here's a message!",
+                    type: "warning",
+                    text: response.data.message,
+                    confirmButtonText : "Close this window"
+                });
+            }
+        });
+    }
+}]);
+app.controller('EditTipController', ['$scope', 'Upload', '$timeout', '$http', '$route', function ($scope, Upload, $timeout, $http, $route) {
+    $scope.updateTip = function() {
+        var file = $scope.tipsByIdData.tip_img;
+        file.upload = Upload.upload({
+          url: 'http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_beauty_tips',
+          data: {tip_title: $scope.tipsByIdData.tip_title, tip_img: file, tip_id : $scope.tipsByIdData.tip_id, tip_description: $scope.tipsByIdData.tip_description},
+        });
+        if(file.upload){
+            file.upload.then(function (response) {
+                $timeout(function () {
+                    file.result = response.data;
+                });
+                if(response.data.status = true){
+                    swal({
+                        title: "Here's a message!",
+                        type: "success",
+                        text: response.data.message,
+                        confirmButtonText : "Close this window"
+                    },function(){
+                        $route.reload();
+                    })
+                }else{
+                    swal({
+                        title: "Here's a message!",
+                        type: "warning",
+                        text: response.data.message,
+                        confirmButtonText : "Close this window"
+                    });
+                }
+            });
+        }
+        else{
+            var formData = new FormData();
+            formData.append('tip_id', $scope.tipsByIdData.tip_id);
+            formData.append('tip_title', $scope.tipsByIdData.tip_title);
+            formData.append('tip_description', $scope.tipsByIdData.tip_description);
+            formData.append('tip_img', $scope.tipsByIdData.tip_img);
+            $http.post('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_beauty_tips', formData, {
+                transformRequest: angular.identity,
+                headers: {'Content-Type': undefined}
+            })
+            .success(function (response) {
+                console.log(response);
+                if(response.status = true){
+                    swal({
+                        title: "Here's a message!",
+                        type: "success",
+                        text: response.message,
+                        confirmButtonText : "Close this window"
+                    },function(){
+                        $route.reload();
+                    })
+                }
+            })
+        }
+    }
+}]);
+/* Beauty tips end */
+
+/* Packages start */
 app.controller('show_packages', function($scope,$http,DTOptionsBuilder, DTColumnBuilder) {
     $scope.hideHeader = false;
     $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/get_packages').success(function(data) {
@@ -294,217 +617,10 @@ app.controller('show_packages', function($scope,$http,DTOptionsBuilder, DTColumn
               .withOption('order', [0, 'asc']);
     });
 });
-app.controller('show_products', function($scope,$http,DTOptionsBuilder, DTColumnBuilder) {
-    $scope.hideHeader = false;
-    $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/get_products').success(function(data) {
-        $scope.products = data.data;
-        console.log($scope.products);
-        $scope.vm = {};
-        $scope.vm.dtOptions = DTOptionsBuilder.newOptions()
-              .withOption('order', [0, 'asc']);
-    });
-});
-
-app.controller('AddCategoryController', ['$scope', 'Upload', '$timeout', function ($scope, Upload, $timeout) {
-    $scope.uploadPic = function(file) {
-        file.upload = Upload.upload({
-          url: 'http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_category',
-          data: {category_name: $scope.category_name, cat_img: file},
-        });
-        file.upload.then(function (response) {
-          $timeout(function () {
-            file.result = response.data;
-          });
-          if(response.data.status == 'true'){
-            swal({
-                title: "Here's a message!",
-                type: "success",
-                text: response.data.message,
-                confirmButtonText : "Close this window"
-            });
-          }else{
-            swal({
-                title: "Here's a message!",
-                type: "warning",
-                text: response.data.message,
-                confirmButtonText : "Close this window"
-            });
-          }
-        });
-    }
-}]);
-app.controller('EditCategoryController', ['$scope', 'Upload', '$timeout', function ($scope, Upload, $timeout) {
-    $scope.updateCategoryForm = function() {
-        console.log($scope.categoriesByIdData);
-        var file = $scope.categoriesByIdData.cat_img;
-        file.upload = Upload.upload({
-          url: 'http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_category',
-          data: {category_name: $scope.categoriesByIdData.category_name, cat_img: file},
-        });
-        file.upload.then(function (response) {
-          $timeout(function () {
-            file.result = response.data;
-          });
-          if(response.data.status == 'true'){
-            swal({
-                title: "Here's a message!",
-                type: "success",
-                text: response.data.message,
-                confirmButtonText : "Close this window"
-            });
-          }else{
-            swal({
-                title: "Here's a message!",
-                type: "warning",
-                text: response.data.message,
-                confirmButtonText : "Close this window"
-            });
-          }
-        });
-    }
-}]);
-
-app.controller('AddSubCategoryController', ['$scope', 'Upload', '$timeout', function ($scope, Upload, $timeout) {
-    $scope.uploadPic = function(file) {
-        file.upload = Upload.upload({
-          url: 'http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_sub_category',
-          data: {sub_category_name: $scope.sub_category_name, cat_id: $scope.cat_id, sub_cat_img: file},
-        });
-        file.upload.then(function (response) {
-            console.log(response);
-          $timeout(function () {
-            file.result = response.data;
-          });
-          if(response.data.status == 'true'){
-            swal({
-                title: "Here's a message!",
-                type: "success",
-                text: response.data.message,
-                confirmButtonText : "Close this window"
-            });
-          }else{
-            swal({
-                title: "Here's a message!",
-                type: "warning",
-                text: response.data.message,
-                confirmButtonText : "Close this window"
-            });
-          }
-        }
-        // , function (response) {
-        //   if (response.status > 0)
-        //     $scope.errorMsg = response.status + ': ' + response.data;
-        // }, function (evt) {
-        //   // Math.min is to fix IE which reports 200% sometimes
-        //   file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
-        // }
-        );
-    }
-}]);
-app.controller('EditSubCategoryController', ['$scope', 'Upload', '$timeout', function ($scope, Upload, $timeout) {
-    $scope.updateSubCategoryForm = function() {
-        console.log($scope.subCategoriesByIdData);
-        var file = $scope.subCategoriesByIdData.cat_img;
-        console.log($scope.subCategoriesByIdData.cat_img);
-        file.upload = Upload.upload({
-          url: 'http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_sub_category',
-          data: {category_name: $scope.subCategoriesByIdData.category_name, cat_img: file, sub_category_name: $scope.subCategoriesByIdData.sub_category_name, cat_id : $scope.subCategoriesByIdData.cat_id},
-        });
-        file.upload.then(function (response) {
-          $timeout(function () {
-            file.result = response.data;
-          });
-          if(response.data.status == 'true'){
-            swal({
-                title: "Here's a message!",
-                type: "success",
-                text: response.data.message,
-                confirmButtonText : "Close this window"
-            });
-          }else{
-            swal({
-                title: "Here's a message!",
-                type: "warning",
-                text: response.data.message,
-                confirmButtonText : "Close this window"
-            });
-          }
-        });
-    }
-}]);
-app.controller('AddServicesController', ['$scope', 'Upload', '$timeout', function ($scope, Upload, $timeout) {
-    $scope.uploadServicePic = function(file) {
-        //console.log($scope.service_name + $scope.service_duration + $scope.service_description + $scope.service_price + $scope.sub_cat_id);
-        file.upload = Upload.upload({
-          url: 'http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_services',
-           data: {service_name: $scope.service_name, sub_cat_id: $scope.sub_cat_id, service_img: file, service_description: $scope.service_description, service_price: $scope.service_price,service_duration:$scope.service_duration},
-        });
-        file.upload.then(function (response) {
-            console.log(response);
-          $timeout(function () {
-            file.result = response.data;
-          });
-          if(response.data.status == 'true'){
-            swal({
-                title: "Here's a message!",
-                type: "success",
-                text: response.data.message,
-                confirmButtonText : "Close this window"
-            });
-          }else{
-            swal({
-                title: "Here's a message!",
-                type: "warning",
-                text: response.data.message,
-                confirmButtonText : "Close this window"
-            });
-          }
-        });
-    }
-}]);
-
-app.controller('AddProductsController', ['$scope', 'Upload', '$timeout','$http', function ($scope, Upload, $timeout,$http) {
-    // $scope.addProductForm={"product_description":"","product_name":"","product_price":"","product_offer_price":""};
-    
-    $scope.submitProductForm = function() {
-        // console.log($scope);return;
-        var data = {product_name: $scope.product_name, product_price: $scope.product_price, product_offer_price: $scope.product_offer_price, product_description: $scope.product_description};
-        console.log(data);
-        $http.post('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_product', data)
-        .success(function (response) {
-            console.log(response);
-            if(response.status == 'true'){
-                swal({
-                    title: "Here's a message!",
-                    type: "success",
-                    text: response.message,
-                    confirmButtonText : "Close this window"
-                });
-              }else{
-                swal({
-                    title: "Here's a message!",
-                    type: "warning",
-                    text: response.message,
-                    confirmButtonText : "Close this window"
-                });
-              }
-        }
-        
-        
-        // , function (response) {
-        //   if (response.status > 0)
-        //     $scope.errorMsg = response.status + ': ' + response.data;
-        // }, function (evt) {
-        //   // Math.min is to fix IE which reports 200% sometimes
-        //   file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
-        // }
-        );
-    }
-}]);
 app.controller('AddPackagesController', function($scope, $http, $location) {  
+    $scope.isLoading = false;
     $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/get_packages')
       .success(function(data){
-        // Prepare the fake data
         var data_final = data.data;
         $scope.servicesInfo = data_final.map(function(item){
             return {
@@ -519,7 +635,6 @@ app.controller('AddPackagesController', function($scope, $http, $location) {
             };
         });
     })
-
     $scope.selected_services = [];
     $scope.selected_services_settings = {
         template: '<b>{{option.package_name}}</b>',
@@ -537,7 +652,7 @@ app.controller('AddPackagesController', function($scope, $http, $location) {
     $scope.selected_services_customTexts = {buttonDefaultText: 'Select Services'};
     $scope.selected_other_services_customTexts = {buttonDefaultText: 'Select Other Services'}; 
     $scope.submitPackageForm = function() {
-        
+        $scope.isLoading = true;
         if ($scope.addPackageForm.$valid) {
             var services = $scope.selected_services;
             var package_services = [];
@@ -563,95 +678,128 @@ app.controller('AddPackagesController', function($scope, $http, $location) {
             };
             //console.log(data);
             $http.post('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_package', data)
-                .success(function (response) {
-                    if(response.status == 'true'){
-                        swal({
-                            title: "Here's a message!",
-                            type: "success",
-                            text: response.message,
-                            confirmButtonText : "Close this window"
+            .success(function (response) {
+                $scope.isLoading = false;
+                if(response.status = true){
+                    swal({
+                        title: "Here's a message!",
+                        type: "success",
+                        text: response.message,
+                        confirmButtonText : "Close this window"
+                    },function(){
+                        $scope.$apply(function() {
+                            $location.path('/show_packages');
                         });
-                    }else{
-                        swal({
-                            title: "Here's a message!",
-                            type: "warning",
-                            text: response.message,
-                            confirmButtonText : "Close this window"
-                        });
-                    }
-                })
-
+                    });
+                }else{
+                    swal({
+                        title: "Here's a message!",
+                        type: "warning",
+                        text: response.message,
+                        confirmButtonText : "Close this window"
+                    });
+                }
+            })
         }
     };
-
 });
+/* Packages end */
 
-app.controller('AddBeautyTipController', ['$scope', 'Upload', '$timeout', function ($scope, Upload, $timeout) {
-
-    $scope.uploadTip = function(file) {
-        console.log('tip_video:' + $scope.tip_video);
+/* Prdcusts Start */
+app.controller('show_products', function($scope,$http,DTOptionsBuilder, DTColumnBuilder) {
+    $scope.hideHeader = false;
+    $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/get_products').success(function(data) {
+        $scope.products = data.data;
+        console.log($scope.products);
+        $scope.vm = {};
+        $scope.vm.dtOptions = DTOptionsBuilder.newOptions()
+              .withOption('order', [0, 'asc']);
+    });
+});
+app.controller('AddProductsController', ['$scope', 'Upload', '$timeout','$http', '$location', function ($scope, Upload, $timeout,$http, $location) {
+    // $scope.addProductForm={"product_description":"","product_name":"","product_price":"","product_offer_price":""};
+    $scope.isLoading = false;
+    $scope.submitProductForm = function(file) {
+        $scope.isLoading = true;
         file.upload = Upload.upload({
-          url: 'http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_beauty_tips',
-          data: {tip_title: $scope.tip_title, tip_description: $scope.tip_description, tip_img: file, tip_category: $scope.tip_category, tip_id: $scope.tip_id, tip_video: $scope.tip_video},
+          url: 'http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_product',
+          data: {product_name: $scope.product_name, product_price: $scope.product_price, product_offer_price: $scope.product_offer_price, product_description: $scope.product_description, product_img: $scope.product_img,}
         });
         file.upload.then(function (response) {
-            console.log(response);
-          $timeout(function () {
-            file.result = response.data;
-          });
-          if(response.data.status == 'true'){
-            swal({
-                title: "Here's a message!",
-                type: "success",
-                text: response.data.message,
-                confirmButtonText : "Close this window"
+            $scope.isLoading = false;
+            $timeout(function () {
+                file.result = response.data;
             });
-          }else{
-            swal({
-                title: "Here's a message!",
-                type: "warning",
-                text: response.data.message,
-                confirmButtonText : "Close this window"
-            });
-          }
-        }
-        // , function (response) {
-        //   if (response.status > 0)
-        //     $scope.errorMsg = response.status + ': ' + response.data;
-        // }, function (evt) {
-        //   // Math.min is to fix IE which reports 200% sometimes
-        //   file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
-        // }
-        );
+            if(response.data.status = true){
+                swal({
+                    title: "Here's a message!",
+                    type: "success",
+                    text: response.data.message,
+                    confirmButtonText : "Close this window"
+                },function(){
+                    $scope.$apply(function() {
+                        $location.path('/show_products');
+                    });
+                })
+            }else{
+                swal({
+                    title: "Here's a message!",
+                    type: "warning",
+                    text: response.data.message,
+                    confirmButtonText : "Close this window"
+                });
+            }
+        });
     }
 }]);
-app.controller('EditTipController', ['$scope', 'Upload', '$timeout', function ($scope, Upload, $timeout) {
-    $scope.updateTip = function(info) {
-        console.log('tip_title:' + info.tip_title + 'tip_category:' + info.tip_category + 'tip_desc' + info.tip_description + 'tip_id:' + info.tip_id, 'tip_img:' + info.tip_img + 'tip_video:' + info.tip_video);
-        var file = info.tip_img;
+/* Prdcusts end */
+
+/* Promotions start */
+app.controller('show_promotions', function($scope,$http,DTOptionsBuilder, DTColumnBuilder) {
+    $scope.hideHeader = false;
+    $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/get_promotions').success(function(data) {
+        $scope.promotions = data.data;
+        $scope.vm = {};
+        $scope.vm.dtOptions = DTOptionsBuilder.newOptions()
+              .withOption('order', [0, 'asc']);
+    });
+});
+app.controller('AddPromotionsController', ['$scope', 'Upload', '$timeout', function ($scope, Upload, $timeout) {
+    $scope.isLoading = false;
+    $scope.addPromotion = function(file) {
+        $scope.isLoading = true;
         file.upload = Upload.upload({
-          url: 'http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_sub_category',
-          data: {tip_title:info.tip_title,tip_category:info.tip_category,tip_desc:info.tip_description,ip_id:info.tip_id,tip_img:info.tip_img,tip_video:info.tip_video},
+          url: 'http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_promotions',
+          data: {promotion_name: $scope.promotion_name, promotion_img: file, promotion_description :$scope.promotion_description, promotion_type: $scope.promotion_type, from_date: $scope.from_date, end_date: $scope.end_date },
         });
         file.upload.then(function (response) {
-          $timeout(function () {
-            file.result = response.data;
+            $scope.isLoading = false;
+            $timeout(function () {
+                file.result = response.data;
+            });
+            if(response.data.status = true){
+                swal({
+                    title: "Here's a message!",
+                    type: "success",
+                    text: response.data.message,
+                    confirmButtonText : "Close this window"
+                });
+            }else{
+                swal({
+                    title: "Here's a message!",
+                    type: "warning",
+                    text: response.data.message,
+                    confirmButtonText : "Close this window"
+                });
+            }
         });
-        if(response.data.status == 'true'){
-            swal({
-                title: "Here's a message!",
-                type: "success",
-                text: response.data.message,
-                confirmButtonText : "Close this window"
-            });
-        }else{
-            swal({
-                title: "Here's a message!",
-                type: "warning",
-                text: response.data.message,
-                confirmButtonText : "Close this window"
-            });
-        }
-      })
     }
 }]);
+/* Promotions end */
+
+
+
+
+
+
+

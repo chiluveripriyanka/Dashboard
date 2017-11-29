@@ -43,7 +43,7 @@
                                                         <div class="col-lg-8">
                                                             <div  ng-controller="AddProductsController">
                                                                 <div class="all-form-element-inner">
-                                                                    <form name="addProductForm" id="addProductForm" ng-submit="submitProductForm()" novalidate>
+                                                                    <form name="addProductForm" id="addProductForm" novalidate enctype="multipart/form-data">
                                                                         <div class="form-group-inner">
                                                                             <div class="row">
                                                                                 <div class="col-lg-3">
@@ -89,7 +89,31 @@
                                                                                 <p ng-show="addProductForm.product_description.$invalid && !addProductForm.product_description.$pristine" class="help-block">Enter a product description.</p>
                                                                             </div>
                                                                         </div>
-                                                                       
+                                                                        <div class="form-group-inner">
+                                                                            <div class="row mg-b-10" >
+                                                                                <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+                                                                                    <label class="login2 pull-right pull-right-pro">Image</label>
+                                                                                </div>
+                                                                                <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+                                                                                    
+                                                                                    <div class="file-upload-inner file-upload-inner-right ts-forms">
+                                                                                        <div class="input append-small-btn">
+                                                                                            <div class="file-button">
+                                                                                                Browse
+                                                                                                <input type="file" onchange="document.getElementById('append-small-btn').value = this.value;" ngf-select ng-model="product_img" name="product_img"    
+                                                                                                     accept="image/*" ngf-max-size="2MB" required
+                                                                                                     ngf-model-invalid="errorFile">
+                                                                                            </div>
+                                                                                            <input type="text" id="append-small-btn" placeholder="no file selected">
+                                                                                            <div class="text-left mg-b-30" ng-show="editProductForm.file.$error.required">Upload image is required</i><br>
+                                                                                              <i ng-show="editProductForm.file.$error.maxSize">File too large 
+                                                                                                  {{errorFile.size / 1000000|number:1}}MB: max 2M</i>
+                                                                                              <img ng-show="editProductForm.file.$valid" ngf-thumbnail="picFile" class="thumb"> <button ng-click="picFile = null" ng-show="picFile">Remove</button>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
                                                                         
                                                                         <div class="form-group-inner">
                                                                             <div class="login-btn-inner">
@@ -98,7 +122,10 @@
                                                                                     <div class="col-lg-9">
                                                                                         <div class="login-horizental cancel-wp pull-left">
                                                                                             <button class="btn btn-white" type="submit">Cancel</button>
-                                                                                            <button type="submit" class="btn btn-sm btn-primary login-submit-cs" ng-disabled="addProductForm.$invalid">Submit</button>
+                                                                                            <button type="submit" class="btn btn-sm btn-primary login-submit-cs" ng-disabled="addProductForm.$invalid" ng-click="submitProductForm(product_img)">Submit</button>
+                                                                                            <span ng-show="isLoading" class="ml20">
+                                                                                                <img src="assets/img/loading.gif" class="loading_image"/>
+                                                                                            </span>
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>

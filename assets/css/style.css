@@ -128,7 +128,7 @@ padding: 0
 /*  2.  Header top Customize CSS
 /*----------------------------------------*/
 .header-top-menu .navbar-nav>li>a{
-	padding: 20px 20px;
+	padding: 20px 15px;
 	color: #fff;
 	font-size:14px;
 }
@@ -3554,6 +3554,7 @@ table.dataTable thead tr th:last-child, table.dataTable tbody th:last-child, tab
 }
 .sweet-alert h2{
 	font-size: 20px;
+	padding-top: 10px;
 }
 .modal-open .modal {
     background-color: white;
@@ -3571,3 +3572,7 @@ table.dataTable thead tr th:last-child, table.dataTable tbody th:last-child, tab
 .has-error p.help-block{
 	text-align: left;
 }
+.has-error .input-group .form-control, .has-error input{
+	border-color: #a94442 !important;
+}
+.ml20{margin-left: 20px;}

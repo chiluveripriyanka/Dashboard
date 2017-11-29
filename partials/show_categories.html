@@ -67,7 +67,8 @@
             <div  ng-controller="EditCategoryController">
                 <div class="all-form-element-inner">
                     <div >
-                        <form name="editCategoryForm" id="editCategoryForm" ng-submit="submitCategoryForm()" novalidate enctype="multipart/form-data">
+                        <form name="editCategoryForm" id="editCategoryForm" novalidate enctype="multipart/form-data">
+                            <input type="hidden" ng-model="categoriesByIdData.cat_id" name="cat_id">
                             <div class="form-group-inner">
                                 <div class="row mg-b-10" >
                                     <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
@@ -80,10 +81,12 @@
                                                 <div class="file-button">
                                                     Browse
                                                     <input type="file" onchange="document.getElementById('append-small-btn').value = this.value;" ngf-select ng-model="categoriesByIdData.cat_img" name="cat_img"    
-                                                         accept="image/*" ngf-max-size="2MB" 
+                                                         accept="image/*" ngf-max-size="2MB" required
                                                          ngf-model-invalid="errorFile">
                                                 </div>
-                                                <input type="text" id="append-small-btn" placeholder="no file selected" ng-model="categoriesByIdData.cat_img">
+                                                <input type="text" ng-model="categoriesByIdData.cat_img" id="append-small-btn" placeholder="no file selected">
+                                                
+                                                <img width="50" class="mg-t-10" ng-src="http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/uploads/{{categoriesByIdData.cat_img}}" />
                                                 <div class="text-left mg-b-30" ng-show="editCategoryForm.file.$error.required">Upload image is required</i><br>
                                                   <i ng-show="editCategoryForm.file.$error.maxSize">File too large 
                                                       {{errorFile.size / 1000000|number:1}}MB: max 2M</i>
@@ -104,7 +107,6 @@
                                     </div>
                                 </div>
                             </div>
-                            
                             <div class="form-group-inner">
                                 <div class="login-btn-inner">
                                     <div class="row">
