@@ -42,7 +42,8 @@
                                       <tr>
                                         <th>Category Name</th>
                                         <th>Sub Category Name</th>
-                                        <th>Sub Category Image</th>                                <!-- <th>Actions</th> -->
+                                        <th>Sub Category Image</th>        
+									    <th>Actions</th> 
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -50,12 +51,12 @@
                                         <td>{{ user.category_name }}</td>
                                         <td>{{ user.sub_category_name }}</td>
                                         <td><img width=50 ng-src="http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/uploads/{{user.sub_cat_img}}" /></td>
-                                        <!-- <td>
+                                         <td>
                                             <div class="btn-group">
                                                 <button type="button" class="btn btn-default btn" ng-click="edit($index);"><i class="glyphicon glyphicon-pencil"></i></button>  
-                                                <button type="button" class="btn btn-default btn" ng-click="delete();"><i class="glyphicon glyphicon-trash"></i></button> 
+                                                <button type="button" class="btn btn-default btn" ng-click="f2(user.sub_cat_id,$index)"><i class="glyphicon glyphicon-trash"></i></button> 
                                             </div>
-                                        </td> -->
+                                        </td>
                                       </tr>
                                     </tbody>
                                   </table>

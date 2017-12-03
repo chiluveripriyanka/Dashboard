@@ -42,7 +42,8 @@
                                       <tr>
                                         <th>Title</th>
                                         <th>Description</th>
-                                        <th>Image</th>                                <!-- <th>Actions</th> -->
+                                        <th>Image</th>   
+										<th>Actions</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -50,12 +51,13 @@
                                         <td>{{ tip.tip_title }}</td>
                                         <td>{{ tip.tip_description }}</td>
                                         <td><img width=50 ng-src="{{tip.tip_img}}" /></td>
-                                        <!-- <td>
-                                            <div class="btn-group">
-                                                <button type="button" class="btn btn-default btn" ng-click="edit($index);"><i class="glyphicon glyphicon-pencil"></i></button>  
-                                                <button type="button" class="btn btn-default btn" ng-click="delete();"><i class="glyphicon glyphicon-trash"></i></button> 
+                                          <td>
+                                           <div class="btn-group">
+											     <button type="button" class="btn btn-default btn" ng-click="edit($index);"><i class="glyphicon glyphicon-pencil"></i></button>  
+
+                                                <button type="button" class="btn btn-default btn" ng-click="f2(tip.tip_id,$index)"><i class="glyphicon glyphicon-trash"></i></button> 
                                             </div>
-                                        </td> -->
+                                        </td> 
                                       </tr>
                                     </tbody>
                                   </table>

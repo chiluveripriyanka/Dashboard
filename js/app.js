@@ -152,6 +152,32 @@ app.controller('usersController', function($scope,$http,DTOptionsBuilder, DTColu
 
 app.controller('show_categories', function($scope,$http,DTOptionsBuilder, DTColumnBuilder) {
     $scope.hideHeader = false;
+	////start of delete function
+	 $scope.f2=function(n,index){
+		         var data = {cat_id:n};
+				 
+		$http.post('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/delete_category', data)
+        .success(function (response) {
+            console.log(response);
+            if(response.status == 'true'){
+				$scope.packages.splice(index,1);
+                swal({
+                    title: "Here's a message!",
+                    type: "success",
+                    text: response.message,
+                    confirmButtonText : "Close this window"
+                });
+              }else{
+                swal({
+                    title: "Here's a message!",
+                    type: "warning",
+                    text: response.message,
+                    confirmButtonText : "Close this window"
+                });
+              }
+        });
+	 }
+	////end of delete function
     $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/show_categories').success(function(data) {
         $scope.userData = data.data;
         $scope.vm = {};
@@ -164,6 +190,35 @@ app.controller('show_categories', function($scope,$http,DTOptionsBuilder, DTColu
 
 app.controller('show_sub_categories', function($scope,$http,DTOptionsBuilder, DTColumnBuilder) {
     $scope.hideHeader = false;
+
+	////start of delete function
+	 $scope.f2=function(n,index){
+		         var data = {sub_cat_id:n};
+				 
+		$http.post('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/delete_sub_category', data)
+        .success(function (response) {
+            console.log(response);
+            if(response.status == 'true'){
+				$scope.packages.splice(index,1);
+                swal({
+                    title: "Here's a message!",
+                    type: "success",
+                    text: response.message,
+                    confirmButtonText : "Close this window"
+                });
+              }else{
+                swal({
+                    title: "Here's a message!",
+                    type: "warning",
+                    text: response.message,
+                    confirmButtonText : "Close this window"
+                });
+              }
+        });
+	 }
+	////end of delete function
+	
+	
     $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/show_sub_categories').success(function(data) {
         $scope.userData = data.data;
         $scope.vm = {};
@@ -175,6 +230,31 @@ app.controller('show_sub_categories', function($scope,$http,DTOptionsBuilder, DT
 
 app.controller('show_beauty_tips', function($scope,$http,DTOptionsBuilder, DTColumnBuilder) {
     $scope.hideHeader = false;
+	 $scope.f2=function(n,index){
+		         var data = {tip_id:n};
+        console.log(data);
+        $http.post('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/delete_beauty_tips', data)
+        .success(function (response) {
+            console.log(response);
+            if(response.status == 'true'){
+				$scope.packages.splice(index,1);
+                swal({
+                    title: "Here's a message!",
+                    type: "success",
+                    text: response.message,
+                    confirmButtonText : "Close this window"
+                });
+              }else{
+                swal({
+                    title: "Here's a message!",
+                    type: "warning",
+                    text: response.message,
+                    confirmButtonText : "Close this window"
+                });
+              }
+        });
+        
+	 }
     $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/get_beauty_tips').success(function(data) {
         $scope.tips = data.data;
         $scope.vm = {};
@@ -184,8 +264,34 @@ app.controller('show_beauty_tips', function($scope,$http,DTOptionsBuilder, DTCol
     });
 });
 
-app.controller('show_packages', function($scope,$http,DTOptionsBuilder, DTColumnBuilder) {
+app.controller('show_packages', function($scope,$http,DTOptionsBuilder,DTColumnBuilder) {
     $scope.hideHeader = false;
+     $scope.f2=function(n,index){
+		         var data = {package_id:n};
+        console.log(data);
+        $http.post('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/delete_package', data)
+        .success(function (response) {
+            console.log(response);
+            if(response.status == 'true'){
+				$scope.packages.splice(index,1);
+                swal({
+                    title: "Here's a message!",
+                    type: "success",
+                    text: response.message,
+                    confirmButtonText : "Close this window"
+                });
+              }else{
+                swal({
+                    title: "Here's a message!",
+                    type: "warning",
+                    text: response.message,
+                    confirmButtonText : "Close this window"
+                });
+              }
+        });
+        
+	 }
+	
     $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/get_packages').success(function(data) {
         $scope.packages = data.data;
         console.log($scope.packages);

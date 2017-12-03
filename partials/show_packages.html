@@ -46,6 +46,7 @@
                                         <th>Package Validity Days</th>
                                         <th>Package Start Date</th>
                                         <th>Package End Date</th>
+										<th>Action</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -56,11 +57,21 @@
                                         <td>{{ package.package_validity_days }}</td>
                                         <td>{{ package.package_start_date }}</td>
                                         <td>{{ package.package_end_date }}</td>
+										<td>
+                                            <div class="btn-group">
+											     <button type="button" class="btn btn-default btn" ng-click="edit($index);"><i class="glyphicon glyphicon-pencil"></i></button>  
+
+                                                <button type="button" class="btn btn-default btn" ng-click="f2(package.package_id,$index)"><i class="glyphicon glyphicon-trash"></i></button> 
+                                            </div>
+                                        </td> 
                                       </tr>
                                     </tbody>
                                   </table>
                             </div>
                         </div>
+						
+
+						
                     </div>
                 </div>
             </div>
