@@ -36,7 +36,7 @@
                                         <th>Service Price</th>
                                         <th>Service Duration</th>
                                         <th>Service Image</th>
-                                        <!-- <th>Actions</th> -->
+                                        <th>Actions</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -46,11 +46,13 @@
                                         <td>{{ service.service_price }}</td>
                                         <td>{{ service.service_duration }}</td>
                                         <td><img width="50" ng-src="http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/uploads/{{service.service_img}}" /></td>
-                                        <!-- <td class="v-middle">
+                                         <td class="v-middle">
                                             <div class="btn-group">
                                                 <button type="button" class="btn btn-default btn" ng-click="editCategory(category.cat_id)"><i class="glyphicon glyphicon-pencil"></i></button>  
-                                            </div>
-                                        </td> -->
+                                               <button type="button" class="btn btn-default btn" ng-click="f2(service.service_id,$index)"><i class="glyphicon glyphicon-trash"></i></button>  
+
+										   </div>
+                                        </td> 
                                       </tr>
                                     </tbody>
                                   </table>

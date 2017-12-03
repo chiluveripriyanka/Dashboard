@@ -137,6 +137,34 @@ app.controller('dashboardController', function($scope,$http,DTOptionsBuilder, DT
 
 app.controller('usersController', function($scope,$http,DTOptionsBuilder, DTColumnBuilder) {
     $scope.hideHeader = false;
+	
+	
+ $scope.f2=function(n,index){
+		         var data = {user_id:n};
+        console.log(data);
+        $http.post('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/delete_user', data)
+        .success(function (response) {
+            console.log(response);
+            if(response.status == 'true'){
+				$scope.packages.splice(index,1);
+                swal({
+                    title: "Here's a message!",
+                    type: "success",
+                    text: response.message,
+                    confirmButtonText : "Close this window"
+                });
+              }else{
+                swal({
+                    title: "Here's a message!",
+                    type: "warning",
+                    text: response.message,
+                    confirmButtonText : "Close this window"
+                });
+              }
+        });
+        
+	 }
+	
     $scope.loading = true; // Show loading image
     $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/get_users_list').success(function(data) {
         $scope.loading = false; // hide loading image on ajax success
@@ -155,6 +183,34 @@ app.controller('usersController', function($scope,$http,DTOptionsBuilder, DTColu
 app.controller('show_services', function($scope,$http,DTOptionsBuilder, DTColumnBuilder) {
     $scope.hideHeader = false;
     $scope.loading = true;
+	
+	
+	 
+$scope.f2=function(n,index){
+		         var data = {service_id:n};
+				 
+		$http.post('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/delete_service', data)
+        .success(function (response) {
+            console.log(response);
+            if(response.status == 'true'){
+				$scope.packages.splice(index,1);
+                swal({
+                    title: "Here's a message!",
+                    type: "success",
+                    text: response.message,
+                    confirmButtonText : "Close this window"
+                });
+              }else{
+                swal({
+                    title: "Here's a message!",
+                    type: "warning",
+                    text: response.message,
+                    confirmButtonText : "Close this window"
+                });
+              }
+        });
+	 }
+	
     $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/get_services').success(function(data) {
         $scope.loading = false;
         $scope.servicesData = data.data;
