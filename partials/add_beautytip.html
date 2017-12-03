@@ -44,33 +44,54 @@
                                                             
                                                             <div class="all-form-element-inner">
                                                                 <form name="addBeautyTipForm" id="addBeautyTipForm"  novalidate enctype="multipart/form-data">
-                                                                    
                                                                     <div class="form-group-inner">
-                                                                        <div class="row">
+                                                                        <div class="row" ng-class="{ 'has-error' : addBeautyTipForm.tip_title.$invalid && !addBeautyTipForm.tip_title.$pristine }">
                                                                             <div class="col-lg-3">
                                                                                 <label class="login2 pull-right pull-right-pro">Tip Title</label>
                                                                             </div>
                                                                             <div class="col-lg-9">
                                                                                 <input type="text" class="form-control" name="tip_title" ng-model="tip_title" required>
+                                                                                <p ng-show="addBeautyTipForm.tip_title.$invalid && !addBeautyTipForm.tip_title.$pristine" class="help-block">Enter a Tip Name.</p>
                                                                             </div>
-                                                                            <p ng-show="addBeautyTipForm.tip_title.$invalid && !addBeautyTipForm.tip_title.$pristine" class="help-block">Enter a Tip Name.</p>
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group-inner">
-                                                                        <div class="row">
+                                                                        <div class="row" ng-class="{ 'has-error' : addBeautyTipForm.tip_description.$invalid && !addBeautyTipForm.tip_description.$pristine }">
                                                                             <div class="col-lg-3">
                                                                                 <label class="login2 pull-right pull-right-pro">Tip Description</label>
                                                                             </div>
                                                                             <div class="col-lg-9">
                                                                                 <textarea class="form-control" name="tip_description" ng-model="tip_description" required cols="5" rows="5" />
+                                                                                <p ng-show="addBeautyTipForm.tip_description.$invalid && !addBeautyTipForm.tip_description.$pristine" class="help-block">Enter a tip description.</p>
                                                                             </div>
-                                                                            <p ng-show="addBeautyTipForm.tip_description.$invalid && !addBeautyTipForm.tip_description.$pristine" class="help-block">Enter a tip description.</p>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group-inner">
+                                                                        <div class="row" ng-class="{ 'has-error' : addBeautyTipForm.tip_category.$invalid && !addBeautyTipForm.tip_category.$pristine }">
+                                                                            <div class="col-lg-3">
+                                                                                <label class="login2 pull-right pull-right-pro">Tip Category</label>
+                                                                            </div>
+                                                                            <div class="col-lg-9">
+                                                                                <input type="number" class="form-control" name="tip_category" ng-model="tip_category" required>
+                                                                                <p ng-show="addBeautyTipForm.tip_category.$invalid && !addBeautyTipForm.tip_category.$pristine" class="help-block">Enter a tip Category.</p>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group-inner">
+                                                                        <div class="row" ng-class="{ 'has-error' : addBeautyTipForm.tip_id.$invalid && !addBeautyTipForm.tip_id.$pristine }">
+                                                                            <div class="col-lg-3">
+                                                                                <label class="login2 pull-right pull-right-pro">Tip Id</label>
+                                                                            </div>
+                                                                            <div class="col-lg-9">
+                                                                                <input type="number" class="form-control" name="tip_id" ng-model="tip_id" required>
+                                                                                <p ng-show="addBeautyTipForm.tip_id.$invalid && !addBeautyTipForm.tip_id.$pristine" class="help-block">Enter a tip Id.</p>
+                                                                            </div>
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group-inner">
                                                                         <div class="row mg-b-10" >
                                                                             <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-                                                                                <label class="login2 pull-right pull-right-pro">Image</label>
+                                                                                <label class="login2 pull-right pull-right-pro">Tip Image</label>
                                                                             </div>
                                                                             <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
                                                                                 
@@ -79,7 +100,7 @@
                                                                                         <div class="file-button">
                                                                                             Browse
                                                                                             <input type="file" onchange="document.getElementById('append-small-btn').value = this.value;" ngf-select ng-model="tip_img" name="tip_img"    
-                                                                                                 accept="image/*" ngf-max-size="2MB" required
+                                                                                                 accept="image/*" ngf-max-size="200000000MB" required
                                                                                                  ngf-model-invalid="errorFile">
                                                                                         </div>
                                                                                         <input type="text" id="append-small-btn" placeholder="no file selected">
@@ -91,7 +112,31 @@
                                                                                 </div>
                                                                             </div>
                                                                         </div>
-
+                                                                    </div>
+                                                                    <div class="form-group-inner">
+                                                                        <div class="row mg-b-10" >
+                                                                            <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+                                                                                <label class="login2 pull-right pull-right-pro">Tip Video</label>
+                                                                            </div>
+                                                                            <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+                                                                                
+                                                                                <div class="file-upload-inner file-upload-inner-right ts-forms">
+                                                                                    <div class="input append-small-btn1">
+                                                                                        <div class="file-button">
+                                                                                            Browse
+                                                                                            <input type="file" onchange="document.getElementById('append-small-btn1').value = this.value;" ngf-select ng-model="tip_video" name="tip_video"    
+                                                                                                 accept="video/*" ngf-max-size="200000000MB" required
+                                                                                                 ngf-model-invalid="errorFile">
+                                                                                        </div>
+                                                                                        <input type="text" id="append-small-btn1" placeholder="no file selected">
+                                                                                        <div class="text-left mg-b-30" ng-show="addBeautyTipForm.file.$error.required">Upload video is required</i><br>
+                                                                                          <i ng-show="addBeautyTipForm.file.$error.maxSize">File too large 
+                                                                                              {{errorFile.size / 200000000|number:1}}MB: max 2M</i>
+                                                                                          <img ng-show="addBeautyTipForm.file.$valid" ngf-thumbnail="picFile" class="thumb"> <button ng-click="picFile = null" ng-show="picFile">Remove</button>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
                                                                     </div>
                                                                     <div class="form-group-inner">
                                                                         <div class="login-btn-inner">
@@ -101,6 +146,9 @@
                                                                                     <div class="login-horizental cancel-wp pull-left">
                                                                                         <button class="btn btn-white" type="submit">Cancel</button>
                                                                                         <button class="btn btn-sm btn-primary login-submit-cs" ng-disabled="!addBeautyTipForm.$valid" ng-click="uploadTip(tip_img)">Submit</button>
+                                                                                        <span ng-show="isLoading" class="ml20">
+                                                                                                <img src="assets/img/loading.gif" class="loading_image"/>
+                                                                                            </span>
                                                                                           <span class="progress" ng-show="tip_img.progress >= 0">
                                                                                             <div style="width:{{tip_img.progress}}%" 
                                                                                                 ng-bind="tip_img.progress + '%'"></div>

@@ -21,41 +21,34 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    <div class="sparkline8-list shadow-reset">
-
-                       <!-- <div class="sparkline8-hd">
+                    <div class="sparkline8-list button_margin">
+                        <a href="#/add_categories"><button type="button" class="btn btn-custon-four btn-primary pull-right mg-t-50 mg-b-20">Add Category</button></a>
+                        <ul class="nav nav-tabs custom-menu-wrap custon-tab-menu-style1">
                             
-                        
-                            <div class="main-sparkline8-hd">
-                                <h1>User Data Table</h1>
-                                 <div class="sparkline8-outline-icon">
-                                    <span class="sparkline8-collapse-link"><i class="fa fa-chevron-up"></i></span>
-                                    <span><i class="fa fa-wrench"></i></span>
-                                    <span class="sparkline8-collapse-close"><i class="fa fa-times"></i></span>
-                                </div> 
-                            </div>
-                        </div>-->
+                        </ul>
                         <div class="sparkline8-graph">
                             <div class="static-table-list">
                                 <table class="table table-striped" datatable="ng" dt-options="vm.dtOptions">
                                     <thead>
                                       <tr>
                                         <th>Category Name</th>
-                                        <th>Category Image</th>         
-										<th>Actions</th> 
+
+                                        <th>Category Image</th>
+                                        <th>Actions</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                      <tr ng-repeat="user in userData">
-                                        <td>{{ user.category_name }}</td>
-                                        <td><img width=50 ng-src="http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/uploads/{{user.cat_img}}" /></td>
-                                         <td>
+                                      <tr ng-repeat="category in categoriesData">
+                                        <td>{{ category.category_name }}</td>
+                                        <td><img width="50" ng-src="http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/uploads/{{category.cat_img}}" /></td>
+                                        <td class="v-middle">
                                             <div class="btn-group">
-                                                <button type="button" class="btn btn-default btn" ng-click="edit($index);"><i class="glyphicon glyphicon-pencil"></i></button>  
-                                                <button type="button" class="btn btn-default btn" ng-click="f2(user.cat_id,$index);"><i class="glyphicon glyphicon-trash"></i></button> 
+                                                <button type="button" class="btn btn-default btn" ng-click="editCategory(category.cat_id)"><i class="glyphicon glyphicon-pencil"></i></button>  
+												  <button type="button" class="btn btn-default btn" ng-click="f2(user.cat_id,$index);"><i class="glyphicon glyphicon-trash"></i></button> 
                                             </div>
                                         </td>
                                       </tr>
+
                                     </tbody>
                                   </table>
                             </div>
@@ -65,4 +58,83 @@
             </div>
         </div>
     </div>
-    <!-- Static Table End -->
+    <div modal="showModal" close="cancel()">
+        <div class="modal-header">
+            <h4>Edit Category</h4>
+        </div>
+        <div class="modal-body">
+                                      <!-- <input type="hidden" data-ng-model="newperson.cat_id" />
+                                      <b>Name:</b>
+                <input type="text" name="Name" id="Name" data-ng-model="newperson.category_name" placeholder="Name" required /> -->
+            <div  ng-controller="EditCategoryController">
+                <div class="all-form-element-inner">
+                    <div >
+                        <form name="editCategoryForm" id="editCategoryForm" novalidate enctype="multipart/form-data">
+                            <input type="hidden" ng-model="categoriesByIdData.cat_id" name="cat_id">
+                            <div class="form-group-inner">
+                                <div class="row mg-b-10" >
+                                    <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+                                        <label class="login2 pull-right pull-right-pro">Image</label>
+                                    </div>
+                                    <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+                                        
+                                        <div class="file-upload-inner file-upload-inner-right ts-forms">
+                                            <div class="input append-small-btn">
+                                                <div class="file-button">
+                                                    Browse
+                                                    <input type="file" onchange="document.getElementById('append-small-btn').value = this.value;" ngf-select ng-model="categoriesByIdData.cat_img" name="cat_img"    
+                                                         accept="image/*" ngf-max-size="2MB" required
+                                                         ngf-model-invalid="errorFile">
+                                                </div>
+                                                <input type="text" ng-model="categoriesByIdData.cat_img" id="append-small-btn" placeholder="no file selected">
+                                                
+                                                <img width="50" class="mg-t-10" ng-src="http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/uploads/{{categoriesByIdData.cat_img}}" />
+                                                <div class="text-left mg-b-30" ng-show="editCategoryForm.file.$error.required">Upload image is required</i><br>
+                                                  <i ng-show="editCategoryForm.file.$error.maxSize">File too large 
+                                                      {{errorFile.size / 1000000|number:1}}MB: max 2M</i>
+                                                  <img ng-show="editCategoryForm.file.$valid" ngf-thumbnail="picFile" class="thumb"> <button ng-click="picFile = null" ng-show="picFile">Remove</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group-inner">
+                                <div class="row"ng-class="{ 'has-error' : editCategoryForm.category_name.$invalid && !editCategoryForm.category_name.$pristine }">
+                                    <div class="col-lg-3">
+                                        <label class="login2 pull-right pull-right-pro">Category Name</label>
+                                    </div>
+                                    <div class="col-lg-9">
+                                        <input type="text" class="form-control" name="category_name" ng-model="categoriesByIdData.category_name" required>
+                                        <p ng-show="editCategoryForm.category_name.$invalid && !editCategoryForm.category_name.$pristine" class="help-block">Enter a Category Name.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group-inner">
+                                <div class="login-btn-inner">
+                                    <div class="row">
+                                        <div class="col-lg-3"></div>
+                                        <div class="col-lg-9">
+                                            <div class="login-horizental cancel-wp pull-left">
+                                                <button class="btn btn-white" type="submit" ng-click="cancel()">Cancel</button>
+                                                <button class="btn btn-sm btn-primary login-submit-cs" ng-disabled="!editCategoryForm.$valid" ng-click="updateCategoryForm()">Submit</button>
+                                                  <span class="progress" ng-show="cat_img.progress >= 0">
+                                                    <div style="width:{{cat_img.progress}}%" 
+                                                        ng-bind="cat_img.progress + '%'"></div>
+                                                  </span>
+                                                  <span ng-show="cat_img.result">Upload Successful</span>
+                                                  <span class="err" ng-show="errorMsg">{{errorMsg}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- <div class="modal-footer">
+          <button class="btn btn-success" ng-click="ok()">Okay</button>
+          <button class="btn" ng-click="cancel()">Cancel</button>
+        </div> -->
+    </div>    

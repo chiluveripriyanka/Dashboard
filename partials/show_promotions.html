@@ -1,0 +1,60 @@
+<div class="breadcome-area mg-b-30 mg-t-30">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcome-list map-mg-t-40-gl shadow-reset">
+                        <div class="breadcome-heading">
+                            <h2>Products Table</h2>
+                        </div>
+                        <ul class="breadcome-menu">
+                            <li><a href="#">Home</a> <span class="bread-slash">/</span>
+                            </li>
+                            <li><span class="bread-blod">Products Data</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<div class="data-table-area mg-b-40">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="sparkline8-list button_margin">
+                        <a href="#/add_promotions"><button type="button" class="btn btn-custon-four btn-primary pull-right mg-t-50 mg-b-20">Add Promotions</button></a>
+                        <ul class="nav nav-tabs custom-menu-wrap custon-tab-menu-style1">
+                            
+                        </ul>
+                        <div class="sparkline8-graph">
+                            <div class="static-table-list">
+                                <table class="table table-striped" datatable="ng" dt-options="vm.dtOptions">
+                                    <thead>
+                                      <tr>
+                                        <th>Promotion Name</th>
+                                        <th>Promotion Type</th>
+                                        <th>Promotion Description</th>
+                                        <th>Promotion Image</th>
+                                        <th>Promotion Start Date</th>
+                                        <th>Promotion End Date</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                      <tr ng-repeat="promotion in promotions">
+                                        <td>{{ promotion.promotion_name }}</td>
+                                        <td>{{ promotion.promotion_type }}</td>
+                                        <td>{{ promotion.promotion_description }}</td>
+                                        <td><img width="50" ng-src="http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/uploads/{{promotion.promotion_img}}" /></td>
+                                        <td>{{ promotion.from_date }}</td>
+                                        <td>{{ promotion.end_date }}</td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Static Table End -->
