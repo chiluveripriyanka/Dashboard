@@ -97,7 +97,14 @@
                                                                                     <label class="login2 pull-right pull-right-pro">Promotion Type</label>
                                                                                 </div>
                                                                                 <div class="col-lg-9">
-                                                                                    <input type="number" class="form-control" name="promotion_type" ng-model="promotion_type" required />
+                                                                                        <select class="form-control"  name="promotion_type"  ng-model="promotion_type" required >
+                                                                                                <option value="" >Select Promotion Type</option>    
+                                                                                                <option value="1">Promotions</option>
+                                                                                                <option value="2">Hot Deals</option>
+                                                                                                <option value="3">Scrolling</option>
+                                                                                                <option value="4">Sliders</option>
+                                                                                            </select>
+                                                                                    <!-- <input type="number" class="form-control" name="promotion_type" ng-model="promotion_type" required /> -->
                                                                                     <p ng-show="addPromotionForm.promotion_type.$invalid && !addPromotionForm.promotion_type.$pristine" class="help-block">Enter a Promotion Type.</p>
                                                                                 </div>
                                                                             </div>
