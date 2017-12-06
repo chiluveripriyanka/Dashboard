@@ -49,6 +49,10 @@ app.config(function ($routeProvider) {
         templateUrl : "partials/show_packages.html",
         controller: "show_packages"
     })
+    .when("/show_products",{
+        templateUrl : "partials/show_products.html",
+        controller: "show_products" 
+    })
     .when("/add_categories",{
         templateUrl : "partials/add_categories.html"
     })
@@ -75,9 +79,9 @@ app.config(function ($routeProvider) {
         templateUrl : "partials/add_promotions.html",
         controller: "AddPromotionsController"
     })
-    .when("/show_products",{
-        templateUrl : "partials/show_products.html",
-        controller: "show_products" 
+    .when("/add_branch",{
+        templateUrl : "partials/add_branch.html" ,
+        controller: "AddBranchController"
     })
     .otherwise({
         redirectTo : "/"
@@ -135,36 +139,51 @@ app.controller('dashboardController', function($scope,$http,DTOptionsBuilder, DT
 });
 
 
-app.controller('usersController', function($scope,$http,DTOptionsBuilder, DTColumnBuilder) {
+app.controller('usersController', function($scope,$http, $route, DTOptionsBuilder, DTColumnBuilder) {
     $scope.hideHeader = false;
-	
-	
- $scope.f2=function(n,index){
-		         var data = {user_id:n};
-        console.log(data);
-        $http.post('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/delete_user', data)
-        .success(function (response) {
-            console.log(response);
-            if(response.status == 'true'){
-				$scope.packages.splice(index,1);
-                swal({
-                    title: "Here's a message!",
-                    type: "success",
-                    text: response.message,
-                    confirmButtonText : "Close this window"
-                });
-              }else{
-                swal({
-                    title: "Here's a message!",
-                    type: "warning",
-                    text: response.message,
-                    confirmButtonText : "Close this window"
-                });
-              }
-        });
-        
-	 }
-	
+    
+    
+    $scope.f2=function(n,index){
+        swal({
+                title: "Are you sure?",
+                text: "Do you want to delete this user.",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes, delete it!",
+                cancelButtonText: "No, cancel please!",
+                closeOnConfirm: false,
+                closeOnCancel: false
+            },
+            function(isConfirm){
+                if (isConfirm) {
+                    var data = {user_id:n};
+                    $http.post('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/delete_user', data)
+                    .success(function (response) {
+                        if(response.status = true){
+                            swal({
+                                title: "User has been Deleted",
+                                type: "success",
+                                text: response.message,
+                                confirmButtonText : "Close this window"
+                            },function(){
+                                $route.reload();
+                            });
+                        }else{
+                            swal({
+                                title: "Here's a message!",
+                                type: "warning",
+                                text: response.message,
+                                confirmButtonText : "Close this window"
+                            });
+                        }
+                    });
+                } else {
+                    swal("Cancelled", "Your user is safe :)", "error");
+                  }
+            }
+        );
+    }
     $scope.loading = true; // Show loading image
     $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/get_users_list').success(function(data) {
         $scope.loading = false; // hide loading image on ajax success
@@ -180,37 +199,51 @@ app.controller('usersController', function($scope,$http,DTOptionsBuilder, DTColu
 });
 
 /* services start */
-app.controller('show_services', function($scope,$http,DTOptionsBuilder, DTColumnBuilder) {
+app.controller('show_services', function($scope,$http, $route, DTOptionsBuilder, DTColumnBuilder) {
     $scope.hideHeader = false;
     $scope.loading = true;
-	
-	
-	 
-$scope.f2=function(n,index){
-		         var data = {service_id:n};
-				 
-		$http.post('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/delete_service', data)
-        .success(function (response) {
-            console.log(response);
-            if(response.status == 'true'){
-				$scope.packages.splice(index,1);
-                swal({
-                    title: "Here's a message!",
-                    type: "success",
-                    text: response.message,
-                    confirmButtonText : "Close this window"
-                });
-              }else{
-                swal({
-                    title: "Here's a message!",
-                    type: "warning",
-                    text: response.message,
-                    confirmButtonText : "Close this window"
-                });
-              }
-        });
-	 }
-	
+    $scope.f2=function(n,index){
+        swal({
+                title: "Are you sure?",
+                text: "Do you want to delete this service.",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes, delete it!",
+                cancelButtonText: "No, cancel please!",
+                closeOnConfirm: false,
+                closeOnCancel: false
+            },
+            function(isConfirm){
+                if (isConfirm) {
+                    var data = {service_id:n};
+                    $http.post('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/delete_service', data)
+                    .success(function (response) {
+                        if(response.status = true){
+                            swal({
+                                title: "Service has been Deleted",
+                                type: "success",
+                                text: response.message,
+                                confirmButtonText : "Close this window"
+                            },function(){
+                                $route.reload();
+                            });
+                        }else{
+                            swal({
+                                title: "Here's a message!",
+                                type: "warning",
+                                text: response.message,
+                                confirmButtonText : "Close this window"
+                            });
+                        }
+                    });
+                } else {
+                    swal("Cancelled", "Your service is safe :)", "error");
+                  }
+            }
+        );
+     }
+    
     $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/get_services').success(function(data) {
         $scope.loading = false;
         $scope.servicesData = data.data;
@@ -258,33 +291,50 @@ app.controller('AddServicesController', ['$scope', 'Upload', '$timeout', '$locat
 /* services end */
 
 /* Categories start */
-app.controller('show_categories', function($scope,$http,DTOptionsBuilder, DTColumnBuilder) {
-	
-	$scope.f2=function(n,index){
-		         var data = {cat_id:n};
-				 
-		$http.post('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/delete_category', data)
-        .success(function (response) {
-            console.log(response);
-            if(response.status == 'true'){
-				$scope.packages.splice(index,1);
-                swal({
-                    title: "Here's a message!",
-                    type: "success",
-                    text: response.message,
-                    confirmButtonText : "Close this window"
-                });
-              }else{
-                swal({
-                    title: "Here's a message!",
-                    type: "warning",
-                    text: response.message,
-                    confirmButtonText : "Close this window"
-                });
-              }
-        });
-	 }
-	 
+app.controller('show_categories', function($scope,$http, $route, DTOptionsBuilder, DTColumnBuilder) {
+    
+    $scope.f2=function(n,index){
+        swal({
+                title: "Are you sure?",
+                text: "Do you want to delete this category.",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes, delete it!",
+                cancelButtonText: "No, cancel please!",
+                closeOnConfirm: false,
+                closeOnCancel: false
+            },
+            function(isConfirm){
+                if (isConfirm) {
+                    var data = {cat_id:n};
+                    $http.post('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/delete_category', data)
+                    .success(function (response) {
+                        if(response.status = true){
+                            swal({
+                                title: "Category has been Deleted",
+                                type: "success",
+                                text: response.message,
+                                confirmButtonText : "Close this window"
+                            },function(){
+                                $route.reload();
+                            });
+                        }else{
+                            swal({
+                                title: "Here's a message!",
+                                type: "warning",
+                                text: response.message,
+                                confirmButtonText : "Close this window"
+                            });
+                        }
+                    });
+                } else {
+                    swal("Cancelled", "Your category is safe :)", "error");
+                  }
+            }
+        );
+     }
+     
     $scope.hideHeader = false;
     $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/show_categories').success(function(data) {
         $scope.categoriesData = data.data;
@@ -408,35 +458,52 @@ app.controller('EditCategoryController', ['$scope', 'Upload', '$http', '$route',
 /* Categories end */
 
 /* Sub Categories start */
-app.controller('show_sub_categories', function($scope,$http,DTOptionsBuilder, DTColumnBuilder) {
+app.controller('show_sub_categories', function($scope,$http,$route, DTOptionsBuilder, DTColumnBuilder) {
     $scope.hideHeader = false;
-	
-		 
-$scope.f2=function(n,index){
-		         var data = {sub_cat_id:n};
-				 
-		$http.post('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/delete_sub_category', data)
-        .success(function (response) {
-            console.log(response);
-            if(response.status == 'true'){
-				$scope.packages.splice(index,1);
-                swal({
-                    title: "Here's a message!",
-                    type: "success",
-                    text: response.message,
-                    confirmButtonText : "Close this window"
-                });
-              }else{
-                swal({
-                    title: "Here's a message!",
-                    type: "warning",
-                    text: response.message,
-                    confirmButtonText : "Close this window"
-                });
-              }
-        });
-	 }
-	
+    
+         
+    $scope.f2=function(n,index){
+        swal({
+                title: "Are you sure?",
+                text: "Do you want to delete this sub category.",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes, delete it!",
+                cancelButtonText: "No, cancel please!",
+                closeOnConfirm: false,
+                closeOnCancel: false
+            },
+            function(isConfirm){
+                if (isConfirm) {
+                    var data = {sub_cat_id:n};
+                    $http.post('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/delete_sub_category', data)
+                    .success(function (response) {
+                        if(response.status = true){
+                            swal({
+                                title: "Sub category has been Deleted",
+                                type: "success",
+                                text: response.message,
+                                confirmButtonText : "Close this window"
+                            },function(){
+                                $route.reload();
+                            });
+                        }else{
+                            swal({
+                                title: "Here's a message!",
+                                type: "warning",
+                                text: response.message,
+                                confirmButtonText : "Close this window"
+                            });
+                        }
+                    });
+                } else {
+                    swal("Cancelled", "Your sub category is safe :)", "error");
+                  }
+            }
+        );
+     }
+    
     $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/show_sub_categories').success(function(data) {
         $scope.subcategoriesgetData = data.data;
         $scope.vm = {};
@@ -568,35 +635,52 @@ app.controller('EditSubCategoryController', ['$scope', 'Upload', '$timeout', '$h
 /* Sub Categories end */
 
 /* Beauty tips start */
-app.controller('show_beauty_tips', function($scope,$http,DTOptionsBuilder, DTColumnBuilder) {
-	
-	
- $scope.f2=function(n,index){
-		         var data = {tip_id:n};
-        console.log(data);
-        $http.post('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/delete_beauty_tips', data)
-        .success(function (response) {
-            console.log(response);
-            if(response.status == 'true'){
-				$scope.packages.splice(index,1);
-                swal({
-                    title: "Here's a message!",
-                    type: "success",
-                    text: response.message,
-                    confirmButtonText : "Close this window"
-                });
-              }else{
-                swal({
-                    title: "Here's a message!",
-                    type: "warning",
-                    text: response.message,
-                    confirmButtonText : "Close this window"
-                });
-              }
-        });
+app.controller('show_beauty_tips', function($scope,$http, $route, DTOptionsBuilder, DTColumnBuilder) {
+    
+    
+    $scope.f2=function(n,index){
+        swal({
+                title: "Are you sure?",
+                text: "Do you want to delete this beauty tip.",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes, delete it!",
+                cancelButtonText: "No, cancel please!",
+                closeOnConfirm: false,
+                closeOnCancel: false
+            },
+            function(isConfirm){
+                if (isConfirm) {
+                    var data = {tip_id:n};
+                    $http.post('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/delete_beauty_tips', data)
+                    .success(function (response) {
+                        if(response.status = true){
+                            swal({
+                                title: "Beauty tip has been Deleted",
+                                type: "success",
+                                text: response.message,
+                                confirmButtonText : "Close this window"
+                            },function(){
+                                $route.reload();
+                            });
+                        }else{
+                            swal({
+                                title: "Here's a message!",
+                                type: "warning",
+                                text: response.message,
+                                confirmButtonText : "Close this window"
+                            });
+                        }
+                    });
+                } else {
+                    swal("Cancelled", "Your Beauty tip is safe :)", "error");
+                  }
+            }
+        );
         
-	 }
-	
+    }
+    
     $scope.hideHeader = false;
     $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/get_beauty_tips').success(function(data) {
         $scope.tips = data.data;
@@ -619,28 +703,6 @@ app.controller('show_beauty_tips', function($scope,$http,DTOptionsBuilder, DTCol
             }
         }
     };
-    $scope.deleteTip = function(id){
-        alert(id);
-        var tip_id = id;
-        swal({
-          title: 'Are you sure?',
-          text: "You want to delete",
-          type: 'warning',
-          showCancelButton: true,
-          confirmButtonText: 'Yes, delete it!'
-        }, function (isConfirm) {
-            if (isConfirm) {
-                $http.post('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/delete_tip', tip_id)
-                .success(function(){
-                    swal(
-                      'Deleted!',
-                      'Your file has been deleted.',
-                      'success'
-                    )
-                })
-            }
-        })
-    }
     $scope.ok = function() {
       $scope.showModal = false;
     };
@@ -744,37 +806,50 @@ app.controller('EditTipController', ['$scope', 'Upload', '$timeout', '$http', '$
 /* Beauty tips end */
 
 /* Packages start */
-app.controller('show_packages', function($scope,$http,DTOptionsBuilder, DTColumnBuilder) {
-	
-	
-$scope.f2=function(n,index){
-		         var data = {package_id:n};
-        console.log(data);
-        $http.post('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/delete_package', data)
-        .success(function (response) {
-            console.log(response);
-            if(response.status == 'true'){
-				$scope.packages.splice(index,1);
-                swal({
-                    title: "Here's a message!",
-                    type: "success",
-                    text: response.message,
-                    confirmButtonText : "Close this window"
-                });
-              }else{
-                swal({
-                    title: "Here's a message!",
-                    type: "warning",
-                    text: response.message,
-                    confirmButtonText : "Close this window"
-                });
-              }
-        });
-        
-	 }
-	 
-	 
-    $scope.hideHeader = false;
+app.controller('show_packages', function($scope,$http, $route, DTOptionsBuilder, DTColumnBuilder) {
+    $scope.f2=function(n,index){
+        swal({
+                title: "Are you sure?",
+                text: "Do you want to delete this package.",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes, delete it!",
+                cancelButtonText: "No, cancel please!",
+                closeOnConfirm: false,
+                closeOnCancel: false
+            },
+            function(isConfirm){
+                if (isConfirm) {
+                    var data = {package_id:n};
+                    $http.post('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/delete_package', data)
+                    .success(function (response) {
+                        console.log(response);
+                        if(response.status = true){
+                            swal({
+                                title: "Package has been Deleted",
+                                type: "success",
+                                text: response.message,
+                                confirmButtonText : "Close this window"
+                            },function(){
+                                $route.reload();
+                            });
+                        }else{
+                            swal({
+                                title: "Here's a message!",
+                                type: "warning",
+                                text: response.message,
+                                confirmButtonText : "Close this window"
+                            });
+                        }
+                    });
+                } else {
+                    swal("Cancelled", "Your package is safe :)", "error");
+                  }
+            }
+        );
+     }
+     $scope.hideHeader = false;
     $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/get_packages').success(function(data) {
         $scope.packages = data.data;
         console.log($scope.packages);
@@ -963,7 +1038,40 @@ app.controller('AddPromotionsController', ['$scope', 'Upload', '$timeout', funct
 }]);
 /* Promotions end */
 
+/* Branches start */
 
+app.controller('AddBranchController', ['$scope', 'Upload', '$route', '$timeout', '$http', '$location', function ($scope, Upload, $timeout, $route, $http, $location) {
+    $scope.isLoading = false;
+    
+    $scope.submitBranchForm = function() {
+        var data = {branch_name:$scope.branch_name, branch_address:$scope.branch_address, branch_area:$scope.branch_area, branch_location:$scope.branch_location, branch_contact_number:$scope.branch_contact_number, branch_parent_id:$scope.branch_parent_id }
+        $http.post('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_branch', data)
+        .success(function (response) {
+            if(response.status = true){
+                swal({
+                    title: "Here's a message!",
+                    type: "success",
+                    text: response.data,
+                    confirmButtonText : "Close this window"
+                }
+                // ,function(){
+                //     $scope.$apply(function() {
+                //         $location.path('/show_categories');
+                //     });
+                // }
+                )
+            }else{
+                swal({
+                    title: "Here's a message!",
+                    type: "warning",
+                    text: response.data.message,
+                    confirmButtonText : "Close this window"
+                });
+            }
+        });
+    }
+}]);
+/* Branches ene */
 
 
 
