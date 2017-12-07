@@ -1,0 +1,143 @@
+    <!-- Breadcome start-->
+    <div class="breadcome-area mg-b-30 mg-t-30">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcome-list map-mg-t-40-gl shadow-reset">
+                        <div class="breadcome-heading">
+                            <h2>Add Branches</h2>
+                        </div>
+                        <ul class="breadcome-menu">
+                            <li><a href="#">Home</a> <span class="bread-slash">/</span>
+                            </li>
+                            <li><span class="bread-blod">Add Branches</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Breadcome End-->
+    <!-- tabs start-->
+    <div class="admintab-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="admintab-wrap mg-b-40 button_margin">
+                        <a href="#/show_products"><button type="button" class="btn btn-custon-four btn-primary pull-right mg-t-50 mg-b-20">Show branches</button></a>
+                        <ul class="nav nav-tabs custom-menu-wrap custon-tab-menu-style1">
+                            
+                            <!-- <li><a data-toggle="tab" href="#edit_category"><span class="adminpro-icon adminpro-analytics-arrow tab-custon-ic"></span>Edit Category</a>
+                            </li> -->
+                        </ul>
+                        <div class="tab-content">
+                            <div id="add_branch" class="tab-pane in active animated flipInX custon-tab-style1">
+
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="sparkline12-list mg-t-30">
+                                            <div class="sparkline12-graph">
+                                                <div class="basic-login-form-ad">
+                                                    <div class="row">
+                                                        <div class="col-lg-8">
+                                                            <div  ng-controller="AddBranchController">
+                                                                <div class="all-form-element-inner">
+                                                                    <form name="addBranchForm" id="addBranchForm" novalidate enctype="multipart/form-data" ng-submit="submitBranchForm()">
+                                                                        <div class="form-group-inner">
+                                                                            <div class="row" ng-class="{ 'has-error' : addBranchForm.branch_name.$invalid && !addBranchForm.branch_name.$pristine }">
+                                                                                <div class="col-lg-3">
+                                                                                    <label class="login2 pull-right pull-right-pro">Branch Name</label>
+                                                                                </div>
+                                                                                <div class="col-lg-9">
+                                                                                    <input type="text" class="form-control" name="branch_name" ng-model="branch_name" required>
+                                                                                    <p ng-show="addBranchForm.branch_name.$invalid && !addBranchForm.branch_name.$pristine" class="help-block">Enter a branch name.</p>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-group-inner">
+                                                                            <div class="row" ng-class="{ 'has-error' : addBranchForm.branch_address.$invalid && !addBranchForm.branch_address.$pristine }">
+                                                                                <div class="col-lg-3">
+                                                                                    <label class="login2 pull-right pull-right-pro">Branch Address</label>
+                                                                                </div>
+                                                                                <div class="col-lg-9">
+                                                                                    <textarea class="form-control" name="branch_address" ng-model="branch_address" required cols="5" rows="5" />
+                                                                                <p ng-show="addBranchForm.branch_address.$invalid && !addBranchForm.branch_address.$pristine" class="help-block">Enter a branch address.</p>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-group-inner">
+                                                                            <div class="row" ng-class="{ 'has-error' : addBranchForm.branch_area.$invalid && !addBranchForm.branch_area.$pristine }">
+                                                                                <div class="col-lg-3">
+                                                                                    <label class="login2 pull-right pull-right-pro">Branch Area</label>
+                                                                                </div>
+                                                                                <div class="col-lg-9">
+                                                                                    <input type="text" class="form-control" name="branch_area" ng-model="branch_area" required>
+                                                                                    <p ng-show="addBranchForm.branch_area.$invalid && !addBranchForm.branch_area.$pristine" class="help-block">Enter a branch area.</p>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-group-inner">
+                                                                            <div class="row"ng-class="{ 'has-error' : addBranchForm.branch_location.$invalid && !addBranchForm.branch_location.$pristine }">
+                                                                                <div class="col-lg-3">
+                                                                                    <label class="login2 pull-right pull-right-pro">Branch Location</label>
+                                                                                </div>
+                                                                                <div class="col-lg-9">
+                                                                                    <input type="text" class="form-control" name="branch_location" ng-model="branch_location" required>
+                                                                                    <p ng-show="addBranchForm.branch_location.$invalid && !addBranchForm.branch_location.$pristine" class="help-block">Enter a branch location.</p>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-group-inner">
+                                                                            <div class="row" ng-class="{ 'has-error' : addBranchForm.branch_contact_number.$invalid && !addBranchForm.branch_contact_number.$pristine }">
+                                                                                <div class="col-lg-3">
+                                                                                    <label class="login2 pull-right pull-right-pro">Branch Contact Number</label>
+                                                                                </div>
+                                                                                <div class="col-lg-9">
+                                                                                    <input type="text" class="form-control" name="branch_contact_number" ng-model="branch_contact_number" required>
+                                                                                    <p ng-show="addBranchForm.branch_contact_number.$invalid && !addBranchForm.branch_contact_number.$pristine" class="help-block">Enter a branch contact number.</p>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-group-inner">
+                                                                            <div class="row"ng-class="{ 'has-error' : addBranchForm.branch_parent_id.$invalid && !addBranchForm.branch_parent_id.$pristine }">
+                                                                                <div class="col-lg-3">
+                                                                                    <label class="login2 pull-right pull-right-pro">Branch Parent Id</label>
+                                                                                </div>
+                                                                                <div class="col-lg-9">
+                                                                                    <input type="number" class="form-control" name="branch_parent_id" ng-model="branch_parent_id" required>
+                                                                                    <p ng-show="addBranchForm.branch_parent_id.$invalid && !addBranchForm.branch_parent_id.$pristine" class="help-block">Enter a branch parent id.</p>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-group-inner">
+                                                                            <div class="login-btn-inner">
+                                                                                <div class="row">
+                                                                                    <div class="col-lg-3"></div>
+                                                                                    <div class="col-lg-9">
+                                                                                        <div class="login-horizental cancel-wp pull-left">
+                                                                                            <button class="btn btn-white" type="submit">Cancel</button>
+                                                                                            <button type="submit" class="btn btn-sm btn-primary login-submit-cs" ng-disabled="addBranchForm.$invalid" >Submit</button>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
