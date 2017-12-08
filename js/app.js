@@ -11,7 +11,8 @@ app.run(['$rootScope', '$route', function ($rootScope, $route) {
     });
     $rootScope.domainNameUrl = window.serverIP;
 }]);
-
+var spinnerDiv = angular.element('<div id="chIns_overlay"><i class="fa fa-spinner fa-spin chIns_loader chIns_fsVVLarge col_white"></i></div>');
+var documentBody = angular.element(document).find('body').eq(0);
 app.config(function ($routeProvider) {
     $routeProvider
     .when("/" , {
@@ -120,6 +121,7 @@ app.controller('loginController', function($scope, $location) {
 });
 
 app.controller('dashboardController', function($scope,$http,DTOptionsBuilder, DTColumnBuilder) {
+    documentBody.append(spinnerDiv);
     $scope.hideHeader = false;
     $http.post('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/get_testimonials').success(function(data) {
         $scope.userData = data.data;
@@ -127,6 +129,8 @@ app.controller('dashboardController', function($scope,$http,DTOptionsBuilder, DT
         $scope.vm = {};
         $scope.vm.dtOptions = DTOptionsBuilder.newOptions()
               .withOption('order', [0, 'asc']);
+             
+              
     });
     $http.post('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/get_my_orders').success(function(data) {
         $scope.ordersData = data.data;
@@ -136,14 +140,19 @@ app.controller('dashboardController', function($scope,$http,DTOptionsBuilder, DT
             $scope.vm.dtOptions = DTOptionsBuilder.newOptions()
               .withOption('order', [0, 'asc']);
     });
+    setTimeout(function() {
+        angular.element(document).find('#chIns_overlay').remove();    
+      }, 3000);
 });
 
 
 app.controller('usersController', function($scope,$http, $route, DTOptionsBuilder, DTColumnBuilder) {
+    documentBody.append(spinnerDiv);
     $scope.hideHeader = false;
     
     
     $scope.f2=function(n,index){
+        documentBody.append(spinnerDiv);
         swal({
                 title: "Are you sure?",
                 text: "Do you want to delete this user.",
@@ -185,6 +194,7 @@ app.controller('usersController', function($scope,$http, $route, DTOptionsBuilde
         );
     }
     $scope.loading = true; // Show loading image
+    
     $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/get_users_list').success(function(data) {
         $scope.loading = false; // hide loading image on ajax success
         $scope.userData = data.data;
@@ -195,14 +205,18 @@ app.controller('usersController', function($scope,$http, $route, DTOptionsBuilde
               .withLanguage( {
                   loadingRecords: "Please wait - loading..."
                 } )
+
+                angular.element(document).find('#chIns_overlay').remove();
     });
 });
 
 /* services start */
 app.controller('show_services', function($scope,$http, $route, DTOptionsBuilder, DTColumnBuilder) {
+    documentBody.append(spinnerDiv);
     $scope.hideHeader = false;
     $scope.loading = true;
     $scope.f2=function(n,index){
+        documentBody.append(spinnerDiv);
         swal({
                 title: "Are you sure?",
                 text: "Do you want to delete this service.",
@@ -219,6 +233,7 @@ app.controller('show_services', function($scope,$http, $route, DTOptionsBuilder,
                     var data = {service_id:n};
                     $http.post('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/delete_service', data)
                     .success(function (response) {
+                        angular.element(document).find('#chIns_overlay').remove();
                         if(response.status = true){
                             swal({
                                 title: "Service has been Deleted",
@@ -236,8 +251,10 @@ app.controller('show_services', function($scope,$http, $route, DTOptionsBuilder,
                                 confirmButtonText : "Close this window"
                             });
                         }
+                        angular.element(document).find('#chIns_overlay').remove();
                     });
                 } else {
+                    angular.element(document).find('#chIns_overlay').remove();
                     swal("Cancelled", "Your service is safe :)", "error");
                   }
             }
@@ -250,6 +267,7 @@ app.controller('show_services', function($scope,$http, $route, DTOptionsBuilder,
         $scope.vm = {};
         $scope.vm.dtOptions = DTOptionsBuilder.newOptions()
             .withOption('order', [0, 'asc']);
+        angular.element(document).find('#chIns_overlay').remove();
     });
 });
 app.controller('AddServicesController', ['$scope', 'Upload', '$timeout', '$location', function ($scope, Upload, $timeout, $location) {

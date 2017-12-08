@@ -3576,3 +3576,21 @@ table.dataTable thead tr th:last-child, table.dataTable tbody th:last-child, tab
 	border-color: #a94442 !important;
 }
 .ml20{margin-left: 20px;}
+
+#chIns_overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    filter:alpha(opacity=50);
+    -moz-opacity:0.5;
+    -khtml-opacity: 0.5;
+    opacity: 0.5;
+    z-index: 10000;
+    color:#fff;
+    margin:auto;
+    text-align:center;
+}
+.chIns_loader{top:40%; position:absolute;}
