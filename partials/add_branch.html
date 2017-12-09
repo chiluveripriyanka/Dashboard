@@ -25,7 +25,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="admintab-wrap mg-b-40 button_margin">
-                        <a href="#/show_products"><button type="button" class="btn btn-custon-four btn-primary pull-right mg-t-50 mg-b-20">Show branches</button></a>
+                        <a href="#/show_branches"><button type="button" class="btn btn-custon-four btn-primary pull-right mg-t-50 mg-b-20">Show branches</button></a>
                         <ul class="nav nav-tabs custom-menu-wrap custon-tab-menu-style1">
                             
                             <!-- <li><a data-toggle="tab" href="#edit_category"><span class="adminpro-icon adminpro-analytics-arrow tab-custon-ic"></span>Edit Category</a>
@@ -118,6 +118,9 @@
                                                                                         <div class="login-horizental cancel-wp pull-left">
                                                                                             <button class="btn btn-white" type="submit">Cancel</button>
                                                                                             <button type="submit" class="btn btn-sm btn-primary login-submit-cs" ng-disabled="addBranchForm.$invalid" >Submit</button>
+                                                                                            <span ng-show="isLoading" class="ml20">
+                                                                                                <img src="assets/img/loading.gif" class="loading_image"/>
+                                                                                            </span>
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
@@ -141,3 +144,7 @@
         </div>
     </div>
     
+<!-- select2 JS
+    ============================================ -->
+<script src="assets/js/select2/select2.full.min.js"></script>
+<script src="assets/js/select2/select2-active.js"></script>
