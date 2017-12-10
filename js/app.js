@@ -92,7 +92,7 @@ app.config(function ($routeProvider) {
         templateUrl : "partials/add_branch.html" ,
         controller: "AddBranchController"
     })
-    .when("/add_memberships",{
+    .when("/add_membership",{
         templateUrl : "partials/add_membership.html" ,
         controller: "AddMembershipController"
     })
