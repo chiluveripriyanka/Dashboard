@@ -63,14 +63,16 @@ app.config(function ($routeProvider) {
         controller: "show_memberships"
     })
     .when("/add_categories",{
-        templateUrl : "partials/add_categories.html"
+        templateUrl : "partials/add_categories.html",
+        controller: "AddCategoryController"
     })
     .when("/add_services",{
         templateUrl : "partials/add_services.html",
         controller: "AddServicesController"
     })
     .when("/add_sub_categories",{
-        templateUrl : "partials/add_sub_categories.html"  
+        templateUrl : "partials/add_sub_categories.html",
+        controller: "AddSubCategoryController"
     })
     .when("/add_beautytip",{
         templateUrl : "partials/add_beautytip.html" ,
@@ -334,8 +336,8 @@ app.controller('show_services', function($scope,$http, $route, DTOptionsBuilder,
         angular.element(document).find('#chIns_overlay').remove();
     });
 });
-app.controller('AddServicesController', ['$scope', 'Upload', '$timeout', '$location', function ($scope, Upload, $timeout, $location) {
-   
+app.controller('AddServicesController', ['$scope', 'Upload', '$timeout', '$location','$http', function ($scope, Upload, $timeout, $location, $http) {
+    documentBody.append(spinnerDiv);
     $scope.isLoading = false;
     $scope.uploadServicePic = function(file) {
         documentBody.append(spinnerDiv);
@@ -372,6 +374,12 @@ app.controller('AddServicesController', ['$scope', 'Upload', '$timeout', '$locat
             angular.element(document).find('#chIns_overlay').remove();
         });
     }
+
+    $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/show_sub_categories').success(function(data) {
+        $scope.subcategoriesgetData = data.data;
+      
+        angular.element(document).find('#chIns_overlay').remove();
+    });
 }]);
 /* services end */
 
@@ -623,7 +631,7 @@ app.controller('show_sub_categories', function($scope,$http,$route, DTOptionsBui
       $scope.showModal = false;
     };
 });
-app.controller('AddSubCategoryController', ['$scope', 'Upload', '$timeout', '$location', function ($scope, Upload, $timeout, $location) {
+app.controller('AddSubCategoryController', ['$scope', 'Upload', '$timeout', '$location','$http', function ($scope, Upload, $timeout, $location, $http) {
     $scope.isLoading = false;
     $scope.uploadPic = function(file) {
         $scope.isLoading = true;
@@ -665,6 +673,13 @@ app.controller('AddSubCategoryController', ['$scope', 'Upload', '$timeout', '$lo
         // }
         );
     }
+    $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/show_categories').success(function(data) {
+        $scope.categoriesData = data.data;
+        $scope.vm = {};
+        $scope.vm.dtOptions = DTOptionsBuilder.newOptions()
+            .withOption('order', [0, 'asc']);
+            angular.element(document).find('#chIns_overlay').remove();
+    });
 }]);
 app.controller('EditSubCategoryController', ['$scope', 'Upload', '$timeout', '$http', '$route', function ($scope, Upload, $timeout, $http, $route) {
     $scope.updateSubCategoryForm = function() {

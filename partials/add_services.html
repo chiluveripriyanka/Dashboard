@@ -116,11 +116,15 @@
                                                                         <div class="form-group-inner">
                                                                             <div class="row" ng-class="{ 'has-error' : addServiceForm.sub_cat_id.$invalid && !addServiceForm.sub_cat_id.$pristine }">
                                                                                 <div class="col-lg-3">
-                                                                                    <label class="login2 pull-right pull-right-pro">Sub Category Id</label>
+                                                                                    <label class="login2 pull-right pull-right-pro"> Select Sub Category</label>
                                                                                 </div>
                                                                                 <div class="col-lg-9">
-                                                                                    <input type="number" class="form-control" name="sub_cat_id" ng-model="sub_cat_id" required>
-                                                                                    <p ng-show="addServiceForm.sub_cat_id.$invalid && !addServiceForm.sub_cat_id.$pristine" class="help-block">Enter a sub category Id.</p>
+                                                                                        <select  class="form-control" name="sub_cat_id" ng-model="sub_cat_id" required>
+                                                                                                <option value=""> Select Sub Category</option>
+                                                                                                <option ng-repeat="category in subcategoriesgetData" value="{{category.sub_cat_id}}">{{category.sub_category_name}}</option>
+                                                                                            </select>
+                                                                                    
+                                                                                    <p ng-show="addServiceForm.sub_cat_id.$invalid && !addServiceForm.sub_cat_id.$pristine" class="help-block">Select a sub category Id.</p>
                                                                                 </div>
                                                                             </div>
                                                                         </div>

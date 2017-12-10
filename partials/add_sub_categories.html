@@ -83,11 +83,15 @@
                                                                     <div class="form-group-inner">
                                                                         <div class="row" ng-class="{ 'has-error' : addSubCategoryForm.cat_id.$invalid && !addSubCategoryForm.cat_id.$pristine }">
                                                                             <div class="col-lg-3">
-                                                                                <label class="login2 pull-right pull-right-pro">Category Id</label>
+                                                                                <label class="login2 pull-right pull-right-pro">Sub category</label>
                                                                             </div>
                                                                             <div class="col-lg-9">
-                                                                                <input type="number" class="form-control" name="cat_id" ng-model="cat_id" required>
-                                                                                <p ng-show="addSubCategoryForm.cat_id.$invalid && !addSubCategoryForm.cat_id.$pristine" class="help-block">Enter a Category Id.</p>
+                                                                                <select class="form-control" name="cat_id" ng-model="cat_id" required>
+                                                                                    <option value=""> Select Category</option>
+                                                                                    <option ng-repeat="category in categoriesData" value="{{category.cat_id}}">{{category.category_name}}</option>
+                                                                                </select>
+                                                                                
+                                                                                <p ng-show="addSubCategoryForm.cat_id.$invalid && !addSubCategoryForm.cat_id.$pristine" class="help-block">Select a Category.</p>
                                                                             </div>
                                                                         </div>
                                                                     </div>
