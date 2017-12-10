@@ -46,12 +46,11 @@
                                         <td>{{ service.service_price }}</td>
                                         <td>{{ service.service_duration }}</td>
                                         <td><img width="50" ng-src="http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/uploads/{{service.service_img}}" /></td>
-                                         <td class="v-middle">
+                                        <td class="v-middle">
                                             <div class="btn-group">
-                                                <button type="button" class="btn btn-default btn" ng-click="editCategory(category.cat_id)"><i class="glyphicon glyphicon-pencil"></i></button>  
-                                               <button type="button" class="btn btn-default btn" ng-click="f2(service.service_id,$index)"><i class="glyphicon glyphicon-trash"></i></button>  
-
-										   </div>
+                                                <button type="button" class="btn btn-default btn" ng-click="editService(service.service_id)"><i class="glyphicon glyphicon-pencil"></i></button>  
+                                               <button type="button" class="btn btn-default btn" ng-click="f2(service.service_id,$index)"><i class="glyphicon glyphicon-trash"></i></button>
+                                            </div>
                                         </td> 
                                       </tr>
                                     </tbody>
@@ -65,13 +64,14 @@
     </div>
     <div modal="showModal" close="cancel()">
         <div class="modal-header">
-            <h4>Edit Category</h4>
+            <h4>Edit Service</h4>
         </div>
         <div class="modal-body">
-            <div  ng-controller="EditCategoryController">
+            <div  ng-controller="EditServiceController">
                 <div class="all-form-element-inner">
-                    <div ng-repeat="category in categoriesgetData">
-                        <form name="editCategoryForm" id="editCategoryForm" novalidate enctype="multipart/form-data">
+                    <div>
+                        <form name="editServiceForm" id="editServiceForm" novalidate enctype="multipart/form-data">
+                            <input type="hidden" ng-model="servicesByIdData.service_id" name="service_id">
                             <div class="form-group-inner">
                                 <div class="row mg-b-10" >
                                     <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
@@ -83,29 +83,78 @@
                                             <div class="input append-small-btn">
                                                 <div class="file-button">
                                                     Browse
-                                                    <input type="file" onchange="document.getElementById('append-small-btn').value = this.value;" ngf-select ng-model="category.cat_img" name="cat_img"    
+                                                    <input type="file" onchange="document.getElementById('append-small-btn').value = this.value;" ngf-select ng-model="servicesByIdData.service_img" name="service_img"    
                                                          accept="image/*" ngf-max-size="2MB" required
                                                          ngf-model-invalid="errorFile">
                                                 </div>
-                                                <input type="text" id="append-small-btn" ng-model="category.cat_img" placeholder="no file selected">
-                                                <div class="text-left mg-b-30" ng-show="editCategoryForm.file.$error.required">Upload image is required</i><br>
-                                                  <i ng-show="editCategoryForm.file.$error.maxSize">File too large 
+                                                <input type="text" id="append-small-btn" ng-model="servicesByIdData.service_img" placeholder="no file selected">
+                                                <img width="50" class="mg-t-10" ng-src="http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/uploads/{{servicesByIdData.service_img}}" />
+                                                <div class="text-left mg-b-30" ng-show="editServiceForm.file.$error.required">Upload image is required</i><br>
+                                                  <i ng-show="editServiceForm.file.$error.maxSize">File too large 
                                                       {{errorFile.size / 1000000|number:1}}MB: max 2M</i>
-                                                  <img ng-show="editCategoryForm.file.$valid" ngf-thumbnail="picFile" class="thumb"> <button ng-click="picFile = null" ng-show="picFile">Remove</button>
+                                                  <img ng-show="editServiceForm.file.$valid" ngf-thumbnail="picFile" class="thumb"> <button ng-click="picFile = null" ng-show="picFile">Remove</button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group-inner">
-                                <div class="row">
+                                <div class="row" ng-class="{ 'has-error' : editServiceForm.service_name.$invalid && !editServiceForm.service_name.$pristine }">
                                     <div class="col-lg-3">
-                                        <label class="login2 pull-right pull-right-pro">Category Name</label>
+                                        <label class="login2 pull-right pull-right-pro">Service Name</label>
                                     </div>
                                     <div class="col-lg-9">
-                                        <input type="text" class="form-control" name="category_name" ng-model="category.category_name" required>
+                                        <input type="text" class="form-control" name="service_name" ng-model="servicesByIdData.service_name" required>
+                                        <p ng-show="editServiceForm.service_name.$invalid && !editServiceForm.service_name.$pristine" class="help-block">Enter a service name.</p>
                                     </div>
-                                    <p ng-show="editCategoryForm.category_name.$invalid && !editCategoryForm.category_name.$pristine" class="help-block">Enter a Category Name.</p>
+                                </div>
+                            </div>
+                            <div class="form-group-inner">
+                                <div class="row" ng-class="{ 'has-error' : editServiceForm.service_duration.$invalid && !editServiceForm.service_duration.$pristine }">
+                                    <div class="col-lg-3">
+                                        <label class="login2 pull-right pull-right-pro">Service Duration</label>
+                                    </div>
+                                    <div class="col-lg-9">
+                                        <input type="text" class="form-control" name="service_duration" ng-model="servicesByIdData.service_duration" required>
+                                        <p ng-show="editServiceForm.service_duration.$invalid && !editServiceForm.service_duration.$pristine" class="help-block">Enter a service duration.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group-inner">
+                                <div class="row" ng-class="{ 'has-error' : editServiceForm.service_description.$invalid && !editServiceForm.service_description.$pristine }">
+                                    <div class="col-lg-3">
+                                        <label class="login2 pull-right pull-right-pro">Service Description</label>
+                                    </div>
+                                    <div class="col-lg-9">
+                                        <textarea  type="text" class="form-control" name="service_description" ng-model="servicesByIdData.service_description" required cols="5" rows="5"/>
+                                        <p ng-show="editServiceForm.service_description.$invalid && !editServiceForm.service_description.$pristine" class="help-block">Enter a service description.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group-inner">
+                                <div class="row" ng-class="{ 'has-error' : editServiceForm.service_price.$invalid && !editServiceForm.service_price.$pristine }">
+                                    <div class="col-lg-3">
+                                        <label class="login2 pull-right pull-right-pro">Service Price</label>
+                                    </div>
+                                    <div class="col-lg-9">
+                                        <input type="text" class="form-control" name="service_price" ng-model="servicesByIdData.service_price" required>
+                                        <p ng-show="editServiceForm.service_price.$invalid && !editServiceForm.service_price.$pristine" class="help-block">Enter a service price.</p>
+                                    </div>
+                                </div>
+                            </div> 
+                            <div class="form-group-inner">
+                                <div class="row" ng-class="{ 'has-error' : editServiceForm.sub_cat_id.$invalid && !editServiceForm.sub_cat_id.$pristine }">
+                                    <div class="col-lg-3">
+                                        <label class="login2 pull-right pull-right-pro"> Select Sub Category</label>
+                                    </div>
+                                    <div class="col-lg-9">
+                                            <select  class="form-control" name="sub_cat_id" ng-model="servicesByIdData.sub_cat_id" required>
+                                                    <option value=""> Select Sub Category</option>
+                                                    <option ng-repeat="category in subcategoriesgetData" value="{{category.sub_cat_id}}">{{category.sub_category_name}}</option>
+                                                </select>
+                                        
+                                        <p ng-show="editServiceForm.sub_cat_id.$invalid && !editServiceForm.sub_cat_id.$pristine" class="help-block">Select a sub category Id.</p>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group-inner">
@@ -114,19 +163,22 @@
                                         <div class="col-lg-3"></div>
                                         <div class="col-lg-9">
                                             <div class="login-horizental cancel-wp pull-left">
-                                                <button class="btn btn-white" type="submit" ng-click="cancel()">Cancel</button>
-                                                <button class="btn btn-sm btn-primary login-submit-cs"  ng-click="updateCategoryForm(category)">Submit</button>
-                                              <span class="progress" ng-show="cat_img.progress >= 0">
-                                                <div style="width:{{cat_img.progress}}%" 
-                                                    ng-bind="cat_img.progress + '%'"></div>
-                                              </span>
-                                              <span ng-show="cat_img.result">Upload Successful</span>
-                                              <span class="err" ng-show="errorMsg">{{errorMsg}}</span>
+                                                <button class="btn btn-white" type="submit">Cancel</button>
+                                                <button class="btn btn-sm btn-primary login-submit-cs" ng-disabled="!editServiceForm.$valid" ng-click="updateServiceForm()">Submit</button>
+                                                <span ng-show="isLoading" class="ml20">
+                                                    <img src="assets/img/loading.gif" class="loading_image"/>
+                                                </span>
+                                                  <span class="progress" ng-show="cat_img.progress >= 0">
+                                                    <div style="width:{{cat_img.progress}}%" 
+                                                        ng-bind="cat_img.progress + '%'"></div>
+                                                  </span>
+                                                  <span ng-show="cat_img.result">Upload Successful</span>
+                                                  <span class="err" ng-show="errorMsg">{{errorMsg}}</span>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> 
                         </form>
                     </div>
                 </div>
@@ -136,4 +188,4 @@
           <button class="btn btn-success" ng-click="ok()">Okay</button>
           <button class="btn" ng-click="cancel()">Cancel</button>
         </div> -->
-    </div>    
+    </div>   
