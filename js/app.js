@@ -1299,6 +1299,7 @@ app.controller('show_memberships', function($scope,$http,DTOptionsBuilder, DTCol
 });
 app.controller('AddMembershipController', ['$scope', 'Upload', '$http', '$route', '$timeout', function ($scope, Upload, $http, $route, $timeout) {
     $scope.isLoading = false;
+    angular.element(document).find('#chIns_overlay').remove();
     $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/get_services')
       .success(function(data){
         var data_final = data.data;
