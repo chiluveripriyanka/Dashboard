@@ -1122,7 +1122,7 @@ app.controller('AddPromotionsController', ['$scope', 'Upload', '$timeout', '$loc
         $scope.isLoading = true;
         file.upload = Upload.upload({
           url: 'http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_promotions',
-          data: {promotion_name: $scope.promotion_name, promotion_img: file, promotion_description :$scope.promotion_description, promotion_type: $scope.promotion_type, from_date: $scope.from_date, end_date: $scope.end_date },
+          data: {promotion_name: $scope.promotion_name, promotion_img: file, promotion_description :$scope.promotion_description, promotion_type: $scope.promotion_type, from_date: $scope.from_date, end_date: $scope.end_date,promotion_for:$scope.promotion_for },
         });
         file.upload.then(function (response) {
             $scope.isLoading = false;
