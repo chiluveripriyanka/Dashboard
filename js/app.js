@@ -54,6 +54,14 @@ app.config(function ($routeProvider) {
         templateUrl : "partials/show_products.html",
         controller: "show_products" 
     })
+    .when("/show_branches",{
+        templateUrl : "partials/show_branches.html",
+        controller: "show_branches"
+    })
+    .when("/show_memberships",{
+        templateUrl : "partials/show_memberships.html",
+        controller: "show_memberships"
+    })
     .when("/add_categories",{
         templateUrl : "partials/add_categories.html"
     })
@@ -84,6 +92,11 @@ app.config(function ($routeProvider) {
         templateUrl : "partials/add_branch.html" ,
         controller: "AddBranchController"
     })
+    .when("/add_memberships",{
+        templateUrl : "partials/add_membership.html" ,
+        controller: "AddMembershipController"
+    })
+    
     .otherwise({
         redirectTo : "/"
     });
@@ -152,7 +165,6 @@ app.controller('usersController', function($scope,$http, $route, DTOptionsBuilde
     
     
     $scope.f2=function(n,index){
-        documentBody.append(spinnerDiv);
         swal({
                 title: "Are you sure?",
                 text: "Do you want to delete this user.",
@@ -198,7 +210,6 @@ app.controller('usersController', function($scope,$http, $route, DTOptionsBuilde
     $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/get_users_list').success(function(data) {
         $scope.loading = false; // hide loading image on ajax success
         $scope.userData = data.data;
-        console.log(data.data);
         $scope.vm = {};
         $scope.vm.dtOptions = DTOptionsBuilder.newOptions()
               .withOption('order', [0, 'asc'],'processing', true)
@@ -208,15 +219,68 @@ app.controller('usersController', function($scope,$http, $route, DTOptionsBuilde
 
                 angular.element(document).find('#chIns_overlay').remove();
     });
-});
+    $scope.editUser = function(id) {
+        $scope.showModal = true;
+        for (i in $scope.userData) {
+            //console.log($scope.userData[i].user_id);
+            //Getting the person details from scope based on id
+            if ($scope.userData[i].user_id == id) {
+                $scope.usersByIdData = {
+                    user_id: $scope.userData[i].user_id,
+                    email_id: $scope.userData[i].email_id,
+                    fullname: $scope.userData[i].fullname,
+                    gender: $scope.userData[i].gender,
+                    mobile: $scope.userData[i].mobile
+                };
+                console.log($scope.usersByIdData);
+            }
+        }
+    };
+    $scope.ok = function() {
+      $scope.showModal = false;
+    };
 
+    $scope.cancel = function() {
+      $scope.showModal = false;
+    };
+});
+app.controller('EditUserController', ['$scope', 'Upload', '$http', '$route', '$timeout', function ($scope, Upload, $http, $route, $timeout) {
+    $scope.updateUser = function() {
+        if($scope.usersByIdData.gender == 'M'){
+            var gender = 'Male';
+        }else if($scope.usersByIdData.gender == 'F'){
+            var gender = 'Female';
+        }
+        var data = {user_id:$scope.usersByIdData.user_id, email_id: $scope.usersByIdData.email_id, fullname:$scope.usersByIdData.fullname, gender:gender,mobile:$scope.usersByIdData.mobile};
+        $http.post('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/profile_update', data)
+        .success(function (response) {
+            $scope.isLoading = false;
+            if(response.status = true){
+                swal({
+                    title: "Here's a message!",
+                    type: "success",
+                    text: response.message,
+                    confirmButtonText : "Close this window"
+                },function(){
+                    $route.reload();
+                })
+            }else{
+                swal({
+                    title: "Here's a message!",
+                    type: "warning",
+                    text: response.message,
+                    confirmButtonText : "Close this window"
+                });
+            }
+        })
+    }
+}]);
 /* services start */
 app.controller('show_services', function($scope,$http, $route, DTOptionsBuilder, DTColumnBuilder) {
     documentBody.append(spinnerDiv);
     $scope.hideHeader = false;
     $scope.loading = true;
     $scope.f2=function(n,index){
-        documentBody.append(spinnerDiv);
         swal({
                 title: "Are you sure?",
                 text: "Do you want to delete this service.",
@@ -313,7 +377,7 @@ app.controller('AddServicesController', ['$scope', 'Upload', '$timeout', '$locat
 
 /* Categories start */
 app.controller('show_categories', function($scope,$http, $route, DTOptionsBuilder, DTColumnBuilder) {
-    
+    documentBody.append(spinnerDiv);
     $scope.f2=function(n,index){
         swal({
                 title: "Are you sure?",
@@ -348,8 +412,10 @@ app.controller('show_categories', function($scope,$http, $route, DTOptionsBuilde
                                 confirmButtonText : "Close this window"
                             });
                         }
+                        angular.element(document).find('#chIns_overlay').remove();
                     });
                 } else {
+                    angular.element(document).find('#chIns_overlay').remove();
                     swal("Cancelled", "Your category is safe :)", "error");
                   }
             }
@@ -362,6 +428,7 @@ app.controller('show_categories', function($scope,$http, $route, DTOptionsBuilde
         $scope.vm = {};
         $scope.vm.dtOptions = DTOptionsBuilder.newOptions()
             .withOption('order', [0, 'asc']);
+            angular.element(document).find('#chIns_overlay').remove();
     });
     $scope.editCategory = function(id) {
         $scope.showModal = true;
@@ -481,8 +548,7 @@ app.controller('EditCategoryController', ['$scope', 'Upload', '$http', '$route',
 /* Sub Categories start */
 app.controller('show_sub_categories', function($scope,$http,$route, DTOptionsBuilder, DTColumnBuilder) {
     $scope.hideHeader = false;
-    
-         
+    documentBody.append(spinnerDiv);
     $scope.f2=function(n,index){
         swal({
                 title: "Are you sure?",
@@ -517,8 +583,10 @@ app.controller('show_sub_categories', function($scope,$http,$route, DTOptionsBui
                                 confirmButtonText : "Close this window"
                             });
                         }
+                        angular.element(document).find('#chIns_overlay').remove();
                     });
                 } else {
+                    angular.element(document).find('#chIns_overlay').remove();
                     swal("Cancelled", "Your sub category is safe :)", "error");
                   }
             }
@@ -530,6 +598,7 @@ app.controller('show_sub_categories', function($scope,$http,$route, DTOptionsBui
         $scope.vm = {};
         $scope.vm.dtOptions = DTOptionsBuilder.newOptions()
               .withOption('order', [0, 'asc']);
+        angular.element(document).find('#chIns_overlay').remove();
     });
     $scope.editSubCategory = function(id) {
         $scope.showModal = true;
@@ -657,8 +726,7 @@ app.controller('EditSubCategoryController', ['$scope', 'Upload', '$timeout', '$h
 
 /* Beauty tips start */
 app.controller('show_beauty_tips', function($scope,$http, $route, DTOptionsBuilder, DTColumnBuilder) {
-    
-    
+    documentBody.append(spinnerDiv);
     $scope.f2=function(n,index){
         swal({
                 title: "Are you sure?",
@@ -693,10 +761,12 @@ app.controller('show_beauty_tips', function($scope,$http, $route, DTOptionsBuild
                                 confirmButtonText : "Close this window"
                             });
                         }
+                        angular.element(document).find('#chIns_overlay').remove();
                     });
                 } else {
+                    angular.element(document).find('#chIns_overlay').remove();
                     swal("Cancelled", "Your Beauty tip is safe :)", "error");
-                  }
+                }
             }
         );
         
@@ -708,6 +778,7 @@ app.controller('show_beauty_tips', function($scope,$http, $route, DTOptionsBuild
         $scope.vm = {};
         $scope.vm.dtOptions = DTOptionsBuilder.newOptions()
               .withOption('order', [0, 'asc']);
+        angular.element(document).find('#chIns_overlay').remove();
     });
     $scope.editTip = function(id) {
         $scope.showModal = true;
@@ -828,6 +899,7 @@ app.controller('EditTipController', ['$scope', 'Upload', '$timeout', '$http', '$
 
 /* Packages start */
 app.controller('show_packages', function($scope,$http, $route, DTOptionsBuilder, DTColumnBuilder) {
+    documentBody.append(spinnerDiv);
     $scope.f2=function(n,index){
         swal({
                 title: "Are you sure?",
@@ -863,8 +935,10 @@ app.controller('show_packages', function($scope,$http, $route, DTOptionsBuilder,
                                 confirmButtonText : "Close this window"
                             });
                         }
+                        angular.element(document).find('#chIns_overlay').remove();
                     });
                 } else {
+                    angular.element(document).find('#chIns_overlay').remove();
                     swal("Cancelled", "Your package is safe :)", "error");
                   }
             }
@@ -877,6 +951,7 @@ app.controller('show_packages', function($scope,$http, $route, DTOptionsBuilder,
         $scope.vm = {};
         $scope.vm.dtOptions = DTOptionsBuilder.newOptions()
               .withOption('order', [0, 'asc']);
+        angular.element(document).find('#chIns_overlay').remove();
     });
 });
 app.controller('AddPackagesController', function($scope, $http, $location) {  
@@ -886,48 +961,25 @@ app.controller('AddPackagesController', function($scope, $http, $location) {
         var data_final = data.data;
         $scope.servicesInfo = data_final.map(function(item){
             return {
-                package_services: item.package_services,
-                package_name:item.package_name
+                service_id: item.service_id,
+                service_name:item.service_name
               };
-        });
-        $scope.servicesOtherInfo = data_final.map(function(item){
-            return {
-                package_on_other_services: item.package_on_other_services,
-                package_name:item.package_name
-            };
         });
     })
     $scope.selected_services = [];
     $scope.selected_services_settings = {
-        template: '<b>{{option.package_name}}</b>',
-        searchField: 'package_name',
-        enableSearch: true,
-        //selectionLimit: 4,
-    };
-    $scope.selected_other_services = [];
-    $scope.selected_other_services_settings = {
-        template: '<b>{{option.package_name}}</b>',
-        searchField: 'package_name',
+        template: '<b>{{option.service_name}}</b>',
+        searchField: 'service_name',
         enableSearch: true,
         //selectionLimit: 4,
     };
     $scope.selected_services_customTexts = {buttonDefaultText: 'Select Services'};
-    $scope.selected_other_services_customTexts = {buttonDefaultText: 'Select Other Services'}; 
     $scope.submitPackageForm = function() {
         $scope.isLoading = true;
         if ($scope.addPackageForm.$valid) {
             var services = $scope.selected_services;
             var package_services = [];
-            for(var i=0;i<services.length;i++){
-                $scope.selected_services = services[i].package_services;
-                package_services.push($scope.selected_services);
-            }
-            var other_services = $scope.selected_other_services;
-            var package_on_other_services = [];
-            for(var i=0;i<other_services.length;i++){
-                $scope.selected_other_services = other_services[i].package_on_other_services;
-                package_on_other_services.push($scope.selected_other_services);
-            }
+            package_services.push($scope.selected_services);
             var data = {
                 package_name: $scope.package_name,
                 package_price: $scope.package_price,
@@ -936,9 +988,9 @@ app.controller('AddPackagesController', function($scope, $http, $location) {
                 package_start_date: $scope.package_start_date,
                 package_end_date: $scope.package_end_date,
                 package_services: package_services,
-                package_on_other_services: package_on_other_services
+                package_on_other_services: $scope.package_on_other_services
             };
-            //console.log(data);
+            console.log(data);
             $http.post('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_package', data)
             .success(function (response) {
                 $scope.isLoading = false;
@@ -969,6 +1021,7 @@ app.controller('AddPackagesController', function($scope, $http, $location) {
 
 /* Prdcusts Start */
 app.controller('show_products', function($scope,$http,DTOptionsBuilder, DTColumnBuilder) {
+    documentBody.append(spinnerDiv);
     $scope.hideHeader = false;
     $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/get_products').success(function(data) {
         $scope.products = data.data;
@@ -976,6 +1029,7 @@ app.controller('show_products', function($scope,$http,DTOptionsBuilder, DTColumn
         $scope.vm = {};
         $scope.vm.dtOptions = DTOptionsBuilder.newOptions()
               .withOption('order', [0, 'asc']);
+        angular.element(document).find('#chIns_overlay').remove();
     });
 });
 app.controller('AddProductsController', ['$scope', 'Upload', '$timeout','$http', '$location', function ($scope, Upload, $timeout,$http, $location) {
@@ -1018,15 +1072,18 @@ app.controller('AddProductsController', ['$scope', 'Upload', '$timeout','$http',
 
 /* Promotions start */
 app.controller('show_promotions', function($scope,$http,DTOptionsBuilder, DTColumnBuilder) {
+    documentBody.append(spinnerDiv);
     $scope.hideHeader = false;
     $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/get_promotions').success(function(data) {
         $scope.promotions = data.data;
         $scope.vm = {};
         $scope.vm.dtOptions = DTOptionsBuilder.newOptions()
               .withOption('order', [0, 'asc']);
+        angular.element(document).find('#chIns_overlay').remove();
     });
+    
 });
-app.controller('AddPromotionsController', ['$scope', 'Upload', '$timeout', function ($scope, Upload, $timeout) {
+app.controller('AddPromotionsController', ['$scope', 'Upload', '$timeout', '$location', function ($scope, Upload, $timeout, $location) {
     $scope.isLoading = false;
     $scope.addPromotion = function(file) {
         $scope.isLoading = true;
@@ -1045,6 +1102,10 @@ app.controller('AddPromotionsController', ['$scope', 'Upload', '$timeout', funct
                     type: "success",
                     text: response.data.message,
                     confirmButtonText : "Close this window"
+                },function(){
+                    $scope.$apply(function() {
+                        $location.path('/show_promotions');
+                    });
                 });
             }else{
                 swal({
@@ -1060,27 +1121,62 @@ app.controller('AddPromotionsController', ['$scope', 'Upload', '$timeout', funct
 /* Promotions end */
 
 /* Branches start */
+app.controller('show_branches', function($scope,$http,DTOptionsBuilder, DTColumnBuilder) {
+    documentBody.append(spinnerDiv);
+    $scope.hideHeader = false;
+    $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/get_branches').success(function(data) {
+        $scope.branches = data.data;
+        console.log($scope.branches);
+        $scope.vm = {};
+        $scope.vm.dtOptions = DTOptionsBuilder.newOptions()
+              .withOption('order', [0, 'asc']);
+        angular.element(document).find('#chIns_overlay').remove();
+    });
+    $scope.editBranch = function(id) {
+        $scope.showModal = true;
+        for (i in $scope.branches) {
+            //Getting the person details from scope based on id
+            if ($scope.branches[i].branch_id == id) {
+                $scope.branchesByIdData = {
+                    branch_id: $scope.branches[i].branch_id,
+                    branch_name: $scope.branches[i].branch_name,
+                    branch_address: $scope.branches[i].branch_address,
+                    branch_area: $scope.branches[i].branch_area,
+                    branch_location: $scope.branches[i].branch_location,
+                    branch_contact_number: $scope.branches[i].branch_contact_number,
+                    branch_parent_id: $scope.branches[i].branch_parent_id
+                };
+                console.log($scope.branchesByIdData);
+            }
+        }
+    };
+    $scope.ok = function() {
+      $scope.showModal = false;
+    };
 
+    $scope.cancel = function() {
+      $scope.showModal = false;
+    };
+});
 app.controller('AddBranchController', ['$scope', 'Upload', '$route', '$timeout', '$http', '$location', function ($scope, Upload, $timeout, $route, $http, $location) {
     $scope.isLoading = false;
-    
     $scope.submitBranchForm = function() {
+        $scope.isLoading = true;
         var data = {branch_name:$scope.branch_name, branch_address:$scope.branch_address, branch_area:$scope.branch_area, branch_location:$scope.branch_location, branch_contact_number:$scope.branch_contact_number, branch_parent_id:$scope.branch_parent_id }
         $http.post('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_branch', data)
         .success(function (response) {
+            $scope.isLoading = false;
             if(response.status = true){
                 swal({
                     title: "Here's a message!",
                     type: "success",
                     text: response.data,
                     confirmButtonText : "Close this window"
-                }
-                // ,function(){
-                //     $scope.$apply(function() {
-                //         $location.path('/show_categories');
-                //     });
-                // }
-                )
+                },function(){
+                    $scope.$apply(function() {
+                        $location.path('/show_branches');
+                    });
+                })
             }else{
                 swal({
                     title: "Here's a message!",
@@ -1092,9 +1188,156 @@ app.controller('AddBranchController', ['$scope', 'Upload', '$route', '$timeout',
         });
     }
 }]);
-/* Branches ene */
+app.controller('EditBranchController', ['$scope', 'Upload', '$http', '$route', '$timeout', function ($scope, Upload, $http, $route, $timeout) {
+    $scope.updateBranchForm = function() {
+        var data = {branch_id:$scope.branchesByIdData.branch_id, branch_address: $scope.branchesByIdData.branch_address, branch_name:$scope.branchesByIdData.branch_name, branch_location:$scope.branchesByIdData.branch_location,branch_area:$scope.branchesByIdData.branch_area, branch_contact_number:$scope.branchesByIdData.branch_contact_number, branch_parent_id:$scope.branchesByIdData.branch_parent_id}
+        console.log(data);
+        $http.post('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_branch', data)
+        .success(function (response) {
+            $scope.isLoading = false;
+            if(response.status = true){
+                swal({
+                    title: "Here's a message!",
+                    type: "success",
+                    text: response.data,
+                    confirmButtonText : "Close this window"
+                },function(){
+                    $route.reload();
+                })
+            }else{
+                swal({
+                    title: "Here's a message!",
+                    type: "warning",
+                    text: response.data.message,
+                    confirmButtonText : "Close this window"
+                });
+            }
+        })
+    }
+}]);
+/* Branches end */
 
+/* Memberships start */
+app.controller('show_memberships', function($scope,$http,DTOptionsBuilder, DTColumnBuilder) {
+    documentBody.append(spinnerDiv);
+    $scope.hideHeader = false;
+    $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/get_memberships').success(function(data) {
+        $scope.membershipsData = data.data;
+        console.log($scope.membershipsData);
+        $scope.vm = {};
+        $scope.vm.dtOptions = DTOptionsBuilder.newOptions()
+              .withOption('order', [0, 'asc']);
+        angular.element(document).find('#chIns_overlay').remove();
+    });
+    // $scope.editBranch = function(id) {
+    //     $scope.showModal = true;
+    //     for (i in $scope.branches) {
+    //         //Getting the person details from scope based on id
+    //         if ($scope.branches[i].branch_id == id) {
+    //             $scope.branchesByIdData = {
+    //                 branch_id: $scope.branches[i].branch_id,
+    //                 branch_name: $scope.branches[i].branch_name,
+    //                 branch_address: $scope.branches[i].branch_address,
+    //                 branch_area: $scope.branches[i].branch_area,
+    //                 branch_location: $scope.branches[i].branch_location,
+    //                 branch_contact_number: $scope.branches[i].branch_contact_number,
+    //                 branch_parent_id: $scope.branches[i].branch_parent_id
+    //             };
+    //             console.log($scope.branchesByIdData);
+    //         }
+    //     }
+    // };
+    // $scope.ok = function() {
+    //   $scope.showModal = false;
+    // };
 
+    // $scope.cancel = function() {
+    //   $scope.showModal = false;
+    // };
+});
+app.controller('AddMembershipController', ['$scope', 'Upload', '$http', '$route', '$timeout', function ($scope, Upload, $http, $route, $timeout) {
+    $scope.isLoading = false;
+    $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/get_services')
+      .success(function(data){
+        var data_final = data.data;
+        $scope.servicesInfo = data_final.map(function(item){
+            return {
+                service_id: item.service_id,
+                service_name:item.service_name,
+                quantity: '2'
+              };
+        });
+    })
+    $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/get_branches')
+      .success(function(data){
+        var data_final = data.data;
+        $scope.branchesInfo = data_final.map(function(item){
+            return {
+                branch_id: item.branch_id,
+                branch_name:item.branch_name
+              };
+        });
+    })
+    $scope.membership_services = [];
+    $scope.membership_services_settings = {
+        template: '<b>{{option.service_name}}</b>',
+        searchField: 'service_name',
+        enableSearch: true,
+        //selectionLimit: 4,
+    };
+    $scope.membership_services_customTexts = {buttonDefaultText: 'Select Services'};
+    $scope.branch_ids = [];
+    $scope.branch_ids_settings = {
+        template: '<b>{{option.branch_name}}</b>',
+        searchField: 'branch_name',
+        enableSearch: true,
+        //selectionLimit: 4,
+    };
+    $scope.branch_ids_customTexts = {buttonDefaultText: 'Select Branches'};
+    $scope.addMembership = function() {
+        $scope.isLoading = true;
+        var services = $scope.membership_services;
+        var membership_services = [];
+        membership_services.push($scope.membership_services);
+        
+        var branches = $scope.branch_ids;
+        var branch_ids = [];
+        branch_ids.push($scope.branch_ids);
 
-
-
+        var data = {
+                    membership_name: $scope.membership_name, 
+                    membership_description :$scope.membership_description, 
+                    membership_discount: $scope.membership_discount, 
+                    membership_price: $scope.membership_price, 
+                    membership_validity_in_days: $scope.membership_validity_in_days,
+                    membership_services: membership_services,
+                    branch_ids: branch_ids,
+                    is_global: $scope.is_global,
+                    membership_img:'im.png'
+                };
+        $http.post('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_branch', data)
+        .success(function (response) {
+            $scope.isLoading = false;
+            if(response.status = true){
+                swal({
+                    title: "Here's a message!",
+                    type: "success",
+                    text: response.data,
+                    confirmButtonText : "Close this window"
+                },function(){
+                    $scope.$apply(function() {
+                        $location.path('/show_branches');
+                    });
+                })
+            }else{
+                swal({
+                    title: "Here's a message!",
+                    type: "warning",
+                    text: response.data.message,
+                    confirmButtonText : "Close this window"
+                });
+            }
+        });
+    }
+}]);
+/* Branches end */

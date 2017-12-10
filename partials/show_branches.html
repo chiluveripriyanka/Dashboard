@@ -1,0 +1,165 @@
+<div class="breadcome-area mg-b-30 mg-t-30">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcome-list map-mg-t-40-gl shadow-reset">
+                        <div class="breadcome-heading">
+                            <h2>Branches Table</h2>
+                        </div>
+                        <ul class="breadcome-menu">
+                            <li><a href="#">Home</a> <span class="bread-slash">/</span>
+                            </li>
+                            <li><span class="bread-blod">Branches Data</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<div class="data-table-area mg-b-40">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="sparkline8-list button_margin">
+                        <a href="#/add_branch"><button type="button" class="btn btn-custon-four btn-primary pull-right mg-t-50 mg-b-20">Add Branches</button></a>
+                        <ul class="nav nav-tabs custom-menu-wrap custon-tab-menu-style1">
+                            
+                        </ul>
+                        <div class="sparkline8-graph">
+                            <div class="static-table-list">
+                                <table class="table table-striped" datatable="ng" dt-options="vm.dtOptions">
+                                    <thead>
+                                      <tr>
+                                        <th>Branch Name</th>
+                                        <th>Branch Address</th>
+                                        <th>Branch Area</th>
+                                        <th>Branch Location</th>
+                                        <th>Branch Contact Number</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="branch in branches">
+                                            <td>{{ branch.branch_name }}</td>
+                                            <td>{{ branch.branch_address }}</td>
+                                            <td>{{ branch.branch_area }}</td>
+                                            <td>{{ branch.branch_location }}</td>
+                                            <td>{{ branch.branch_contact_number }}</td>
+                                            <td class="v-middle">
+                                                <div class="btn-group">
+                                                    <button type="button" class="btn btn-default btn" ng-click="editBranch(branch.branch_id)"><i class="glyphicon glyphicon-pencil"></i></button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                  </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div modal="showModal" close="cancel()">
+        <div class="modal-header">
+            <h4>Edit Branch</h4>
+        </div>
+        <div class="modal-body">
+            <div  ng-controller="EditBranchController">
+                <div class="all-form-element-inner">
+                    <div >
+                        <form name="editBranchForm" id="editBranchForm" novalidate enctype="multipart/form-data" ng-submit="submitBranchForm()">
+                            <input type="hidden" ng-model="branchesByIdData.cat_id" name="cat_id">
+                            <div class="form-group-inner">
+                                <div class="row" ng-class="{ 'has-error' : editBranchForm.branch_name.$invalid && !editBranchForm.branch_name.$pristine }">
+                                    <div class="col-lg-3">
+                                        <label class="login2 pull-right pull-right-pro">Branch Name</label>
+                                    </div>
+                                    <div class="col-lg-9">
+                                        <input type="text" class="form-control" name="branch_name" ng-model="branchesByIdData.branch_name" required>
+                                        <p ng-show="editBranchForm.branch_name.$invalid && !editBranchForm.branch_name.$pristine" class="help-block">Enter a branch name.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group-inner">
+                                <div class="row" ng-class="{ 'has-error' : editBranchForm.branch_address.$invalid && !editBranchForm.branch_address.$pristine }">
+                                    <div class="col-lg-3">
+                                        <label class="login2 pull-right pull-right-pro">Branch Address</label>
+                                    </div>
+                                    <div class="col-lg-9">
+                                        <textarea class="form-control" name="branch_address" ng-model="branchesByIdData.branch_address" required cols="5" rows="5" />
+                                    <p ng-show="editBranchForm.branch_address.$invalid && !editBranchForm.branch_address.$pristine" class="help-block">Enter a branch address.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group-inner">
+                                <div class="row" ng-class="{ 'has-error' : editBranchForm.branch_area.$invalid && !editBranchForm.branch_area.$pristine }">
+                                    <div class="col-lg-3">
+                                        <label class="login2 pull-right pull-right-pro">Branch Area</label>
+                                    </div>
+                                    <div class="col-lg-9">
+                                        <input type="text" class="form-control" name="branch_area" ng-model="branchesByIdData.branch_area" required>
+                                        <p ng-show="editBranchForm.branch_area.$invalid && !editBranchForm.branch_area.$pristine" class="help-block">Enter a branch area.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group-inner">
+                                <div class="row"ng-class="{ 'has-error' : editBranchForm.branch_location.$invalid && !editBranchForm.branch_location.$pristine }">
+                                    <div class="col-lg-3">
+                                        <label class="login2 pull-right pull-right-pro">Branch Location</label>
+                                    </div>
+                                    <div class="col-lg-9">
+                                        <input type="text" class="form-control" name="branch_location" ng-model="branchesByIdData.branch_location" required>
+                                        <p ng-show="editBranchForm.branch_location.$invalid && !editBranchForm.branch_location.$pristine" class="help-block">Enter a branch location.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group-inner">
+                                <div class="row" ng-class="{ 'has-error' : editBranchForm.branch_contact_number.$invalid && !editBranchForm.branch_contact_number.$pristine }">
+                                    <div class="col-lg-3">
+                                        <label class="login2 pull-right pull-right-pro">Branch Contact Number</label>
+                                    </div>
+                                    <div class="col-lg-9">
+                                        <input type="text" class="form-control" name="branch_contact_number" ng-model="branchesByIdData.branch_contact_number" required>
+                                        <p ng-show="editBranchForm.branch_contact_number.$invalid && !editBranchForm.branch_contact_number.$pristine" class="help-block">Enter a branch contact number.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group-inner">
+                                <div class="row"ng-class="{ 'has-error' : editBranchForm.branch_parent_id.$invalid && !editBranchForm.branch_parent_id.$pristine }">
+                                    <div class="col-lg-3">
+                                        <label class="login2 pull-right pull-right-pro">Branch Parent Id</label>
+                                    </div>
+                                    <div class="col-lg-9">
+                                        <input type="number" class="form-control" name="branch_parent_id" ng-model="branchesByIdData.branch_parent_id" required>
+                                        <p ng-show="editBranchForm.branch_parent_id.$invalid && !editBranchForm.branch_parent_id.$pristine" class="help-block">Enter a branch parent id.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group-inner">
+                                <div class="login-btn-inner">
+                                    <div class="row">
+                                        <div class="col-lg-3"></div>
+                                        <div class="col-lg-9">
+                                            <div class="login-horizental cancel-wp pull-left">
+                                                <button class="btn btn-white" type="submit" ng-click="cancel()">Cancel</button>
+                                                <button class="btn btn-sm btn-primary login-submit-cs" ng-disabled="!editBranchForm.$valid" ng-click="updateBranchForm()">Submit</button>
+                                                <span ng-show="isLoading" class="ml20">
+                                                    <img src="assets/img/loading.gif" class="loading_image"/>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- <div class="modal-footer">
+          <button class="btn btn-success" ng-click="ok()">Okay</button>
+          <button class="btn" ng-click="cancel()">Cancel</button>
+        </div> -->
+    </div>

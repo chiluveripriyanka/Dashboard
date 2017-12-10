@@ -109,10 +109,8 @@
                                                                                         <label><strong>Package On Other Services</strong></label>
                                                                                     </div>
                                                                                     <div class="col-lg-4 text-left">
-                                                                                        <div ng-dropdown-multiselect="" options="servicesOtherInfo"selected-model="selected_other_services"
-                                                                                             extra-settings="selected_other_services_settings"
-                                                                                             translation-texts="selected_other_services_customTexts">
-                                                                                              </div>
+                                                                                        <input type="number" class="form-control" name="package_on_other_services" ng-model="package_on_other_services" required>
+                                                                                        <p ng-show="addPackageForm.package_on_other_services.$invalid && !addPackageForm.package_on_other_services.$pristine" class="help-block">Enter a package on other services</p>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
