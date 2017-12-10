@@ -65,7 +65,7 @@
     </div>
     <div modal="showModal" close="cancel()">
         <div class="modal-header">
-            <h4>Edit Service</h4>
+            <h4>Edit Promotions</h4>
         </div>
         <div class="modal-body">
             <div  ng-controller="EditPromotionController">
@@ -100,6 +100,7 @@
                                                          ngf-model-invalid="errorFile">
                                                 </div>
                                                 <input type="text" id="append-small-btn" ng-model="promotionsByIdData.promotion_img" placeholder="no file selected">
+                                                <img width="50" class="mg-t-10" ng-src="http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/uploads/{{promotionsByIdData.promotion_img}}" />
                                                 <div class="text-left mg-b-30" ng-show="editPromotionForm.file.$error.required">Upload image is required</i><br>
                                                   <i ng-show="editPromotionForm.file.$error.maxSize">File too large 
                                                       {{errorFile.size / 1000000|number:1}}MB: max 2M</i>
