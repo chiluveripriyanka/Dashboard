@@ -271,8 +271,10 @@ app.controller('show_services', function($scope,$http, $route, DTOptionsBuilder,
     });
 });
 app.controller('AddServicesController', ['$scope', 'Upload', '$timeout', '$location', function ($scope, Upload, $timeout, $location) {
+   
     $scope.isLoading = false;
     $scope.uploadServicePic = function(file) {
+        documentBody.append(spinnerDiv);
         $scope.isLoading = true;
         //console.log($scope.service_name + $scope.service_duration + $scope.service_description + $scope.service_price + $scope.sub_cat_id);
         file.upload = Upload.upload({
@@ -303,6 +305,7 @@ app.controller('AddServicesController', ['$scope', 'Upload', '$timeout', '$locat
                     confirmButtonText : "Close this window"
                 });
             } 
+            angular.element(document).find('#chIns_overlay').remove();
         });
     }
 }]);
