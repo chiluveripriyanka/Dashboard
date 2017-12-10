@@ -2,6 +2,7 @@ var app = angular.module('admin_dashboard', ['datatables', 'ngRoute', 'ngFileUpl
 app.run(['$rootScope', '$route', function ($rootScope, $route) {
     $rootScope.$on('$routeChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
         console.log(toState.originalPath);
+        documentBody.append(spinnerDiv);
         if(toState.originalPath!='/'){
             $rootScope.isLoggedin= true;
         }
@@ -16,7 +17,8 @@ var documentBody = angular.element(document).find('body').eq(0);
 app.config(function ($routeProvider) {
     $routeProvider
     .when("/" , {
-        templateUrl : "partials/login.html"
+        templateUrl : "partials/login.html",
+        controller: "loginController"
     })
     .when("/dashboard",{
         templateUrl : "partials/dashboard.html",
@@ -63,14 +65,16 @@ app.config(function ($routeProvider) {
         controller: "show_memberships"
     })
     .when("/add_categories",{
-        templateUrl : "partials/add_categories.html"
+        templateUrl : "partials/add_categories.html",
+        controller: "AddCategoryController"
     })
     .when("/add_services",{
         templateUrl : "partials/add_services.html",
         controller: "AddServicesController"
     })
     .when("/add_sub_categories",{
-        templateUrl : "partials/add_sub_categories.html"  
+        templateUrl : "partials/add_sub_categories.html",
+        controller: "AddSubCategoryController"
     })
     .when("/add_beautytip",{
         templateUrl : "partials/add_beautytip.html" ,
@@ -131,6 +135,9 @@ app.controller('loginController', function($scope, $location) {
             }
         }
     };
+    setTimeout(function() {
+        angular.element(document).find('#chIns_overlay').remove();    
+      }, 1000);
 });
 
 app.controller('dashboardController', function($scope,$http,DTOptionsBuilder, DTColumnBuilder) {
@@ -334,9 +341,11 @@ app.controller('show_services', function($scope,$http, $route, DTOptionsBuilder,
         angular.element(document).find('#chIns_overlay').remove();
     });
 });
-app.controller('AddServicesController', ['$scope', 'Upload', '$timeout', '$location', function ($scope, Upload, $timeout, $location) {
+app.controller('AddServicesController', ['$scope', 'Upload', '$timeout', '$location','$http', function ($scope, Upload, $timeout, $location, $http) {
+    documentBody.append(spinnerDiv);
     $scope.isLoading = false;
     $scope.uploadServicePic = function(file) {
+        documentBody.append(spinnerDiv);
         $scope.isLoading = true;
         //console.log($scope.service_name + $scope.service_duration + $scope.service_description + $scope.service_price + $scope.sub_cat_id);
         file.upload = Upload.upload({
@@ -367,8 +376,15 @@ app.controller('AddServicesController', ['$scope', 'Upload', '$timeout', '$locat
                     confirmButtonText : "Close this window"
                 });
             } 
+            angular.element(document).find('#chIns_overlay').remove();
         });
     }
+
+    $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/show_sub_categories').success(function(data) {
+        $scope.subcategoriesgetData = data.data;
+      
+        angular.element(document).find('#chIns_overlay').remove();
+    });
 }]);
 /* services end */
 
@@ -483,6 +499,9 @@ app.controller('AddCategoryController', ['$scope', 'Upload', '$timeout', '$locat
             }
         });
     }
+    setTimeout(function() {
+        angular.element(document).find('#chIns_overlay').remove();    
+      }, 1000);
 }]);
 app.controller('EditCategoryController', ['$scope', 'Upload', '$http', '$route', '$timeout', function ($scope, Upload, $http, $route, $timeout) {
     $scope.updateCategoryForm = function() {
@@ -539,6 +558,9 @@ app.controller('EditCategoryController', ['$scope', 'Upload', '$http', '$route',
             })
         }
     }
+    setTimeout(function() {
+        angular.element(document).find('#chIns_overlay').remove();    
+      }, 1000);
 }]);
 /* Categories end */
 
@@ -620,7 +642,7 @@ app.controller('show_sub_categories', function($scope,$http,$route, DTOptionsBui
       $scope.showModal = false;
     };
 });
-app.controller('AddSubCategoryController', ['$scope', 'Upload', '$timeout', '$location', function ($scope, Upload, $timeout, $location) {
+app.controller('AddSubCategoryController', ['$scope', 'Upload', '$timeout', '$location','$http', function ($scope, Upload, $timeout, $location, $http) {
     $scope.isLoading = false;
     $scope.uploadPic = function(file) {
         $scope.isLoading = true;
@@ -662,6 +684,11 @@ app.controller('AddSubCategoryController', ['$scope', 'Upload', '$timeout', '$lo
         // }
         );
     }
+    $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/show_categories').success(function(data) {
+        $scope.categoriesData = data.data;
+       
+            angular.element(document).find('#chIns_overlay').remove();
+    });
 }]);
 app.controller('EditSubCategoryController', ['$scope', 'Upload', '$timeout', '$http', '$route', function ($scope, Upload, $timeout, $http, $route) {
     $scope.updateSubCategoryForm = function() {
@@ -834,6 +861,9 @@ app.controller('AddBeautyTipController', ['$scope', 'Upload', '$timeout', '$loca
             }
         });
     }
+    setTimeout(function() {
+        angular.element(document).find('#chIns_overlay').remove();    
+      }, 1000);
 }]);
 app.controller('EditTipController', ['$scope', 'Upload', '$timeout', '$http', '$route', function ($scope, Upload, $timeout, $http, $route) {
     $scope.updateTip = function() {
@@ -1013,10 +1043,13 @@ app.controller('AddPackagesController', function($scope, $http, $location) {
             })
         }
     };
+    setTimeout(function() {
+        angular.element(document).find('#chIns_overlay').remove();    
+      }, 1000);
 });
 /* Packages end */
 
-/* Prdcusts Start */
+/* Products Start */
 app.controller('show_products', function($scope,$http,DTOptionsBuilder, DTColumnBuilder) {
     documentBody.append(spinnerDiv);
     $scope.hideHeader = false;
@@ -1064,6 +1097,9 @@ app.controller('AddProductsController', ['$scope', 'Upload', '$timeout','$http',
             }
         });
     }
+    setTimeout(function() {
+        angular.element(document).find('#chIns_overlay').remove();    
+      }, 1000);
 }]);
 /* Prdcusts end */
 
@@ -1086,7 +1122,7 @@ app.controller('AddPromotionsController', ['$scope', 'Upload', '$timeout', '$loc
         $scope.isLoading = true;
         file.upload = Upload.upload({
           url: 'http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_promotions',
-          data: {promotion_name: $scope.promotion_name, promotion_img: file, promotion_description :$scope.promotion_description, promotion_type: $scope.promotion_type, from_date: $scope.from_date, end_date: $scope.end_date },
+          data: {promotion_name: $scope.promotion_name, promotion_img: file, promotion_description :$scope.promotion_description, promotion_type: $scope.promotion_type, from_date: $scope.from_date, end_date: $scope.end_date,promotion_for:$scope.promotion_for },
         });
         file.upload.then(function (response) {
             $scope.isLoading = false;
@@ -1114,6 +1150,9 @@ app.controller('AddPromotionsController', ['$scope', 'Upload', '$timeout', '$loc
             }
         });
     }
+    setTimeout(function() {
+        angular.element(document).find('#chIns_overlay').remove();    
+      }, 1000);
 }]);
 /* Promotions end */
 
@@ -1154,6 +1193,9 @@ app.controller('show_branches', function($scope,$http,DTOptionsBuilder, DTColumn
     $scope.cancel = function() {
       $scope.showModal = false;
     };
+    setTimeout(function() {
+        angular.element(document).find('#chIns_overlay').remove();    
+      }, 1000);
 });
 app.controller('AddBranchController', ['$scope', 'Upload', '$route', '$timeout', '$http', '$location', function ($scope, Upload, $timeout, $route, $http, $location) {
     $scope.isLoading = false;
@@ -1184,6 +1226,9 @@ app.controller('AddBranchController', ['$scope', 'Upload', '$route', '$timeout',
             }
         });
     }
+    setTimeout(function() {
+        angular.element(document).find('#chIns_overlay').remove();    
+      }, 1000);
 }]);
 app.controller('EditBranchController', ['$scope', 'Upload', '$http', '$route', '$timeout', function ($scope, Upload, $http, $route, $timeout) {
     $scope.updateBranchForm = function() {
