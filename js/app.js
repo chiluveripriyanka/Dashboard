@@ -96,7 +96,7 @@ app.config(function ($routeProvider) {
         templateUrl : "partials/add_branch.html" ,
         controller: "AddBranchController"
     })
-    .when("/add_memberships",{
+    .when("/add_membership",{
         templateUrl : "partials/add_membership.html" ,
         controller: "AddMembershipController"
     })
@@ -331,7 +331,6 @@ app.controller('show_services', function($scope,$http, $route, DTOptionsBuilder,
             }
         );
      }
-    
     $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/get_services').success(function(data) {
         $scope.loading = false;
         $scope.servicesData = data.data;
@@ -340,6 +339,31 @@ app.controller('show_services', function($scope,$http, $route, DTOptionsBuilder,
             .withOption('order', [0, 'asc']);
         angular.element(document).find('#chIns_overlay').remove();
     });
+    $scope.editService = function(id) {
+        $scope.showModal = true;
+        for (i in $scope.servicesData) {
+            //Getting the person details from scope based on id
+            if ($scope.servicesData[i].service_id == id) {
+                $scope.servicesByIdData = {
+                    service_id: $scope.servicesData[i].service_id,
+                    sub_cat_id: $scope.servicesData[i].sub_cat_id,
+                    service_name: $scope.servicesData[i].service_name,
+                    service_description: $scope.servicesData[i].service_description,
+                    service_price: $scope.servicesData[i].service_price,
+                    service_duration: $scope.servicesData[i].service_duration,
+                    service_img: $scope.servicesData[i].service_img
+                }
+                console.log($scope.servicesByIdData);
+            }
+        }
+    };
+    $scope.ok = function() {
+      $scope.showModal = false;
+    };
+
+    $scope.cancel = function() {
+      $scope.showModal = false;
+    };
 });
 app.controller('AddServicesController', ['$scope', 'Upload', '$timeout', '$location','$http', function ($scope, Upload, $timeout, $location, $http) {
     documentBody.append(spinnerDiv);
@@ -385,6 +409,69 @@ app.controller('AddServicesController', ['$scope', 'Upload', '$timeout', '$locat
       
         angular.element(document).find('#chIns_overlay').remove();
     });
+}]);
+app.controller('EditServiceController', ['$scope', 'Upload', '$timeout', '$http', '$route', function ($scope, Upload, $timeout, $http, $route) {
+    $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/show_sub_categories').success(function(data) {
+        $scope.subcategoriesgetData = data.data;
+      
+        angular.element(document).find('#chIns_overlay').remove();
+    });
+    $scope.updateServiceForm = function() {
+        var file = $scope.servicesByIdData.service_img;
+        file.upload = Upload.upload({
+          url: 'http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_services',
+          data: {service_name: $scope.servicesByIdData.service_name, service_img: file, service_description: $scope.servicesByIdData.service_description, sub_cat_id : $scope.servicesByIdData.sub_cat_id, service_price : $scope.servicesByIdData.service_price, service_duration : $scope.servicesByIdData.service_duration}
+        });
+        if(file.upload){
+            file.upload.then(function (response) {
+                $timeout(function () {
+                    file.result = response.data;
+                });
+                if(response.data.status = true){
+                    swal({
+                        title: "Here's a message!",
+                        type: "success",
+                        text: response.data.message,
+                        confirmButtonText : "Close this window"
+                    },function(){
+                        $route.reload();
+                    })
+                }else{
+                    swal({
+                        title: "Here's a message!",
+                        type: "warning",
+                        text: response.data.message,
+                        confirmButtonText : "Close this window"
+                    });
+                }
+            });
+        }
+        else{
+            var formData = new FormData();
+            formData.append('service_img', $scope.subCategoriesByIdData.service_img);
+            formData.append('sub_cat_id', $scope.subCategoriesByIdData.sub_cat_id);
+            formData.append('service_name', $scope.subCategoriesByIdData.service_name);
+            formData.append('service_description', $scope.subCategoriesByIdData.service_description);
+            formData.append('service_price', $scope.subCategoriesByIdData.service_price);
+            formData.append('service_duration', $scope.subCategoriesByIdData.service_duration);
+            $http.post('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_services', formData, {
+                transformRequest: angular.identity,
+                headers: {'Content-Type': undefined}
+            })
+            .success(function (response) {
+                if(response.status = true){
+                    swal({
+                        title: "Here's a message!",
+                        type: "success",
+                        text: response.message,
+                        confirmButtonText : "Close this window"
+                    },function(){
+                        $route.reload();
+                    })
+                }
+            })
+        }
+    }
 }]);
 /* services end */
 
@@ -1059,12 +1146,34 @@ app.controller('show_products', function($scope,$http,DTOptionsBuilder, DTColumn
     $scope.hideHeader = false;
     $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/get_products').success(function(data) {
         $scope.products = data.data;
-        console.log($scope.products);
         $scope.vm = {};
         $scope.vm.dtOptions = DTOptionsBuilder.newOptions()
               .withOption('order', [0, 'asc']);
         angular.element(document).find('#chIns_overlay').remove();
     });
+    $scope.editProduct = function(id) {
+        $scope.showModal = true;
+        for (i in $scope.products) {
+            //Getting the person details from scope based on id
+            if ($scope.products[i].product_id == id) {
+                $scope.productsByIdData = {
+                    product_id: $scope.products[i].product_id,
+                    product_name: $scope.products[i].product_name,
+                    product_price: $scope.products[i].product_price,
+                    product_offer_price: $scope.products[i].product_offer_price,
+                    product_description: $scope.products[i].product_description,
+                    product_img: $scope.products[i].product_img
+                }
+            }
+        }
+    };
+    $scope.ok = function() {
+      $scope.showModal = false;
+    };
+
+    $scope.cancel = function() {
+      $scope.showModal = false;
+    };
 });
 app.controller('AddProductsController', ['$scope', 'Upload', '$timeout','$http', '$location', function ($scope, Upload, $timeout,$http, $location) {
     // $scope.addProductForm={"product_description":"","product_name":"","product_price":"","product_offer_price":""};
@@ -1105,6 +1214,65 @@ app.controller('AddProductsController', ['$scope', 'Upload', '$timeout','$http',
         angular.element(document).find('#chIns_overlay').remove();    
       }, 1000);
 }]);
+app.controller('EditProductController', ['$scope', 'Upload', '$timeout', '$http', '$route', function ($scope, Upload, $timeout, $http, $route) {
+    $scope.updateProductForm = function() {
+        var file = $scope.productsByIdData.product_img;
+        file.upload = Upload.upload({
+          url: 'http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_product',
+          data: {product_id: $scope.productsByIdData.product_id, product_img: file, product_name: $scope.productsByIdData.product_name, product_price: $scope.productsByIdData.product_price, product_offer_price: $scope.productsByIdData.product_offer_price, product_description: $scope.productsByIdData.product_description}
+        });
+        if(file.upload){
+            file.upload.then(function (response) {
+                $timeout(function () {
+                    file.result = response.data;
+                });
+                if(response.data.status = true){
+                    swal({
+                        title: "Here's a message!",
+                        type: "success",
+                        text: response.data.message,
+                        confirmButtonText : "Close this window"
+                    },function(){
+                        $route.reload();
+                    })
+                }else{
+                    swal({
+                        title: "Here's a message!",
+                        type: "warning",
+                        text: response.data.message,
+                        confirmButtonText : "Close this window"
+                    });
+                }
+            });
+        }
+        else{
+            var formData = new FormData();
+            formData.append('product_id', $scope.productsByIdData.product_id);
+            formData.append('product_name', $scope.productsByIdData.product_name);
+            formData.append('product_price', $scope.productsByIdData.product_price);
+            formData.append('product_offer_price', $scope.productsByIdData.product_offer_price);
+            formData.append('product_description', $scope.productsByIdData.product_description);
+            formData.append('product_img', $scope.productsByIdData.product_img);
+            $http.post('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_product', formData, {
+                transformRequest: angular.identity,
+                headers: {'Content-Type': undefined}
+            })
+            .success(function (response) {
+                console.log(response);
+                if(response.status = true){
+                    swal({
+                        title: "Here's a message!",
+                        type: "success",
+                        text: response.message,
+                        confirmButtonText : "Close this window"
+                    },function(){
+                        $route.reload();
+                    })
+                }
+            })
+        }
+    }
+}]);
 /* Prdcusts end */
 
 /* Promotions start */
@@ -1118,6 +1286,29 @@ app.controller('show_promotions', function($scope,$http,DTOptionsBuilder, DTColu
               .withOption('order', [0, 'asc']);
         angular.element(document).find('#chIns_overlay').remove();
     });
+    $scope.editPromotion = function(id) {
+        $scope.showModal = true;
+        for (i in $scope.promotions) {
+            //Getting the person details from scope based on id
+            if ($scope.promotions[i].promotion_id == id) {
+                $scope.promotionsByIdData = {
+                    promotion_id: $scope.promotions[i].promotion_id,
+                    promotion_name: $scope.promotions[i].promotion_name,
+                    promotion_img: $scope.promotions[i].promotion_img,
+                    promotion_description: $scope.promotions[i].promotion_description,
+                    promotion_type: $scope.promotions[i].promotion_type
+                };
+                console.log($scope.promotionsByIdData);
+            }
+        }
+    };
+    $scope.ok = function() {
+      $scope.showModal = false;
+    };
+
+    $scope.cancel = function() {
+      $scope.showModal = false;
+    };
     
 });
 app.controller('AddPromotionsController', ['$scope', 'Upload', '$timeout', '$location', function ($scope, Upload, $timeout, $location) {
@@ -1162,6 +1353,67 @@ app.controller('AddPromotionsController', ['$scope', 'Upload', '$timeout', '$loc
     setTimeout(function() {
         angular.element(document).find('#chIns_overlay').remove();    
       }, 1000);
+}]);
+
+app.controller('EditPromotionController', ['$scope', 'Upload', '$timeout', '$http', '$route', function ($scope, Upload, $timeout, $http, $route) {
+    $scope.updatePromotionForm = function() {
+        var file = $scope.promotionsByIdData.promotion_img;
+        file.upload = Upload.upload({
+            url: 'http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_promotions',
+            data: {promotion_id: $scope.promotionsByIdData.promotion_id, promotion_name: $scope.promotionsByIdData.promotion_name, promotion_img: file, promotion_description :$scope.promotionsByIdData.promotion_description, promotion_type: $scope.promotionsByIdData.promotion_type, from_date: $scope.promotionsByIdData.from_date, end_date: $scope.promotionsByIdData.end_date,promotion_for:$scope.promotionsByIdData.promotion_for },
+        });
+        if(file.upload){
+            file.upload.then(function (response) {
+                $timeout(function () {
+                    file.result = response.data;
+                });
+                if(response.data.status = true){
+                    swal({
+                        title: "Here's a message!",
+                        type: "success",
+                        text: response.data.message,
+                        confirmButtonText : "Close this window"
+                    },function(){
+                        $route.reload();
+                    })
+                }else{
+                    swal({
+                        title: "Here's a message!",
+                        type: "warning",
+                        text: response.data.message,
+                        confirmButtonText : "Close this window"
+                    });
+                }
+            });
+        }
+        else{
+            var formData = new FormData();
+            formData.append('promotion_id', $scope.promotionsByIdData.promotion_id);
+            formData.append('promotion_name', $scope.promotionsByIdData.promotion_name);
+            formData.append('promotion_description', $scope.promotionsByIdData.promotion_description);
+            formData.append('promotion_type', $scope.promotionsByIdData.promotion_type);
+            formData.append('from_date', $scope.promotionsByIdData.from_date);
+            formData.append('end_date', $scope.promotionsByIdData.end_date);
+            formData.append('promotion_img', $scope.promotionsByIdData.promotion_img);
+            $http.post('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_promotions', formData, {
+                transformRequest: angular.identity,
+                headers: {'Content-Type': undefined}
+            })
+            .success(function (response) {
+                console.log(response);
+                if(response.status = true){
+                    swal({
+                        title: "Here's a message!",
+                        type: "success",
+                        text: response.message,
+                        confirmButtonText : "Close this window"
+                    },function(){
+                        $route.reload();
+                    })
+                }
+            })
+        }
+    }
 }]);
 /* Promotions end */
 
@@ -1310,6 +1562,7 @@ app.controller('show_memberships', function($scope,$http,DTOptionsBuilder, DTCol
 });
 app.controller('AddMembershipController', ['$scope', 'Upload', '$http', '$route', '$timeout', function ($scope, Upload, $http, $route, $timeout) {
     $scope.isLoading = false;
+    angular.element(document).find('#chIns_overlay').remove();
     $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/get_services')
       .success(function(data){
         var data_final = data.data;

@@ -37,6 +37,7 @@
                                         <th>Promotion Image</th>
                                         <th>Promotion Start Date</th>
                                         <th>Promotion End Date</th>
+                                        <th>Actions</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -47,6 +48,11 @@
                                         <td><img width="50" ng-src="http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/uploads/{{promotion.promotion_img}}" /></td>
                                         <td>{{ promotion.from_date }}</td>
                                         <td>{{ promotion.end_date }}</td>
+                                        <td class="v-middle">
+                                            <div class="btn-group">
+                                                <button type="button" class="btn btn-default btn" ng-click="editPromotion(promotion.promotion_id)"><i class="glyphicon glyphicon-pencil"></i></button>
+                                            </div>
+                                        </td>
                                       </tr>
                                     </tbody>
                                   </table>
@@ -57,4 +63,161 @@
             </div>
         </div>
     </div>
-    <!-- Static Table End -->
+    <div modal="showModal" close="cancel()">
+        <div class="modal-header">
+            <h4>Edit Promotions</h4>
+        </div>
+        <div class="modal-body">
+            <div  ng-controller="EditPromotionController">
+                <div class="all-form-element-inner">
+                    <div>
+                        <form name="editPromotionForm" id="editPromotionForm" novalidate enctype="multipart/form-data">
+                            <input type="hidden" ng-model="promotionsByIdData.promotion_id" name="promotion_id">
+                            <div class="form-group-inner">
+                                <div class="row" ng-class="{ 'has-error' : editPromotionForm.promotion_name.$invalid && !editPromotionForm.promotion_name.$pristine }">
+                                    <div class="col-lg-3">
+                                        <label class="login2 pull-right pull-right-pro">Promotion Name</label>
+                                    </div>
+                                    <div class="col-lg-9">
+                                        <input type="text" class="form-control" name="promotion_name" ng-model="promotionsByIdData.promotion_name" required>
+                                        <p ng-show="editPromotionForm.promotion_name.$invalid && !editPromotionForm.promotion_name.$pristine" class="help-block">Enter a Promotion Name.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group-inner">
+                                <div class="row mg-b-10" >
+                                    <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+                                        <label class="login2 pull-right pull-right-pro">Image</label>
+                                    </div>
+                                    <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+                                        
+                                        <div class="file-upload-inner file-upload-inner-right ts-forms">
+                                            <div class="input append-small-btn">
+                                                <div class="file-button">
+                                                    Browse
+                                                    <input type="file" onchange="document.getElementById('append-small-btn').value = this.value;" ngf-select ng-model="promotionsByIdData.promotion_img" name="promotion_img"    
+                                                         accept="image/*" ngf-max-size="2MB" 
+                                                         ngf-model-invalid="errorFile">
+                                                </div>
+                                                <input type="text" id="append-small-btn" ng-model="promotionsByIdData.promotion_img" placeholder="no file selected">
+                                                <img width="50" class="mg-t-10" ng-src="http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/uploads/{{promotionsByIdData.promotion_img}}" />
+                                                <div class="text-left mg-b-30" ng-show="editPromotionForm.file.$error.required">Upload image is required</i><br>
+                                                  <i ng-show="editPromotionForm.file.$error.maxSize">File too large 
+                                                      {{errorFile.size / 1000000|number:1}}MB: max 2M</i>
+                                                  <img ng-show="editPromotionForm.file.$valid" ngf-thumbnail="picFile" class="thumb"> <button ng-click="picFile = null" ng-show="picFile">Remove</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group-inner">
+                                <div class="row"ng-class="{ 'has-error' : editPromotionForm.promotion_description.$invalid && !editPromotionForm.promotion_description.$pristine }">
+                                    <div class="col-lg-3">
+                                        <label class="login2 pull-right pull-right-pro">Promotion Description</label>
+                                    </div>
+                                    <div class="col-lg-9">
+                                        <textarea class="form-control" name="promotion_description" ng-model="promotionsByIdData.promotion_description" required cols="5" rows="5"/>
+                                        <p ng-show="editPromotionForm.promotion_description.$invalid && !editPromotionForm.promotion_description.$pristine" class="help-block">Enter a Promotion Description.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group-inner">
+                                <div class="row" ng-class="{ 'has-error' : editPromotionForm.promotion_type.$invalid && !editPromotionForm.promotion_type.$pristine }">
+                                    <div class="col-lg-3">
+                                        <label class="login2 pull-right pull-right-pro">Promotion Type</label>
+                                    </div>
+                                    <div class="col-lg-9">
+                                            <select class="form-control"  name="promotion_type"  ng-model="promotionsByIdData.promotion_type" required >
+                                                    <option value="" >Select Promotion Type</option>    
+                                                    <option value="1">Promotions</option>
+                                                    <option value="2">Hot Deals</option>
+                                                    <option value="3">Scrolling</option>
+                                                    <option value="4">Sliders</option>
+                                                </select>
+                                        <!-- <input type="number" class="form-control" name="promotion_type" ng-model="promotion_type" required /> -->
+                                        <p ng-show="editPromotionForm.promotion_type.$invalid && !editPromotionForm.promotion_type.$pristine" class="help-block">Enter a Promotion Type.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group-inner">
+                                    <div class="row" ng-class="{ 'has-error' : editPromotionForm.promotion_for.$invalid && !editPromotionForm.promotion_for.$pristine }">
+                                        <div class="col-lg-3">
+                                            <label class="login2 pull-right pull-right-pro">Promotion For</label>
+                                        </div>
+                                        <div class="col-lg-9">
+                                                <select class="form-control"  name="promotion_for"  ng-model="promotionsByIdData.promotion_for" required >
+                                                        <option value="" >Select Promotion For</option>    
+                                                        <option value="Packages">Packages</option>
+                                                        <option value="Services">Services</option>
+                                                        <option value="Memberships">Memberships</option>
+                                                        <option value="Coupons">Coupons</option>
+                                                    </select>
+                                            <!-- <input type="number" class="form-control" name="promotion_type" ng-model="promotion_type" required /> -->
+                                            <p ng-show="editPromotionForm.promotion_for.$invalid && !editPromotionForm.promotion_for.$pristine" class="help-block">Enter a Promotion Type.</p>
+                                        </div>
+                                    </div>
+                            </div>
+                            <div class="date-picker-inner">
+                                <div class="form-group-inner data-custon-pick" id="data_1">
+                                    <div class="row" ng-class="{ 'has-error' : editPromotionForm.from_date.$invalid && !editPromotionForm.from_date.$pristine }">
+                                        <div class="col-lg-3">
+                                            <label class="login2 pull-right pull-right-pro"><strong>Promotion Start Date</strong></label>
+                                        </div>
+                                        <div class="col-lg-9">
+                                            <div class="input-group date">
+                                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                                <input type="text" class="form-control" value="10/04/2017"  name="from_date" ng-model="promotionsByIdData.from_date" required>
+                                            </div>
+                                            <p ng-show="editPromotionForm.from_date.$invalid && !editPromotionForm.from_date.$pristine" class="help-block">Select promotion start date.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="date-picker-inner">
+                                <div class="form-group-inner data-custon-pick" id="data_1">
+                                    <div class="row" ng-class="{ 'has-error' : editPromotionForm.end_date.$invalid && !editPromotionForm.end_date.$pristine }">
+                                        <div class="col-lg-3">
+                                            <label class="login2 pull-right pull-right-pro"><strong>Promotion End Date</strong></label>
+                                        </div>
+                                        <div class="col-lg-9">
+                                            <div class="input-group date">
+                                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                                <input type="text" class="form-control" value="10/04/2017"  name="end_date" ng-model="promotionsByIdData.end_date" required>
+                                            </div>
+                                            <p ng-show="editPromotionForm.end_date.$invalid && !editPromotionForm.end_date.$pristine" class="help-block">Select Promotion end date.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group-inner">
+                                <div class="login-btn-inner">
+                                    <div class="row">
+                                        <div class="col-lg-3"></div>
+                                        <div class="col-lg-9">
+                                            <div class="login-horizental cancel-wp pull-left">
+                                                <button class="btn btn-white" type="submit" ng-click="cancel()">Cancel</button>
+                                                <button class="btn btn-sm btn-primary login-submit-cs" ng-disabled="!editPromotionForm.$valid" ng-click="updatePromotionForm()">Submit</button>
+                                                <span ng-show="isLoading" class="ml20">
+                                                    <img src="assets/img/loading.gif" class="loading_image"/>
+                                                </span>
+                                                  <span class="progress" ng-show="promotion_img.progress >= 0">
+                                                    <div style="width:{{promotion_img.progress}}%" 
+                                                        ng-bind="promotion_img.progress + '%'"></div>
+                                                  </span>
+                                                  <span ng-show="promotion_img.result">Upload Successful</span>
+                                                  <span class="err" ng-show="errorMsg">{{errorMsg}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- datapicker JS
+        ============================================ -->
+    <script src="assets/js/datapicker/bootstrap-datepicker.js"></script>
+    <script src="assets/js/datapicker/datepicker-active.js"></script>

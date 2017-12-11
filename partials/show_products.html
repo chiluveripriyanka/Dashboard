@@ -36,6 +36,7 @@
                                         <th>Product Offer Price</th>
                                         <th>Product Description</th>
                                         <th>Product Image</th>
+                                        <th>Actions</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -45,6 +46,11 @@
                                         <td>{{ product.product_offer_price }}</td>
                                         <td>{{ product.product_description }}</td>
                                         <td><img width="50" ng-src="http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/uploads/{{product.product_img}}" /></td>
+                                        <td class="v-middle">
+                                            <div class="btn-group">
+                                                <button type="button" class="btn btn-default btn" ng-click="editProduct(product.product_id)"><i class="glyphicon glyphicon-pencil"></i></button>  
+                                            </div>
+                                        </td>
                                       </tr>
                                     </tbody>
                                   </table>
@@ -55,4 +61,109 @@
             </div>
         </div>
     </div>
-    <!-- Static Table End -->
+<div modal="showModal" close="cancel()">
+        <div class="modal-header">
+            <h4>Edit Product</h4>
+        </div>
+        <div class="modal-body">
+            <div  ng-controller="EditProductController">
+                <div class="all-form-element-inner">
+                    <div>
+                        <form name="editProductForm" id="editProductForm" novalidate enctype="multipart/form-data">
+                            <input type="hidden" ng-model="productsByIdData.product_id" name="product_id">
+                            <div class="form-group-inner">
+                                <div class="row">
+                                    <div class="col-lg-3">
+                                        <label class="login2 pull-right pull-right-pro">product Name</label>
+                                    </div>
+                                    <div class="col-lg-9">
+                                        <input type="text" class="form-control" name="product_name" ng-model="productsByIdData.product_name" required>
+                                    </div>
+                                    <p ng-show="editProductForm.product_name.$invalid && !editProductForm.product_name.$pristine" class="help-block">Enter a product name.</p>
+                                </div>
+                            </div>
+                            <div class="form-group-inner">
+                                <div class="row">
+                                    <div class="col-lg-3">
+                                        <label class="login2 pull-right pull-right-pro">product Price</label>
+                                    </div>
+                                    <div class="col-lg-9">
+                                        <input type="number" class="form-control" name="product_price" ng-model="productsByIdData.product_price" required>
+                                    </div>
+                                    <p ng-show="editProductForm.product_price.$invalid && !editProductForm.product_price.$pristine" class="help-block">Enter a product price.</p>
+                                </div>
+                            </div>
+                            <div class="form-group-inner">
+                                <div class="row">
+                                    <div class="col-lg-3">
+                                        <label class="login2 pull-right pull-right-pro">Product Offer Price</label>
+                                    </div>
+                                    <div class="col-lg-9">
+                                        <input type="number" class="form-control" name="product_offer_price" ng-model="productsByIdData.product_offer_price" required>
+                                    </div>
+                                    <p ng-show="editProductForm.product_offer_price.$invalid && !editProductForm.product_offer_price.$pristine" class="help-block">Enter a product validity days.</p>
+                                </div>
+                            </div>
+                            <div class="form-group-inner">
+                                <div class="row">
+                                    <div class="col-lg-3">
+                                        <label class="login2 pull-right pull-right-pro">product Description</label>
+                                    </div>
+                                    <div class="col-lg-9">
+                                        <textarea class="form-control" name="product_description" ng-model="productsByIdData.product_description" required cols="5" rows="5" />
+                                    </div>
+                                    <p ng-show="editProductForm.product_description.$invalid && !editProductForm.product_description.$pristine" class="help-block">Enter a product description.</p>
+                                </div>
+                            </div>
+                            <div class="form-group-inner">
+                                <div class="row mg-b-10" >
+                                    <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+                                        <label class="login2 pull-right pull-right-pro">Image</label>
+                                    </div>
+                                    <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+                                        
+                                        <div class="file-upload-inner file-upload-inner-right ts-forms">
+                                            <div class="input append-small-btn">
+                                                <div class="file-button">
+                                                    Browse
+                                                    <input type="file" onchange="document.getElementById('append-small-btn').value = this.value;" ngf-select ng-model="productsByIdData.product_img" name="product_img"    
+                                                         accept="image/*" ngf-max-size="2MB" required
+                                                         ngf-model-invalid="errorFile">
+                                                </div>
+                                                <input type="text" ng-model="productsByIdData.product_img" id="append-small-btn" placeholder="no file selected">
+                                                <img width="50" class="mg-t-10" ng-src="http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/uploads/{{productsByIdData.product_img}}" />
+                                                <div class="text-left mg-b-30" ng-show="editProductForm.file.$error.required">Upload image is required</i><br>
+                                                  <i ng-show="editProductForm.file.$error.maxSize">File too large 
+                                                      {{errorFile.size / 1000000|number:1}}MB: max 2M</i>
+                                                  <img ng-show="editProductForm.file.$valid" ngf-thumbnail="picFile" class="thumb"> <button ng-click="picFile = null" ng-show="picFile">Remove</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group-inner">
+                                <div class="login-btn-inner">
+                                    <div class="row">
+                                        <div class="col-lg-3"></div>
+                                        <div class="col-lg-9">
+                                            <div class="login-horizental cancel-wp pull-left">
+                                                <button class="btn btn-white" type="submit" ng-click="cancel()">Cancel</button>
+                                                <button type="submit" class="btn btn-sm btn-primary login-submit-cs" ng-disabled="editProductForm.$invalid" ng-click="updateProductForm()">Submit</button>
+                                                <span ng-show="isLoading" class="ml20">
+                                                    <img src="assets/img/loading.gif" class="loading_image"/>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- <div class="modal-footer">
+          <button class="btn btn-success" ng-click="ok()">Okay</button>
+          <button class="btn" ng-click="cancel()">Cancel</button>
+        </div> -->
+    </div> 
