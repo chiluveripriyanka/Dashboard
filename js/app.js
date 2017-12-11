@@ -10,6 +10,15 @@ app.run(['$rootScope', '$route', function ($rootScope, $route) {
             $rootScope.isLoggedin= false;
         }
     });
+    console.log(window.location.host,':change in root');
+    if(window.location.host=='localhost'){
+        window.base_url='http://localhost:8000/';
+    }
+    else{
+        window.base_url='http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/';
+    }
+    
+    console.log(window.location);
     $rootScope.domainNameUrl = window.serverIP;
 }]);
 var spinnerDiv = angular.element('<div id="chIns_overlay"><i class="fa fa-spinner fa-spin chIns_loader chIns_fsVVLarge col_white"></i></div>');
@@ -143,7 +152,7 @@ app.controller('loginController', function($scope, $location) {
 app.controller('dashboardController', function($scope,$http,DTOptionsBuilder, DTColumnBuilder) {
     documentBody.append(spinnerDiv);
     $scope.hideHeader = false;
-    $http.post('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/get_testimonials').success(function(data) {
+    $http.post(base_url+'get_testimonials').success(function(data) {
         $scope.userData = data.data;
         console.log(data.data);
         $scope.vm = {};
@@ -152,7 +161,7 @@ app.controller('dashboardController', function($scope,$http,DTOptionsBuilder, DT
              
               
     });
-    $http.post('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/get_my_orders').success(function(data) {
+    $http.post(base_url+'get_my_orders').success(function(data) {
         $scope.ordersData = data.data;
         console.log(data.data);
         $scope.vm = {};
@@ -186,7 +195,7 @@ app.controller('usersController', function($scope,$http, $route, DTOptionsBuilde
             function(isConfirm){
                 if (isConfirm) {
                     var data = {user_id:n};
-                    $http.post('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/delete_user', data)
+                    $http.post(base_url+'delete_user', data)
                     .success(function (response) {
                         if(response.status = true){
                             swal({
@@ -214,7 +223,7 @@ app.controller('usersController', function($scope,$http, $route, DTOptionsBuilde
     }
     $scope.loading = true; // Show loading image
     
-    $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/get_users_list').success(function(data) {
+    $http.get(base_url+'get_users_list').success(function(data) {
         $scope.loading = false; // hide loading image on ajax success
         $scope.userData = data.data;
         $scope.vm = {};
@@ -259,7 +268,7 @@ app.controller('EditUserController', ['$scope', 'Upload', '$http', '$route', '$t
             var gender = 'Female';
         }
         var data = {user_id:$scope.usersByIdData.user_id, email_id: $scope.usersByIdData.email_id, fullname:$scope.usersByIdData.fullname, gender:gender,mobile:$scope.usersByIdData.mobile};
-        $http.post('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/profile_update', data)
+        $http.post(base_url+'profile_update', data)
         .success(function (response) {
             $scope.isLoading = false;
             if(response.status = true){
@@ -302,7 +311,7 @@ app.controller('show_services', function($scope,$http, $route, DTOptionsBuilder,
             function(isConfirm){
                 if (isConfirm) {
                     var data = {service_id:n};
-                    $http.post('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/delete_service', data)
+                    $http.post(base_url+'delete_service', data)
                     .success(function (response) {
                         angular.element(document).find('#chIns_overlay').remove();
                         if(response.status = true){
@@ -331,7 +340,7 @@ app.controller('show_services', function($scope,$http, $route, DTOptionsBuilder,
             }
         );
      }
-    $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/get_services').success(function(data) {
+    $http.get(base_url+'get_services').success(function(data) {
         $scope.loading = false;
         $scope.servicesData = data.data;
         $scope.vm = {};
@@ -373,7 +382,7 @@ app.controller('AddServicesController', ['$scope', 'Upload', '$timeout', '$locat
         $scope.isLoading = true;
         //console.log($scope.service_name + $scope.service_duration + $scope.service_description + $scope.service_price + $scope.sub_cat_id);
         file.upload = Upload.upload({
-          url: 'http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_services',
+          url: base_url+'add_services',
            data: {service_name: $scope.service_name, sub_cat_id: $scope.sub_cat_id, service_img: file, service_description: $scope.service_description, service_price: $scope.service_price,service_duration:$scope.service_duration},
         });
         file.upload.then(function (response) {
@@ -404,14 +413,14 @@ app.controller('AddServicesController', ['$scope', 'Upload', '$timeout', '$locat
         });
     }
 
-    $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/show_sub_categories').success(function(data) {
+    $http.get(base_url+'show_sub_categories').success(function(data) {
         $scope.subcategoriesgetData = data.data;
       
         angular.element(document).find('#chIns_overlay').remove();
     });
 }]);
 app.controller('EditServiceController', ['$scope', 'Upload', '$timeout', '$http', '$route', function ($scope, Upload, $timeout, $http, $route) {
-    $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/show_sub_categories').success(function(data) {
+    $http.get(base_url+'show_sub_categories').success(function(data) {
         $scope.subcategoriesgetData = data.data;
       
         angular.element(document).find('#chIns_overlay').remove();
@@ -419,7 +428,7 @@ app.controller('EditServiceController', ['$scope', 'Upload', '$timeout', '$http'
     $scope.updateServiceForm = function() {
         var file = $scope.servicesByIdData.service_img;
         file.upload = Upload.upload({
-          url: 'http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_services',
+          url: base_url+'add_services',
           data: {service_name: $scope.servicesByIdData.service_name, service_img: file, service_description: $scope.servicesByIdData.service_description, sub_cat_id : $scope.servicesByIdData.sub_cat_id, service_price : $scope.servicesByIdData.service_price, service_duration : $scope.servicesByIdData.service_duration}
         });
         if(file.upload){
@@ -454,7 +463,7 @@ app.controller('EditServiceController', ['$scope', 'Upload', '$timeout', '$http'
             formData.append('service_description', $scope.subCategoriesByIdData.service_description);
             formData.append('service_price', $scope.subCategoriesByIdData.service_price);
             formData.append('service_duration', $scope.subCategoriesByIdData.service_duration);
-            $http.post('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_services', formData, {
+            $http.post(base_url+'add_services', formData, {
                 transformRequest: angular.identity,
                 headers: {'Content-Type': undefined}
             })
@@ -493,7 +502,7 @@ app.controller('show_categories', function($scope,$http, $route, DTOptionsBuilde
             function(isConfirm){
                 if (isConfirm) {
                     var data = {cat_id:n};
-                    $http.post('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/delete_category', data)
+                    $http.post(base_url+'delete_category', data)
                     .success(function (response) {
                         if(response.status = true){
                             swal({
@@ -523,7 +532,7 @@ app.controller('show_categories', function($scope,$http, $route, DTOptionsBuilde
      }
      
     $scope.hideHeader = false;
-    $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/show_categories').success(function(data) {
+    $http.get(base_url+'show_categories').success(function(data) {
         $scope.categoriesData = data.data;
         $scope.vm = {};
         $scope.vm.dtOptions = DTOptionsBuilder.newOptions()
@@ -557,7 +566,7 @@ app.controller('AddCategoryController', ['$scope', 'Upload', '$timeout', '$locat
     $scope.uploadPic = function(file) {
         $scope.isLoading = true;
         file.upload = Upload.upload({
-          url: 'http://localhost:8000/add_category',
+          url: base_url+'add_category',
           data: {category_name: $scope.category_name, cat_img: file},
         });
         file.upload.then(function (response) {
@@ -594,7 +603,7 @@ app.controller('EditCategoryController', ['$scope', 'Upload', '$http', '$route',
     $scope.updateCategoryForm = function() {
         var file = $scope.categoriesByIdData.cat_img;
         file.upload = Upload.upload({
-          url: 'http://localhost:8000/add_category',
+          url: base_url+'add_category',
           data: {category_name: $scope.categoriesByIdData.category_name, cat_img: file, cat_id : $scope.categoriesByIdData.cat_id},
         });
         if(file.upload){
@@ -626,7 +635,7 @@ app.controller('EditCategoryController', ['$scope', 'Upload', '$http', '$route',
             formData.append('cat_img', $scope.categoriesByIdData.cat_img);
             formData.append('cat_id', $scope.categoriesByIdData.cat_id);
             formData.append('category_name', $scope.categoriesByIdData.category_name);
-            $http.post('http://localhost:8000/add_category', formData, {
+            $http.post(base_url+'add_category', formData, {
                 transformRequest: angular.identity,
                 headers: {'Content-Type': undefined}
             })
@@ -670,7 +679,7 @@ app.controller('show_sub_categories', function($scope,$http,$route, DTOptionsBui
             function(isConfirm){
                 if (isConfirm) {
                     var data = {sub_cat_id:n};
-                    $http.post('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/delete_sub_category', data)
+                    $http.post(base_url+'delete_sub_category', data)
                     .success(function (response) {
                         if(response.status = true){
                             swal({
@@ -699,7 +708,7 @@ app.controller('show_sub_categories', function($scope,$http,$route, DTOptionsBui
         );
      }
     
-    $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/show_sub_categories').success(function(data) {
+    $http.get(base_url+'show_sub_categories').success(function(data) {
         $scope.subcategoriesgetData = data.data;
         $scope.vm = {};
         $scope.vm.dtOptions = DTOptionsBuilder.newOptions()
@@ -734,7 +743,7 @@ app.controller('AddSubCategoryController', ['$scope', 'Upload', '$timeout', '$lo
     $scope.uploadPic = function(file) {
         $scope.isLoading = true;
         file.upload = Upload.upload({
-          url: 'http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_sub_category',
+          url: base_url+'add_sub_category',
           data: {sub_category_name: $scope.sub_category_name, cat_id: $scope.cat_id, sub_cat_img: file},
         });
         file.upload.then(function (response) {
@@ -771,7 +780,7 @@ app.controller('AddSubCategoryController', ['$scope', 'Upload', '$timeout', '$lo
         // }
         );
     }
-    $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/show_categories').success(function(data) {
+    $http.get(base_url+'show_categories').success(function(data) {
         $scope.categoriesData = data.data;
        
             angular.element(document).find('#chIns_overlay').remove();
@@ -781,7 +790,7 @@ app.controller('EditSubCategoryController', ['$scope', 'Upload', '$timeout', '$h
     $scope.updateSubCategoryForm = function() {
         var file = $scope.subCategoriesByIdData.sub_cat_img;
         file.upload = Upload.upload({
-          url: 'http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_sub_category',
+          url: base_url+'add_sub_category',
           data: {category_name: $scope.subCategoriesByIdData.category_name, sub_cat_img: file, sub_category_name: $scope.subCategoriesByIdData.sub_category_name, sub_cat_id : $scope.subCategoriesByIdData.sub_cat_id},
         });
         if(file.upload){
@@ -814,7 +823,7 @@ app.controller('EditSubCategoryController', ['$scope', 'Upload', '$timeout', '$h
             formData.append('sub_cat_id', $scope.subCategoriesByIdData.sub_cat_id);
             formData.append('category_name', $scope.subCategoriesByIdData.category_name);
             formData.append('sub_category_name', $scope.subCategoriesByIdData.sub_category_name);
-            $http.post('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_sub_category', formData, {
+            $http.post(base_url+'add_sub_category', formData, {
                 transformRequest: angular.identity,
                 headers: {'Content-Type': undefined}
             })
@@ -853,7 +862,7 @@ app.controller('show_beauty_tips', function($scope,$http, $route, DTOptionsBuild
             function(isConfirm){
                 if (isConfirm) {
                     var data = {tip_id:n};
-                    $http.post('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/delete_beauty_tips', data)
+                    $http.post(base_url+'delete_beauty_tips', data)
                     .success(function (response) {
                         if(response.status = true){
                             swal({
@@ -884,7 +893,7 @@ app.controller('show_beauty_tips', function($scope,$http, $route, DTOptionsBuild
     }
     
     $scope.hideHeader = false;
-    $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/get_beauty_tips').success(function(data) {
+    $http.get(base_url+'get_beauty_tips').success(function(data) {
         $scope.tips = data.data;
         $scope.vm = {};
         $scope.vm.dtOptions = DTOptionsBuilder.newOptions()
@@ -921,7 +930,7 @@ app.controller('AddBeautyTipController', ['$scope', 'Upload', '$timeout', '$loca
         
         $scope.isLoading = true;
         file.upload = Upload.upload({
-          url: 'http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_beauty_tips',
+          url: base_url+'add_beauty_tips',
           data: {tip_title: $scope.tip_title, tip_description: $scope.tip_description, tip_img: file, tip_category: $scope.tip_category, tip_id: $scope.tip_id, tip_video: $scope.tip_video},
         });
         file.upload.then(function (response) {
@@ -960,7 +969,7 @@ app.controller('EditTipController', ['$scope', 'Upload', '$timeout', '$http', '$
     $scope.updateTip = function() {
         var file = $scope.tipsByIdData.tip_img;
         file.upload = Upload.upload({
-          url: 'http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_beauty_tips',
+          url: base_url+'add_beauty_tips',
           data: {tip_title: $scope.tipsByIdData.tip_title, tip_img: file, tip_id : $scope.tipsByIdData.tip_id, tip_description: $scope.tipsByIdData.tip_description},
         });
         if(file.upload){
@@ -993,7 +1002,7 @@ app.controller('EditTipController', ['$scope', 'Upload', '$timeout', '$http', '$
             formData.append('tip_title', $scope.tipsByIdData.tip_title);
             formData.append('tip_description', $scope.tipsByIdData.tip_description);
             formData.append('tip_img', $scope.tipsByIdData.tip_img);
-            $http.post('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_beauty_tips', formData, {
+            $http.post(base_url+'add_beauty_tips', formData, {
                 transformRequest: angular.identity,
                 headers: {'Content-Type': undefined}
             })
@@ -1033,7 +1042,7 @@ app.controller('show_packages', function($scope,$http, $route, DTOptionsBuilder,
             function(isConfirm){
                 if (isConfirm) {
                     var data = {package_id:n};
-                    $http.post('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/delete_package', data)
+                    $http.post(base_url+'delete_package', data)
                     .success(function (response) {
                         console.log(response);
                         if(response.status = true){
@@ -1063,7 +1072,7 @@ app.controller('show_packages', function($scope,$http, $route, DTOptionsBuilder,
         );
      }
      $scope.hideHeader = false;
-    $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/get_packages').success(function(data) {
+    $http.get(base_url+'get_packages').success(function(data) {
         $scope.packages = data.data;
         console.log($scope.packages);
         $scope.vm = {};
@@ -1074,7 +1083,7 @@ app.controller('show_packages', function($scope,$http, $route, DTOptionsBuilder,
 });
 app.controller('AddPackagesController', function($scope, $http, $location) {  
     $scope.isLoading = false;
-    $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/get_services')
+    $http.get(base_url+'get_services')
       .success(function(data){
         var data_final = data.data;
         $scope.servicesInfo = data_final.map(function(item){
@@ -1109,7 +1118,7 @@ app.controller('AddPackagesController', function($scope, $http, $location) {
                 package_on_other_services: $scope.package_on_other_services
             };
             console.log(data);
-            $http.post('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_package', data)
+            $http.post(base_url+'add_package', data)
             .success(function (response) {
                 $scope.isLoading = false;
                 if(response.status = true){
@@ -1144,7 +1153,7 @@ app.controller('AddPackagesController', function($scope, $http, $location) {
 app.controller('show_products', function($scope,$http,DTOptionsBuilder, DTColumnBuilder) {
     documentBody.append(spinnerDiv);
     $scope.hideHeader = false;
-    $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/get_products').success(function(data) {
+    $http.get(base_url+'get_products').success(function(data) {
         $scope.products = data.data;
         $scope.vm = {};
         $scope.vm.dtOptions = DTOptionsBuilder.newOptions()
@@ -1181,7 +1190,7 @@ app.controller('AddProductsController', ['$scope', 'Upload', '$timeout','$http',
     $scope.submitProductForm = function(file) {
         $scope.isLoading = true;
         file.upload = Upload.upload({
-          url: 'http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_product',
+          url: base_url+'add_product',
           data: {product_name: $scope.product_name, product_price: $scope.product_price, product_offer_price: $scope.product_offer_price, product_description: $scope.product_description, product_img: $scope.product_img,}
         });
         file.upload.then(function (response) {
@@ -1218,7 +1227,7 @@ app.controller('EditProductController', ['$scope', 'Upload', '$timeout', '$http'
     $scope.updateProductForm = function() {
         var file = $scope.productsByIdData.product_img;
         file.upload = Upload.upload({
-          url: 'http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_product',
+          url: base_url+'add_product',
           data: {product_id: $scope.productsByIdData.product_id, product_img: file, product_name: $scope.productsByIdData.product_name, product_price: $scope.productsByIdData.product_price, product_offer_price: $scope.productsByIdData.product_offer_price, product_description: $scope.productsByIdData.product_description}
         });
         if(file.upload){
@@ -1253,7 +1262,7 @@ app.controller('EditProductController', ['$scope', 'Upload', '$timeout', '$http'
             formData.append('product_offer_price', $scope.productsByIdData.product_offer_price);
             formData.append('product_description', $scope.productsByIdData.product_description);
             formData.append('product_img', $scope.productsByIdData.product_img);
-            $http.post('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_product', formData, {
+            $http.post(base_url+'add_product', formData, {
                 transformRequest: angular.identity,
                 headers: {'Content-Type': undefined}
             })
@@ -1279,7 +1288,7 @@ app.controller('EditProductController', ['$scope', 'Upload', '$timeout', '$http'
 app.controller('show_promotions', function($scope,$http,DTOptionsBuilder, DTColumnBuilder) {
     documentBody.append(spinnerDiv);
     $scope.hideHeader = false;
-    $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/get_promotions').success(function(data) {
+    $http.get(base_url+'get_promotions').success(function(data) {
         $scope.promotions = data.data;
         $scope.vm = {};
         $scope.vm.dtOptions = DTOptionsBuilder.newOptions()
@@ -1317,7 +1326,7 @@ app.controller('AddPromotionsController', ['$scope', 'Upload', '$timeout', '$loc
         documentBody.append(spinnerDiv);
         $scope.isLoading = true;
         file.upload = Upload.upload({
-          url: 'http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_promotions',
+          url: base_url+'add_promotions',
           data: {promotion_name: $scope.promotion_name, promotion_img: file, promotion_description :$scope.promotion_description, promotion_type: $scope.promotion_type, from_date: $scope.from_date, end_date: $scope.end_date,promotion_for:$scope.promotion_for },
         });
         file.upload.then(function (response) {
@@ -1359,7 +1368,7 @@ app.controller('EditPromotionController', ['$scope', 'Upload', '$timeout', '$htt
     $scope.updatePromotionForm = function() {
         var file = $scope.promotionsByIdData.promotion_img;
         file.upload = Upload.upload({
-            url: 'http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_promotions',
+            url: base_url+'add_promotions',
             data: {promotion_id: $scope.promotionsByIdData.promotion_id, promotion_name: $scope.promotionsByIdData.promotion_name, promotion_img: file, promotion_description :$scope.promotionsByIdData.promotion_description, promotion_type: $scope.promotionsByIdData.promotion_type, from_date: $scope.promotionsByIdData.from_date, end_date: $scope.promotionsByIdData.end_date,promotion_for:$scope.promotionsByIdData.promotion_for },
         });
         if(file.upload){
@@ -1395,7 +1404,7 @@ app.controller('EditPromotionController', ['$scope', 'Upload', '$timeout', '$htt
             formData.append('from_date', $scope.promotionsByIdData.from_date);
             formData.append('end_date', $scope.promotionsByIdData.end_date);
             formData.append('promotion_img', $scope.promotionsByIdData.promotion_img);
-            $http.post('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_promotions', formData, {
+            $http.post(base_url+'add_promotions', formData, {
                 transformRequest: angular.identity,
                 headers: {'Content-Type': undefined}
             })
@@ -1421,7 +1430,7 @@ app.controller('EditPromotionController', ['$scope', 'Upload', '$timeout', '$htt
 app.controller('show_branches', function($scope,$http,DTOptionsBuilder, DTColumnBuilder) {
     documentBody.append(spinnerDiv);
     $scope.hideHeader = false;
-    $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/get_branches').success(function(data) {
+    $http.get(base_url+'get_branches').success(function(data) {
         $scope.branches = data.data;
         console.log($scope.branches);
         $scope.vm = {};
@@ -1464,7 +1473,7 @@ app.controller('AddBranchController', ['$scope', 'Upload', '$route', '$timeout',
         documentBody.append(spinnerDiv);
         $scope.isLoading = true;
         var data = {branch_name:$scope.branch_name, branch_address:$scope.branch_address, branch_area:$scope.branch_area, branch_location:$scope.branch_location, branch_contact_number:$scope.branch_contact_number, branch_parent_id:$scope.branch_parent_id }
-        $http.post('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_branch', data)
+        $http.post(base_url+'add_branch', data)
         .success(function (response) {
             $scope.isLoading = false;
             if(response.status = true){
@@ -1497,7 +1506,7 @@ app.controller('EditBranchController', ['$scope', 'Upload', '$http', '$route', '
     $scope.updateBranchForm = function() {
         var data = {branch_id:$scope.branchesByIdData.branch_id, branch_address: $scope.branchesByIdData.branch_address, branch_name:$scope.branchesByIdData.branch_name, branch_location:$scope.branchesByIdData.branch_location,branch_area:$scope.branchesByIdData.branch_area, branch_contact_number:$scope.branchesByIdData.branch_contact_number, branch_parent_id:$scope.branchesByIdData.branch_parent_id}
         console.log(data);
-        $http.post('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_branch', data)
+        $http.post(base_url+'add_branch', data)
         .success(function (response) {
             $scope.isLoading = false;
             if(response.status = true){
@@ -1526,7 +1535,7 @@ app.controller('EditBranchController', ['$scope', 'Upload', '$http', '$route', '
 app.controller('show_memberships', function($scope,$http,DTOptionsBuilder, DTColumnBuilder) {
     documentBody.append(spinnerDiv);
     $scope.hideHeader = false;
-    $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/get_memberships').success(function(data) {
+    $http.get(base_url+'get_memberships').success(function(data) {
         $scope.membershipsData = data.data;
         console.log($scope.membershipsData);
         $scope.vm = {};
@@ -1563,7 +1572,7 @@ app.controller('show_memberships', function($scope,$http,DTOptionsBuilder, DTCol
 app.controller('AddMembershipController', ['$scope', 'Upload', '$http', '$route', '$timeout', function ($scope, Upload, $http, $route, $timeout) {
     $scope.isLoading = false;
     angular.element(document).find('#chIns_overlay').remove();
-    $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/get_services')
+    $http.get(base_url+'get_services')
       .success(function(data){
         var data_final = data.data;
         $scope.servicesInfo = data_final.map(function(item){
@@ -1574,7 +1583,7 @@ app.controller('AddMembershipController', ['$scope', 'Upload', '$http', '$route'
               };
         });
     })
-    $http.get('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/get_branches')
+    $http.get(base_url+'get_branches')
       .success(function(data){
         var data_final = data.data;
         $scope.branchesInfo = data_final.map(function(item){
@@ -1621,7 +1630,7 @@ app.controller('AddMembershipController', ['$scope', 'Upload', '$http', '$route'
                     is_global: $scope.is_global,
                     membership_img:'im.png'
                 };
-        $http.post('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_branch', data)
+        $http.post(base_url+'add_branch', data)
         .success(function (response) {
             $scope.isLoading = false;
             if(response.status = true){
