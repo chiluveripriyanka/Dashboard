@@ -470,7 +470,7 @@ app.controller('AddCategoryController', ['$scope', 'Upload', '$timeout', '$locat
     $scope.uploadPic = function(file) {
         $scope.isLoading = true;
         file.upload = Upload.upload({
-          url: 'http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_category',
+          url: 'http://localhost:8000/add_category',
           data: {category_name: $scope.category_name, cat_img: file},
         });
         file.upload.then(function (response) {
@@ -507,7 +507,7 @@ app.controller('EditCategoryController', ['$scope', 'Upload', '$http', '$route',
     $scope.updateCategoryForm = function() {
         var file = $scope.categoriesByIdData.cat_img;
         file.upload = Upload.upload({
-          url: 'http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_category',
+          url: 'http://localhost:8000/add_category',
           data: {category_name: $scope.categoriesByIdData.category_name, cat_img: file, cat_id : $scope.categoriesByIdData.cat_id},
         });
         if(file.upload){
@@ -539,7 +539,7 @@ app.controller('EditCategoryController', ['$scope', 'Upload', '$http', '$route',
             formData.append('cat_img', $scope.categoriesByIdData.cat_img);
             formData.append('cat_id', $scope.categoriesByIdData.cat_id);
             formData.append('category_name', $scope.categoriesByIdData.category_name);
-            $http.post('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_category', formData, {
+            $http.post('http://localhost:8000/add_category', formData, {
                 transformRequest: angular.identity,
                 headers: {'Content-Type': undefined}
             })
@@ -830,6 +830,8 @@ app.controller('show_beauty_tips', function($scope,$http, $route, DTOptionsBuild
 app.controller('AddBeautyTipController', ['$scope', 'Upload', '$timeout', '$location', function ($scope, Upload, $timeout, $location) {
     $scope.isLoading = false;
     $scope.uploadTip = function(file) {
+        documentBody.append(spinnerDiv);
+        
         $scope.isLoading = true;
         file.upload = Upload.upload({
           url: 'http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_beauty_tips',
@@ -841,6 +843,7 @@ app.controller('AddBeautyTipController', ['$scope', 'Upload', '$timeout', '$loca
                 file.result = response.data;
             });
             if(response.data.status = true){
+                angular.element(document).find('#chIns_overlay').remove();    
                 swal({
                     title: "Here's a message!",
                     type: "success",
@@ -852,6 +855,7 @@ app.controller('AddBeautyTipController', ['$scope', 'Upload', '$timeout', '$loca
                     });
                 });
             }else{
+                angular.element(document).find('#chIns_overlay').remove();    
                 swal({
                     title: "Here's a message!",
                     type: "warning",
@@ -1119,6 +1123,7 @@ app.controller('show_promotions', function($scope,$http,DTOptionsBuilder, DTColu
 app.controller('AddPromotionsController', ['$scope', 'Upload', '$timeout', '$location', function ($scope, Upload, $timeout, $location) {
     $scope.isLoading = false;
     $scope.addPromotion = function(file) {
+        documentBody.append(spinnerDiv);
         $scope.isLoading = true;
         file.upload = Upload.upload({
           url: 'http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_promotions',
@@ -1130,6 +1135,9 @@ app.controller('AddPromotionsController', ['$scope', 'Upload', '$timeout', '$loc
                 file.result = response.data;
             });
             if(response.data.status = true){
+                
+                angular.element(document).find('#chIns_overlay').remove();    
+                
                 swal({
                     title: "Here's a message!",
                     type: "success",
@@ -1141,6 +1149,7 @@ app.controller('AddPromotionsController', ['$scope', 'Upload', '$timeout', '$loc
                     });
                 });
             }else{
+                angular.element(document).find('#chIns_overlay').remove();    
                 swal({
                     title: "Here's a message!",
                     type: "warning",
@@ -1200,12 +1209,14 @@ app.controller('show_branches', function($scope,$http,DTOptionsBuilder, DTColumn
 app.controller('AddBranchController', ['$scope', 'Upload', '$route', '$timeout', '$http', '$location', function ($scope, Upload, $timeout, $route, $http, $location) {
     $scope.isLoading = false;
     $scope.submitBranchForm = function() {
+        documentBody.append(spinnerDiv);
         $scope.isLoading = true;
         var data = {branch_name:$scope.branch_name, branch_address:$scope.branch_address, branch_area:$scope.branch_area, branch_location:$scope.branch_location, branch_contact_number:$scope.branch_contact_number, branch_parent_id:$scope.branch_parent_id }
         $http.post('http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/add_branch', data)
         .success(function (response) {
             $scope.isLoading = false;
             if(response.status = true){
+                angular.element(document).find('#chIns_overlay').remove();    
                 swal({
                     title: "Here's a message!",
                     type: "success",
