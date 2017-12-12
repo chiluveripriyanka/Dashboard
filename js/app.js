@@ -13,6 +13,7 @@ app.run(['$rootScope', '$route', function ($rootScope, $route) {
     console.log(window.location.host,':change in root');
     if(window.location.host=='localhost'){
         window.base_url='http://localhost:8000/';
+        // window.base_url='http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/';
     }
     else{
         window.base_url='http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/';
@@ -1573,16 +1574,16 @@ app.controller('AddMembershipController', ['$scope', 'Upload', '$http', '$route'
     $scope.isLoading = false;
     angular.element(document).find('#chIns_overlay').remove();
     $http.get(base_url+'get_services')
-      .success(function(data){
-        var data_final = data.data;
-        $scope.servicesInfo = data_final.map(function(item){
-            return {
-                service_id: item.service_id,
-                service_name:item.service_name,
-                quantity: '2'
-              };
-        });
-    })
+       .success(function(data){
+            var data_final = data.data;
+            $scope.servicesInfo = data_final.map(function(item){
+                return {
+                    service_id: item.service_id,
+                    service_name:item.service_name,
+                    quantity: '2'
+                };
+            });
+        })
     $http.get(base_url+'get_branches')
       .success(function(data){
         var data_final = data.data;
@@ -1609,15 +1610,15 @@ app.controller('AddMembershipController', ['$scope', 'Upload', '$http', '$route'
         //selectionLimit: 4,
     };
     $scope.branch_ids_customTexts = {buttonDefaultText: 'Select Branches'};
-    $scope.addMembership = function() {
+    $scope.addMembership = function(file) {
         $scope.isLoading = true;
-        var services = $scope.membership_services;
-        var membership_services = [];
-        membership_services.push($scope.membership_services);
+        // var services = $scope.membership_services;
+        var membership_services = JSON.parse(angular.toJson($scope.membership_services));
+        // membership_services.push($scope.membership_services);
         
-        var branches = $scope.branch_ids;
-        var branch_ids = [];
-        branch_ids.push($scope.branch_ids);
+        // var branches = $scope.branch_ids;
+        var branch_ids = JSON.parse(angular.toJson($scope.branch_ids));
+        // branch_ids.push($scope.branch_ids);
 
         var data = {
                     membership_name: $scope.membership_name, 
@@ -1625,34 +1626,65 @@ app.controller('AddMembershipController', ['$scope', 'Upload', '$http', '$route'
                     membership_discount: $scope.membership_discount, 
                     membership_price: $scope.membership_price, 
                     membership_validity_in_days: $scope.membership_validity_in_days,
-                    membership_services: membership_services,
-                    branch_ids: branch_ids,
+                    membership_services: JSON.stringify(membership_services),
+                    branch_ids: JSON.stringify(branch_ids),
                     is_global: $scope.is_global,
-                    membership_img:'im.png'
+                    membership_img:file
                 };
-        $http.post(base_url+'add_branch', data)
-        .success(function (response) {
-            $scope.isLoading = false;
-            if(response.status = true){
-                swal({
-                    title: "Here's a message!",
-                    type: "success",
-                    text: response.data,
-                    confirmButtonText : "Close this window"
-                },function(){
-                    $scope.$apply(function() {
-                        $location.path('/show_branches');
-                    });
-                })
-            }else{
-                swal({
-                    title: "Here's a message!",
-                    type: "warning",
-                    text: response.data.message,
-                    confirmButtonText : "Close this window"
+                file.upload = Upload.upload({
+                    url: base_url+'add_membership',
+                    data: data,
                 });
-            }
-        });
+
+                file.upload.then(function (response) {
+                    $scope.isLoading = false;
+                    $timeout(function () {
+                        file.result = response.data;
+                    });
+                    if(response.data.status = true){
+                        swal({
+                            title: "Here's a message!",
+                            type: "success",
+                            text: response.data.message,
+                            confirmButtonText : "Close this window"
+                        },function(){
+                            $scope.$apply(function() {
+                                $location.path('/show_memberships');
+                            });
+                        });
+                    }else{
+                        swal({
+                            title: "Here's a message!",
+                            type: "warning",
+                            text: response.data.message,
+                            confirmButtonText : "Close this window"
+                        });
+                    } 
+                    angular.element(document).find('#chIns_overlay').remove();
+                });
+        // $http.post(base_url+'add_membership', data)
+        // .success(function (response) {
+        //     $scope.isLoading = false;
+        //     if(response.status = true){
+        //         swal({
+        //             title: "Here's a message!",
+        //             type: "success",
+        //             text: response.data,
+        //             confirmButtonText : "Close this window"
+        //         },function(){
+        //             $scope.$apply(function() {
+        //                 $location.path('/show_branches');
+        //             });
+        //         })
+        //     }else{
+        //         swal({
+        //             title: "Here's a message!",
+        //             type: "warning",
+        //             text: response.data.message,
+        //             confirmButtonText : "Close this window"
+        //         });
+        //     }
+        // });
     }
 }]);
 /* Branches end */

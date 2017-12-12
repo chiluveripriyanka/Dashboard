@@ -43,7 +43,7 @@
                                                             <div  ng-controller="AddMembershipController">
                                                             
                                                             <div class="all-form-element-inner">
-                                                                <form name="addMembershipForm" id="addMembershipForm" novalidate>
+                                                                <form ng-submit="addMembership(membership_img)" name="addMembershipForm" id="addMembershipForm" novalidate enctype="multipart/form-data">
                                                                     <div class="form-group-inner">
                                                                         <div class="row" ng-class="{ 'has-error' : addMembershipForm.membership_name.$invalid && !addMembershipForm.membership_name.$pristine }">
                                                                             <div class="col-lg-3">
@@ -66,7 +66,7 @@
                                                                             </div>
                                                                         </div>
                                                                     </div>
-                                                                    <!-- <div class="form-group-inner">
+                                                                    <div class="form-group-inner">
                                                                         <div class="row mg-b-10" >
                                                                             <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
                                                                                 <label class="login2 pull-right pull-right-pro">Membership Image</label>
@@ -89,7 +89,7 @@
                                                                                 </div>
                                                                             </div>
                                                                         </div>
-                                                                    </div> -->
+                                                                    </div>
                                                                     <div class="form-group-inner">
                                                                         <div class="row" ng-class="{ 'has-error' : addMembershipForm.membership_discount.$invalid && !addMembershipForm.membership_discount.$pristine }">
                                                                             <div class="col-lg-3">
@@ -104,7 +104,7 @@
                                                                     <div class="form-group-inner">
                                                                         <div class="row" ng-class="{ 'has-error' : addMembershipForm.membership_price.$invalid && !addMembershipForm.membership_price.$pristine }">
                                                                             <div class="col-lg-3">
-                                                                                <label class="login2 pull-right pull-right-pro">Membership Discount</label>
+                                                                                <label class="login2 pull-right pull-right-pro">Membership Price</label>
                                                                             </div>
                                                                             <div class="col-lg-9">
                                                                                 <input type="number" class="form-control" name="membership_price" ng-model="membership_price" required>
@@ -115,7 +115,7 @@
                                                                     <div class="form-group-inner">
                                                                         <div class="row" ng-class="{ 'has-error' : addMembershipForm.membership_validity_in_days.$invalid && !addMembershipForm.membership_validity_in_days.$pristine }">
                                                                             <div class="col-lg-3">
-                                                                                <label class="login2 pull-right pull-right-pro">Membership Discount</label>
+                                                                                <label class="login2 pull-right pull-right-pro">Membership Validity(in days)</label>
                                                                             </div>
                                                                             <div class="col-lg-9">
                                                                                 <input type="number" class="form-control" name="membership_validity_in_days" ng-model="membership_validity_in_days" required>
@@ -175,7 +175,7 @@
                                                                                 <div class="col-lg-9">
                                                                                     <div class="login-horizental cancel-wp pull-left">
                                                                                         <button class="btn btn-white" type="submit">Cancel</button>
-                                                                                        <button class="btn btn-sm btn-primary login-submit-cs" ng-disabled="!addMembershipForm.$valid" ng-click="addMembership(membership_img)" >Submit</button>
+                                                                                        <button class="btn btn-sm btn-primary login-submit-cs" ng-disabled="!addMembershipForm.$valid"  >Submit</button>
                                                                                         <span ng-show="isLoading" class="ml20">
                                                                                             <img src="assets/img/loading.gif" class="loading_image"/>
                                                                                         </span>
