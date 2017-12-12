@@ -1570,7 +1570,7 @@ app.controller('show_memberships', function($scope,$http,DTOptionsBuilder, DTCol
     //   $scope.showModal = false;
     // };
 });
-app.controller('AddMembershipController', ['$scope', 'Upload', '$http', '$route', '$timeout', function ($scope, Upload, $http, $route, $timeout) {
+app.controller('AddMembershipController', ['$scope', 'Upload', '$http', '$route', '$timeout','$location', function ($scope, Upload, $http, $route, $timeout,$location) {
     $scope.isLoading = false;
     angular.element(document).find('#chIns_overlay').remove();
     $http.get(base_url+'get_services')
