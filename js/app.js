@@ -12,8 +12,8 @@ app.run(['$rootScope', '$route', function ($rootScope, $route) {
     });
     console.log(window.location.host,':change in root');
     if(window.location.host=='localhost'){
-        window.base_url='http://localhost:8000/';
-        // window.base_url='http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/';
+        //window.base_url='http://localhost:8000/';
+        window.base_url='http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/';
     }
     else{
         window.base_url='http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/';
@@ -457,13 +457,13 @@ app.controller('EditServiceController', ['$scope', 'Upload', '$timeout', '$http'
             });
         }
         else{
-            var formData = new FormData();
-            formData.append('service_img', $scope.subCategoriesByIdData.service_img);
-            formData.append('sub_cat_id', $scope.subCategoriesByIdData.sub_cat_id);
-            formData.append('service_name', $scope.subCategoriesByIdData.service_name);
-            formData.append('service_description', $scope.subCategoriesByIdData.service_description);
-            formData.append('service_price', $scope.subCategoriesByIdData.service_price);
-            formData.append('service_duration', $scope.subCategoriesByIdData.service_duration);
+            console.log('fomra ata', formData);
+            formData.append('service_img', $scope.servicesByIdData.service_img);
+            formData.append('sub_cat_id', $scope.servicesByIdData.sub_cat_id);
+            formData.append('service_name', $scope.servicesByIdData.service_name);
+            formData.append('service_description', $scope.servicesByIdData.service_description);
+            formData.append('service_price', $scope.servicesByIdData.service_price);
+            formData.append('service_duration', $scope.servicesByIdData.service_duration);
             $http.post(base_url+'add_services', formData, {
                 transformRequest: angular.identity,
                 headers: {'Content-Type': undefined}
@@ -1075,12 +1075,58 @@ app.controller('show_packages', function($scope,$http, $route, DTOptionsBuilder,
      $scope.hideHeader = false;
     $http.get(base_url+'get_packages').success(function(data) {
         $scope.packages = data.data;
-        console.log($scope.packages);
         $scope.vm = {};
         $scope.vm.dtOptions = DTOptionsBuilder.newOptions()
               .withOption('order', [0, 'asc']);
         angular.element(document).find('#chIns_overlay').remove();
     });
+    $http.get(base_url+'get_services')
+      .success(function(data){
+        var data_final = data.data;
+        $scope.servicesInfo = data_final.map(function(item){
+            return {
+                service_id: item.service_id,
+                service_name:item.service_name
+              };
+        });
+    })
+    $scope.selected_services = [];
+    $scope.selected_services_settings = {
+        template: '<b>{{option.service_name}}</b>',
+        searchField: 'service_name',
+        enableSearch: true,
+        //selectionLimit: 4,
+    };
+    $scope.selected_services_customTexts = {buttonDefaultText: 'Select Services'};
+    $scope.editPackage = function(id) {
+        var services = $scope.selected_services;
+        var package_services = [];
+        package_services.push($scope.selected_services);
+        $scope.showModal = true;
+        for (i in $scope.packages) {
+            if ($scope.packages[i].package_id == id) {
+                $scope.packagesByIdData = {
+                    package_id: $scope.packages[i].package_id,
+                    package_name: $scope.packages[i].package_name,
+                    package_price: $scope.packages[i].package_price,
+                    package_description: $scope.packages[i].package_description,
+                    package_validity_days: $scope.packages[i].package_validity_days,
+                    package_services: package_services,
+                    package_on_other_services: $scope.packages[i].package_on_other_services,
+                    package_start_date: $scope.packages[i].package_start_date,
+                    package_end_date: $scope.packages[i].package_end_date
+                };
+                console.log($scope.packagesByIdData);
+            }
+        }
+    };
+    $scope.ok = function() {
+      $scope.showModal = false;
+    };
+
+    $scope.cancel = function() {
+      $scope.showModal = false;
+    };
 });
 app.controller('AddPackagesController', function($scope, $http, $location) {  
     $scope.isLoading = false;
@@ -1105,9 +1151,10 @@ app.controller('AddPackagesController', function($scope, $http, $location) {
     $scope.submitPackageForm = function() {
         $scope.isLoading = true;
         if ($scope.addPackageForm.$valid) {
-            var services = $scope.selected_services;
-            var package_services = [];
-            package_services.push($scope.selected_services);
+            //var services = $scope.selected_services;
+            // var package_services = [];
+            // package_services.push($scope.selected_services);
+            var package_services = JSON.parse(angular.toJson($scope.selected_services));
             var data = {
                 package_name: $scope.package_name,
                 package_price: $scope.package_price,
@@ -1115,7 +1162,7 @@ app.controller('AddPackagesController', function($scope, $http, $location) {
                 package_validity_days: $scope.package_validity_days,
                 package_start_date: $scope.package_start_date,
                 package_end_date: $scope.package_end_date,
-                package_services: package_services,
+                package_services: JSON.stringify(package_services),
                 package_on_other_services: $scope.package_on_other_services
             };
             console.log(data);
@@ -1148,6 +1195,44 @@ app.controller('AddPackagesController', function($scope, $http, $location) {
         angular.element(document).find('#chIns_overlay').remove();    
       }, 1000);
 });
+
+app.controller('EditPackageController', ['$scope', '$timeout', '$http', '$route', function ($scope, $timeout, $http, $route) {
+    $scope.updatePackageForm = function() {
+        var data= {
+                package_id: $scope.packagesByIdData.package_id,
+                package_name: $scope.packagesByIdData.package_name,
+                package_price: $scope.packagesByIdData.package_price,
+                package_description: $scope.packagesByIdData.package_description,
+                package_validity_days: $scope.packagesByIdData.package_validity_days,
+                package_services: $scope.packagesByIdData.package_services,
+                package_on_other_services: $scope.packagesByIdData.package_on_other_services,
+                package_start_date: $scope.packagesByIdData.package_start_date,
+                package_end_date: $scope.packagesByIdData.package_end_date
+        };
+        console.log(data);
+        $http.post(base_url+'add_package', data)
+        .success(function (response) {
+            $scope.isLoading = false;
+            if(response.status = true){
+                swal({
+                    title: "Here's a message!",
+                    type: "success",
+                    text: response.message,
+                    confirmButtonText : "Close this window"
+                },function(){
+                    $route.reload();
+                })
+            }else{
+                swal({
+                    title: "Here's a message!",
+                    type: "warning",
+                    text: response.message,
+                    confirmButtonText : "Close this window"
+                });
+            }
+        })
+    }
+}]);
 /* Packages end */
 
 /* Products Start */
@@ -1544,31 +1629,71 @@ app.controller('show_memberships', function($scope,$http,DTOptionsBuilder, DTCol
               .withOption('order', [0, 'asc']);
         angular.element(document).find('#chIns_overlay').remove();
     });
-    // $scope.editBranch = function(id) {
-    //     $scope.showModal = true;
-    //     for (i in $scope.branches) {
-    //         //Getting the person details from scope based on id
-    //         if ($scope.branches[i].branch_id == id) {
-    //             $scope.branchesByIdData = {
-    //                 branch_id: $scope.branches[i].branch_id,
-    //                 branch_name: $scope.branches[i].branch_name,
-    //                 branch_address: $scope.branches[i].branch_address,
-    //                 branch_area: $scope.branches[i].branch_area,
-    //                 branch_location: $scope.branches[i].branch_location,
-    //                 branch_contact_number: $scope.branches[i].branch_contact_number,
-    //                 branch_parent_id: $scope.branches[i].branch_parent_id
-    //             };
-    //             console.log($scope.branchesByIdData);
-    //         }
-    //     }
-    // };
-    // $scope.ok = function() {
-    //   $scope.showModal = false;
-    // };
+    $http.get(base_url+'get_services')
+       .success(function(data){
+            var data_final = data.data;
+            $scope.servicesInfo = data_final.map(function(item){
+                return {
+                    service_id: item.service_id,
+                    service_name:item.service_name,
+                    quantity: '2'
+                };
+            });
+        })
+    $http.get(base_url+'get_branches')
+      .success(function(data){
+        var data_final = data.data;
+        $scope.branchesInfo = data_final.map(function(item){
+            return {
+                branch_id: item.branch_id,
+                branch_name:item.branch_name
+              };
+        });
+    })
+    $scope.membership_services = [];
+    $scope.membership_services_settings = {
+        template: '<b>{{option.service_name}}</b>',
+        searchField: 'service_name',
+        enableSearch: true,
+        //selectionLimit: 4,
+    };
+    $scope.membership_services_customTexts = {buttonDefaultText: 'Select Services'};
+    $scope.branch_ids = [];
+    $scope.branch_ids_settings = {
+        template: '<b>{{option.branch_name}}</b>',
+        searchField: 'branch_name',
+        enableSearch: true,
+        //selectionLimit: 4,
+    };
+    $scope.branch_ids_customTexts = {buttonDefaultText: 'Select Branches'};
+    $scope.editMembership = function(id) {
+        var membership_services = JSON.parse(angular.toJson($scope.membership_services));
+        var branch_ids = JSON.parse(angular.toJson($scope.branch_ids));
+        $scope.showModal = true;
+        for (i in $scope.membershipsData) {
+            if ($scope.membershipsData[i].membership_id == id) {
+                $scope.membershipsByIdData = {
+                    membership_id: $scope.membershipsData[i].membership_id,
+                    membership_name: $scope.membershipsData[i].membership_name,
+                    membership_discount: $scope.membershipsData[i].membership_discount,
+                    membership_img: $scope.membershipsData[i].membership_img,
+                    membership_description: $scope.membershipsData[i].membership_description,
+                    membership_price: $scope.membershipsData[i].membership_price,
+                    membership_services: membership_services,
+                    branch_ids: branch_ids,
+                    is_global: $scope.membershipsData[i].is_global
+                };
+                console.log($scope.membershipsByIdData);
+            }
+        }
+    };
+    $scope.ok = function() {
+      $scope.showModal = false;
+    };
 
-    // $scope.cancel = function() {
-    //   $scope.showModal = false;
-    // };
+    $scope.cancel = function() {
+      $scope.showModal = false;
+    };
 });
 app.controller('AddMembershipController', ['$scope', 'Upload', '$http', '$route', '$timeout','$location', function ($scope, Upload, $http, $route, $timeout,$location) {
     $scope.isLoading = false;
@@ -1662,29 +1787,83 @@ app.controller('AddMembershipController', ['$scope', 'Upload', '$http', '$route'
                     } 
                     angular.element(document).find('#chIns_overlay').remove();
                 });
-        // $http.post(base_url+'add_membership', data)
-        // .success(function (response) {
-        //     $scope.isLoading = false;
-        //     if(response.status = true){
-        //         swal({
-        //             title: "Here's a message!",
-        //             type: "success",
-        //             text: response.data,
-        //             confirmButtonText : "Close this window"
-        //         },function(){
-        //             $scope.$apply(function() {
-        //                 $location.path('/show_branches');
-        //             });
-        //         })
-        //     }else{
-        //         swal({
-        //             title: "Here's a message!",
-        //             type: "warning",
-        //             text: response.data.message,
-        //             confirmButtonText : "Close this window"
-        //         });
-        //     }
-        // });
+    }
+}]);
+app.controller('EditMembershipController', ['$scope', 'Upload', '$timeout', '$http', '$route', function ($scope, Upload, $timeout, $http, $route) {
+    $scope.updateMembershipForm = function() {
+        var membership_services = JSON.parse(angular.toJson($scope.membership_services));
+        var branch_ids = JSON.parse(angular.toJson($scope.branch_ids));
+        var file = $scope.membershipsByIdData.membership_img;
+        var data = {
+                    membership_id: $scope.membershipsData.membership_id,
+                    membership_name: $scope.membershipsData.membership_name,
+                    membership_discount: $scope.membershipsData.membership_discount,
+                    membership_img: $scope.membershipsData.membership_img,
+                    membership_description: $scope.membershipsData.membership_description,
+                    membership_price: $scope.membershipsData.membership_price,
+                    membership_services: JSON.stringify(membership_services),
+                    branch_ids: JSON.stringify(branch_ids),
+                    is_global: $scope.membershipsData.is_global
+                }
+        file.upload = Upload.upload({
+            url: base_url+'add_membership',
+            data: data
+        });
+        if(file.upload){
+            file.upload.then(function (response) {
+                $timeout(function () {
+                    file.result = response.data;
+                });
+                if(response.data.status = true){
+                    swal({
+                        title: "Here's a message!",
+                        type: "success",
+                        text: response.data.message,
+                        confirmButtonText : "Close this window"
+                    },function(){
+                        $route.reload();
+                    })
+                }else{
+                    swal({
+                        title: "Here's a message!",
+                        type: "warning",
+                        text: response.data.message,
+                        confirmButtonText : "Close this window"
+                    });
+                }
+            });
+        }
+        else{
+            var formData = new FormData();
+
+            formData.append('membership_id', $scope.membershipsData.membership_id);
+            formData.append('membership_name', $scope.membershipsData.membership_name);
+            formData.append('membership_discount', $scope.membershipsData.membership_discount);
+            formData.append('membership_img', $scope.membershipsData.membership_img);
+            formData.append('membership_description', $scope.membershipsData.membership_description);
+            formData.append('membership_price', $scope.membershipsData.membership_price);
+            formData.append('membership_services', JSON.stringify(membership_services));
+            formData.append('branch_ids', JSON.stringify(branch_ids));
+            formData.append('is_global', $scope.membershipsData.is_global);
+
+            $http.post(base_url+'add_membership', formData, {
+                transformRequest: angular.identity,
+                headers: {'Content-Type': undefined}
+            })
+            .success(function (response) {
+                console.log(response);
+                if(response.status = true){
+                    swal({
+                        title: "Here's a message!",
+                        type: "success",
+                        text: response.message,
+                        confirmButtonText : "Close this window"
+                    },function(){
+                        $route.reload();
+                    })
+                }
+            })
+        }
     }
 }]);
 /* Branches end */

@@ -37,6 +37,7 @@
                                         <th>Membership Discount</th>
                                         <th>Membership Price</th>
                                         <th>Global</th>
+                                        <th>Actions</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -47,6 +48,11 @@
                                         <td>{{ membership.membership_discount }}</td>
                                         <td>{{ membership.membership_price }}</td>
                                         <td>{{ membership.is_global }}</td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <button type="button" class="btn btn-default btn" ng-click="editMembership(membership.membership_id)"><i class="glyphicon glyphicon-pencil"></i></button>
+                                            </div>
+                                        </td>
                                       </tr>
 
                                     </tbody>
@@ -58,51 +64,140 @@
             </div>
         </div>
     </div>
-    <!-- <div modal="showModal" close="cancel()">
+    <div modal="showModal" close="cancel()">
         <div class="modal-header">
-            <h4>Edit membership</h4>
+            <h4>Edit Membership</h4>
         </div>
         <div class="modal-body">
-            <div  ng-controller="EditmembershipController">
+            <div  ng-controller="EditMembershipController">
                 <div class="all-form-element-inner">
                     <div >
-                        <form name="editmembershipForm" id="editmembershipForm" novalidate enctype="multipart/form-data">
-                            <input type="hidden" ng-model="categoriesByIdData.cat_id" name="cat_id">
+                        <form ng-submit="editMembership(membership_img)" name="editMembershipForm" id="editMembershipForm" novalidate enctype="multipart/form-data">
+                            <input type="hidden" ng-model="membershipsByIdData.membership_id" name="membership_id">
+                            <div class="form-group-inner">
+                                <div class="row" ng-class="{ 'has-error' : editMembershipForm.membership_name.$invalid && !editMembershipForm.membership_name.$pristine }">
+                                    <div class="col-lg-3">
+                                        <label class="login2 pull-right pull-right-pro">Membership Name</label>
+                                    </div>
+                                    <div class="col-lg-9">
+                                        <input type="text" class="form-control" name="membership_name" ng-model="membershipsByIdData.membership_name" required>
+                                        <p ng-show="editMembershipForm.membership_name.$invalid && !editMembershipForm.membership_name.$pristine" class="help-block">Enter a Membership Name.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group-inner">
+                                <div class="row" ng-class="{ 'has-error' : editMembershipForm.membership_description.$invalid && !editMembershipForm.membership_description.$pristine }">
+                                    <div class="col-lg-3">
+                                        <label class="login2 pull-right pull-right-pro">Membership Description</label>
+                                    </div>
+                                    <div class="col-lg-9">
+                                        <textarea class="form-control" name="membership_description" ng-model="membershipsByIdData.membership_description" required cols="5" rows="5" />
+                                        <p ng-show="editMembershipForm.membership_description.$invalid && !editMembershipForm.membership_description.$pristine" class="help-block">Enter a Membership description.</p>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="form-group-inner">
                                 <div class="row mg-b-10" >
                                     <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-                                        <label class="login2 pull-right pull-right-pro">Image</label>
+                                        <label class="login2 pull-right pull-right-pro">Membership Image</label>
                                     </div>
                                     <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
-                                        
                                         <div class="file-upload-inner file-upload-inner-right ts-forms">
                                             <div class="input append-small-btn">
                                                 <div class="file-button">
                                                     Browse
-                                                    <input type="file" onchange="document.getElementById('append-small-btn').value = this.value;" ngf-select ng-model="categoriesByIdData.cat_img" name="cat_img"    
+                                                    <input type="file" onchange="document.getElementById('append-small-btn').value = this.value;" ngf-select ng-model="membershipsByIdData.membership_img" name="membership_img"    
                                                          accept="image/*" ngf-max-size="2MB" required
                                                          ngf-model-invalid="errorFile">
                                                 </div>
-                                                <input type="text" ng-model="categoriesByIdData.cat_img" id="append-small-btn" placeholder="no file selected">
-                                                
-                                                <img width="50" class="mg-t-10" ng-src="http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/uploads/{{categoriesByIdData.cat_img}}" />
-                                                <div class="text-left mg-b-30" ng-show="editmembershipForm.file.$error.required">Upload image is required</i><br>
-                                                  <i ng-show="editmembershipForm.file.$error.maxSize">File too large 
+                                                <input type="text" id="append-small-btn" placeholder="no file selected" ng-model="membershipsByIdData.membership_img">
+
+                                                <img width="50" class="mg-t-10" ng-src="http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/uploads/{{membershipsByIdData.membership_img}}" />
+                                                <div class="text-left mg-b-30" ng-show="editMembershipForm.file.$error.required">Upload image is required</i><br>
+                                                  <i ng-show="editMembershipForm.file.$error.maxSize">File too large 
                                                       {{errorFile.size / 1000000|number:1}}MB: max 2M</i>
-                                                  <img ng-show="editmembershipForm.file.$valid" ngf-thumbnail="picFile" class="thumb"> <button ng-click="picFile = null" ng-show="picFile">Remove</button>
+                                                  <img ng-show="editMembershipForm.file.$valid" ngf-thumbnail="picFile" class="thumb"> <button ng-click="picFile = null" ng-show="picFile">Remove</button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group-inner">
-                                <div class="row"ng-class="{ 'has-error' : editmembershipForm.membership_name.$invalid && !editmembershipForm.membership_name.$pristine }">
+                                <div class="row" ng-class="{ 'has-error' : editMembershipForm.membership_discount.$invalid && !editMembershipForm.membership_discount.$pristine }">
                                     <div class="col-lg-3">
-                                        <label class="login2 pull-right pull-right-pro">membership Name</label>
+                                        <label class="login2 pull-right pull-right-pro">Membership Discount</label>
                                     </div>
                                     <div class="col-lg-9">
-                                        <input type="text" class="form-control" name="membership_name" ng-model="categoriesByIdData.membership_name" required>
-                                        <p ng-show="editmembershipForm.membership_name.$invalid && !editmembershipForm.membership_name.$pristine" class="help-block">Enter a membership Name.</p>
+                                        <input type="number" class="form-control" name="membership_discount" ng-model="membershipsByIdData.membership_discount" required>
+                                        <p ng-show="editMembershipForm.membership_discount.$invalid && !editMembershipForm.membership_discount.$pristine" class="help-block">Enter a Membership Discount.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group-inner">
+                                <div class="row" ng-class="{ 'has-error' : editMembershipForm.membership_price.$invalid && !editMembershipForm.membership_price.$pristine }">
+                                    <div class="col-lg-3">
+                                        <label class="login2 pull-right pull-right-pro">Membership Price</label>
+                                    </div>
+                                    <div class="col-lg-9">
+                                        <input type="number" class="form-control" name="membership_price" ng-model="membershipsByIdData.membership_price" required>
+                                        <p ng-show="editMembershipForm.membership_price.$invalid && !editMembershipForm.membership_price.$pristine" class="help-block">Enter a Membership Price.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group-inner">
+                                <div class="row" ng-class="{ 'has-error' : editMembershipForm.membership_validity_in_days.$invalid && !editMembershipForm.membership_validity_in_days.$pristine }">
+                                    <div class="col-lg-3">
+                                        <label class="login2 pull-right pull-right-pro">Membership Validity(in days)</label>
+                                    </div>
+                                    <div class="col-lg-9">
+                                        <input type="number" class="form-control" name="membership_validity_in_days" ng-model="membershipsByIdData.membership_validity_in_days" required>
+                                        <p ng-show="editMembershipForm.membership_validity_in_days.$invalid && !editMembershipForm.membership_validity_in_days.$pristine" class="help-block">Enter a Membership Validity Days.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group-inner">
+                                <div class="chosen-select-single">
+                                    <div class="row">
+                                        <div class="col-lg-3">
+                                            <label><strong>Membership Services</strong></label>
+                                        </div>
+                                        <div class="col-lg-4 text-left">
+                                            <div ng-dropdown-multiselect="" options="servicesInfo"selected-model="membership_services" extra-settings="membership_services_settings" translation-texts="membership_services_customTexts"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group-inner">
+                                <div class="chosen-select-single">
+                                    <div class="row">
+                                        <div class="col-lg-3">
+                                            <label><strong>Select Branches</strong></label>
+                                        </div>
+                                        <div class="col-lg-4 text-left">
+                                            <div ng-dropdown-multiselect="" options="branchesInfo"selected-model="branch_ids" extra-settings="branch_ids_settings" translation-texts="branch_ids_customTexts"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group-inner">
+                                <div class="chosen-select-single">
+                                    <div class="row">
+                                        <div class="col-lg-3">
+                                            <label><strong>Global</strong></label>
+                                        </div>
+                                        <div class="col-lg-4 text-left bt-df-checkbox pull-left">
+                                            <div class="i-checks pull-left col-lg-4">
+                                                <label>
+                                                    <input type="radio" value="option1" name="is_global" ng-model="is_global" value="1"> <i></i> Yes 
+                                                </label>
+                                            </div>
+                                            <div class="i-checks pull-left col-lg-4">
+                                                <label>
+                                                    <input type="radio" value="option1" name="is_global" ng-model="membershipsByIdData.is_global" value="0"> <i></i> No 
+                                                </label>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -113,13 +208,10 @@
                                         <div class="col-lg-9">
                                             <div class="login-horizental cancel-wp pull-left">
                                                 <button class="btn btn-white" type="submit" ng-click="cancel()">Cancel</button>
-                                                <button class="btn btn-sm btn-primary login-submit-cs" ng-disabled="!editmembershipForm.$valid" ng-click="updatemembershipForm()">Submit</button>
-                                                  <span class="progress" ng-show="cat_img.progress >= 0">
-                                                    <div style="width:{{cat_img.progress}}%" 
-                                                        ng-bind="cat_img.progress + '%'"></div>
-                                                  </span>
-                                                  <span ng-show="cat_img.result">Upload Successful</span>
-                                                  <span class="err" ng-show="errorMsg">{{errorMsg}}</span>
+                                                <button class="btn btn-sm btn-primary login-submit-cs" ng-disabled="!editMembershipForm.$valid" ng-click="updateMembershipForm()">Submit</button>
+                                                <span ng-show="isLoading" class="ml20">
+                                                    <img src="assets/img/loading.gif" class="loading_image"/>
+                                                </span>
                                             </div>
                                         </div>
                                     </div>
@@ -133,5 +225,5 @@
         <!-- <div class="modal-footer">
           <button class="btn btn-success" ng-click="ok()">Okay</button>
           <button class="btn" ng-click="cancel()">Cancel</button>
-        </div> 
-    </div> -->    
+        </div> -->
+    </div>  

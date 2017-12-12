@@ -50,6 +50,7 @@
                                         <td>{{ package.package_end_date }}</td>
 										<td>
                                             <div class="btn-group">
+                                                <button type="button" class="btn btn-default btn" ng-click="editPackage(package.package_id)"><i class="glyphicon glyphicon-pencil"></i></button> 
 											    <button type="button" class="btn btn-default btn" ng-click="f2(package.package_id,$index)"><i class="glyphicon glyphicon-trash"></i></button> 
                                             </div>
                                         </td> 
@@ -58,12 +59,143 @@
                                   </table>
                             </div>
                         </div>
-						
-
-						
+					</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div modal="showModal" close="cancel()">
+        <div class="modal-header">
+            <h4>Edit Package</h4>
+        </div>
+        <div class="modal-body">
+            <div  ng-controller="EditPackageController">
+                <div class="all-form-element-inner">
+                    <div >
+                        <form name="editPackageForm" id="editPackageForm" ng-submit="submitPackageForm()" novalidate>
+                            <input type="hidden" ng-model="packagesByIdData.package_id" name="package_id">
+                            <div class="form-group-inner">
+                                <div class="row"ng-class="{ 'has-error' : editPackageForm.package_name.$invalid && !editPackageForm.package_name.$pristine }">
+                                    <div class="col-lg-3">
+                                        <label class="login2 pull-right pull-right-pro">Package Name</label>
+                                    </div>
+                                    <div class="col-lg-9">
+                                        <input type="text" class="form-control" name="package_name" ng-model="packagesByIdData.package_name" required>
+                                        <p ng-show="editPackageForm.package_name.$invalid && !editPackageForm.package_name.$pristine" class="help-block">Enter a package name.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group-inner">
+                                <div class="row"ng-class="{ 'has-error' : editPackageForm.package_price.$invalid && !editPackageForm.package_price.$pristine }">
+                                    <div class="col-lg-3">
+                                        <label class="login2 pull-right pull-right-pro">Package Price</label>
+                                    </div>
+                                    <div class="col-lg-9">
+                                        <input type="number" class="form-control" name="package_price" ng-model="packagesByIdData.package_price" required>
+                                        <p ng-show="editPackageForm.package_price.$invalid && !editPackageForm.package_price.$pristine" class="help-block">Enter a package price.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group-inner">
+                                <div class="row" ng-class="{ 'has-error' : editPackageForm.package_description.$invalid && !editPackageForm.package_description.$pristine }">
+                                    <div class="col-lg-3">
+                                        <label class="login2 pull-right pull-right-pro">Package Description</label>
+                                    </div>
+                                    <div class="col-lg-9">
+                                        <textarea class="form-control" name="package_description" ng-model="packagesByIdData.package_description" required cols="5" rows="5" />
+                                        <p ng-show="editPackageForm.package_description.$invalid && !editPackageForm.package_description.$pristine" class="help-block">Enter a package description.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group-inner">
+                                <div class="row"ng-class="{ 'has-error' : editPackageForm.package_validity_days.$invalid && !editPackageForm.package_validity_days.$pristine }">
+                                    <div class="col-lg-3">
+                                        <label class="login2 pull-right pull-right-pro">Package Validity Days</label>
+                                    </div>
+                                    <div class="col-lg-9">
+                                        <input type="number" class="form-control" name="package_validity_days" ng-model="packagesByIdData.package_validity_days" required>
+                                        <p ng-show="editPackageForm.package_validity_days.$invalid && !editPackageForm.package_validity_days.$pristine" class="help-block">Enter a package validity days.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group-inner">
+                                <div class="chosen-select-single">
+                                    <div class="row">
+                                        <div class="col-lg-3">
+                                            <label><strong>Package Services</strong></label>
+                                        </div>
+                                        <div class="col-lg-4 text-left">
+                                            <div ng-dropdown-multiselect="" options="servicesInfo"selected-model="selected_services"
+                                                 extra-settings="selected_services_settings"
+                                                 translation-texts="selected_services_customTexts"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group-inner">
+                                <div class="row">
+                                    <div class="chosen-select-single">
+                                        <div class="col-lg-3">
+                                            <label><strong>Package On Other Services</strong></label>
+                                        </div>
+                                        <div class="col-lg-4 text-left">
+                                            <input type="number" class="form-control" name="package_on_other_services" ng-model="packagesByIdData.package_on_other_services" required>
+                                            <p ng-show="editPackageForm.package_on_other_services.$invalid && !editPackageForm.package_on_other_services.$pristine" class="help-block">Enter a package on other services</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="date-picker-inner">
+                                <div class="form-group-inner data-custon-pick" id="data_1">
+                                    <div class="row">
+                                        <div class="col-lg-3">
+                                            <label class="login2 pull-right pull-right-pro"><strong>Package Start Date</strong></label>
+                                        </div>
+                                        <div class="col-lg-9">
+                                            <div class="input-group date">
+                                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                                <input type="text" class="form-control" value="10/04/2017" name="package_start_date" ng-model="packagesByIdData.package_start_date"required>
+                                            </div>
+                                            <p ng-show="editPackageForm.package_start_date.$invalid && !editPackageForm.package_start_date.$pristine" class="help-block">Select package start date.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="date-picker-inner">
+                                <div class="form-group-inner data-custon-pick" id="data_1">
+                                    <div class="row">
+                                        <div class="col-lg-3">
+                                            <label class="login2 pull-right pull-right-pro"><strong>Package End Date</strong></label>
+                                        </div>
+                                        <div class="col-lg-9">
+                                            <div class="input-group date">
+                                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                                <input type="text" class="form-control" value="10/04/2017"  name="package_end_date" ng-model="packagesByIdData.package_end_date" required>
+                                            </div>
+                                        </div>
+                                        <p ng-show="editPackageForm.package_end_date.$invalid && !editPackageForm.package_end_date.$pristine" class="help-block">Select package end date.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group-inner">
+                                <div class="login-btn-inner">
+                                    <div class="row">
+                                        <div class="col-lg-3"></div>
+                                        <div class="col-lg-9">
+                                            <div class="login-horizental cancel-wp pull-left">
+                                                <button class="btn btn-white" type="submit" ng-click="cancel()">Cancel</button>
+                                                <button type="submit" class="btn btn-sm btn-primary login-submit-cs" ng-disabled="editPackageForm.$invalid" ng-click="updatePackageForm()">Submit</button>
+                                                <span ng-show="isLoading" class="ml20">
+                                                    <img src="assets/img/loading.gif" class="loading_image"/>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Static Table End -->
