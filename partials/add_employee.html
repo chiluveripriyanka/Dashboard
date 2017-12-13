@@ -1,0 +1,167 @@
+    <!-- Breadcome start-->
+    <div class="breadcome-area mg-b-30 mg-t-30">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcome-list map-mg-t-40-gl shadow-reset">
+                        <div class="breadcome-heading">
+                            <h2>Add Employees</h2>
+                        </div>
+                        <ul class="breadcome-menu">
+                            <li><a href="#">Home</a> <span class="bread-slash">/</span>
+                            </li>
+                            <li><span class="bread-blod">Add Employees</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Breadcome End-->
+    <!-- tabs start-->
+    <div class="admintab-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="admintab-wrap mg-b-40 button_margin">
+                        <a href="#/show_employees"><button type="button" class="btn btn-custon-four btn-primary pull-right mg-t-50 mg-b-20">Show Employees</button></a>
+                        <ul class="nav nav-tabs custom-menu-wrap custon-tab-menu-style1">
+                            
+                            <!-- <li><a data-toggle="tab" href="#edit_category"><span class="adminpro-icon adminpro-analytics-arrow tab-custon-ic"></span>Edit Category</a>
+                            </li> -->
+                        </ul>
+                        <div class="tab-content">
+                            <div id="add_branch" class="tab-pane in active animated flipInX custon-tab-style1">
+
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="sparkline12-list mg-t-30">
+                                            <div class="sparkline12-graph">
+                                                <div class="basic-login-form-ad">
+                                                    <div class="row">
+                                                        <div class="col-lg-8">
+                                                            <div  ng-controller="AddEmployeeController">
+                                                                <div class="all-form-element-inner">
+                                                                    <form name="addEmployeeForm" id="addEmployeeForm" novalidate enctype="multipart/form-data" ng-submit="submitEmployeeForm()">
+                                                                        <div class="form-group-inner">
+                                                                            <div class="row" ng-class="{ 'has-error' : addEmployeeForm.employee_name.$invalid && !addEmployeeForm.employee_name.$pristine }">
+                                                                                <div class="col-lg-3">
+                                                                                    <label class="login2 pull-right pull-right-pro">Name</label>
+                                                                                </div>
+                                                                                <div class="col-lg-9">
+                                                                                    <input type="text" class="form-control" name="employee_name" ng-model="employee_name" required>
+                                                                                    <p ng-show="addEmployeeForm.employee_name.$invalid && !addEmployeeForm.employee_name.$pristine" class="help-block">Enter a Employee name.</p>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-group-inner">
+                                                                            <div class="chosen-select-single">
+                                                                                <div class="row">
+                                                                                    <div class="col-lg-3">
+                                                                                        <label class="login2 pull-right pull-right-pro"><strong>Role</strong></label>
+                                                                                    </div>
+                                                                                    <div class="col-lg-4 text-left">
+                                                                                        <div ng-dropdown-multiselect="" options="role" selected-model="selected_roles"
+                                                                                             extra-settings="selected_roles_settings"
+                                                                                             translation-texts="selected_roles_customTexts">
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-group-inner">
+                                                                            <div class="row" ng-class="{ 'has-error' : addEmployeeForm.email_id.$invalid && !addEmployeeForm.email_id.$pristine }">
+                                                                                <div class="col-lg-3">
+                                                                                    <label class="login2 pull-right pull-right-pro">Email Id </label>
+                                                                                </div>
+                                                                                <div class="col-lg-9">
+                                                                                    <input type="email" class="form-control" name="email_id" ng-model="email_id" required>
+                                                                                    <p ng-show="addEmployeeForm.email_id.$invalid && !addEmployeeForm.email_id.$pristine" class="help-block">Enter a employee email id.</p>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-group-inner">
+                                                                            <div class="row" ng-class="{ 'has-error' : addEmployeeForm.phone.$invalid && !addEmployeeForm.phone.$pristine }">
+                                                                                <div class="col-lg-3">
+                                                                                    <label class="login2 pull-right pull-right-pro">Contact Number</label>
+                                                                                </div>
+                                                                                <div class="col-lg-9">
+                                                                                    <input type="text" class="form-control" name="phone" ng-model="phone" required>
+                                                                                    <p ng-show="addEmployeeForm.phone.$invalid && !addEmployeeForm.phone.$pristine" class="help-block">Enter a employee contact number.</p>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-group-inner">
+                                                                            <div class="row" ng-class="{ 'has-error' : addEmployeeForm.employee_branch.$invalid && !addEmployeeForm.employee_branch.$pristine }">
+                                                                                <div class="col-lg-3">
+                                                                                    <label class="login2 pull-right pull-right-pro">Branch</label>
+                                                                                </div>
+                                                                                <div class="col-lg-9">
+                                                                                    <input type="text" class="form-control" name="employee_branch" ng-model="employee_branch" required>
+                                                                                    <p ng-show="addEmployeeForm.employee_branch.$invalid && !addEmployeeForm.employee_branch.$pristine" class="help-block">Enter a employee branch.</p>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-group-inner">
+                                                                            <div class="row" ng-class="{ 'has-error' : addEmployeeForm.employee_address.$invalid && !addEmployeeForm.employee_address.$pristine }">
+                                                                                <div class="col-lg-3">
+                                                                                    <label class="login2 pull-right pull-right-pro">Address</label>
+                                                                                </div>
+                                                                                <div class="col-lg-9">
+                                                                                    <textarea class="form-control" name="employee_address" ng-model="employee_address" required cols="5" rows="5" />
+                                                                                <p ng-show="addEmployeeForm.employee_address.$invalid && !addEmployeeForm.employee_address.$pristine" class="help-block">Enter a employee address.</p>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        
+                                                                        <div class="form-group-inner">
+                                                                            <div class="row"ng-class="{ 'has-error' : addEmployeeForm.employee_pincode.$invalid && !addEmployeeForm.employee_pincode.$pristine }">
+                                                                                <div class="col-lg-3">
+                                                                                    <label class="login2 pull-right pull-right-pro">Pincode</label>
+                                                                                </div>
+                                                                                <div class="col-lg-9">
+                                                                                    <input type="text" class="form-control" name="employee_pincode" ng-model="employee_pincode" required>
+                                                                                    <p ng-show="addEmployeeForm.employee_pincode.$invalid && !addEmployeeForm.employee_pincode.$pristine" class="help-block">Enter a employee pincode.</p>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        
+                                                                        <div class="form-group-inner">
+                                                                            <div class="login-btn-inner">
+                                                                                <div class="row">
+                                                                                    <div class="col-lg-3"></div>
+                                                                                    <div class="col-lg-9">
+                                                                                        <div class="login-horizental cancel-wp pull-left">
+                                                                                            <button class="btn btn-white" type="submit">Cancel</button>
+                                                                                            <button type="submit" class="btn btn-sm btn-primary login-submit-cs" ng-disabled="addEmployeeForm.$invalid" >Submit</button>
+                                                                                            <span ng-show="isLoading" class="ml20">
+                                                                                                <img src="assets/img/loading.gif" class="loading_image"/>
+                                                                                            </span>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+<!-- select2 JS
+    ============================================ -->
+<script src="assets/js/select2/select2.full.min.js"></script>
+<script src="assets/js/select2/select2-active.js"></script>

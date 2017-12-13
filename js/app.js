@@ -74,6 +74,10 @@ app.config(function ($routeProvider) {
         templateUrl : "partials/show_memberships.html",
         controller: "show_memberships"
     })
+    .when("/show_employees",{
+        templateUrl : "partials/show_employees.html",
+        controller: "show_employees"
+    })
     .when("/add_categories",{
         templateUrl : "partials/add_categories.html",
         controller: "AddCategoryController"
@@ -110,7 +114,10 @@ app.config(function ($routeProvider) {
         templateUrl : "partials/add_membership.html" ,
         controller: "AddMembershipController"
     })
-    
+    .when("/add_employee",{
+        templateUrl: "partials/add_employee.html",
+        controller: "AddEmployeeController"
+    })
     .otherwise({
         redirectTo : "/"
     });
@@ -1618,7 +1625,7 @@ app.controller('EditBranchController', ['$scope', 'Upload', '$http', '$route', '
 /* Branches end */
 
 /* Memberships start */
-app.controller('show_memberships', function($scope,$http,DTOptionsBuilder, DTColumnBuilder) {
+app.controller('show_memberships', function($scope,$http,$route,DTOptionsBuilder, DTColumnBuilder) {
     documentBody.append(spinnerDiv);
     $scope.hideHeader = false;
     $http.get(base_url+'get_memberships').success(function(data) {
@@ -1694,21 +1701,65 @@ app.controller('show_memberships', function($scope,$http,DTOptionsBuilder, DTCol
     $scope.cancel = function() {
       $scope.showModal = false;
     };
+    $scope.f2=function(n,index){
+        swal({
+                title: "Are you sure?",
+                text: "Do you want to delete this membership.",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes, delete it!",
+                cancelButtonText: "No, cancel please!",
+                closeOnConfirm: false,
+                closeOnCancel: false
+            },
+            function(isConfirm){
+                if (isConfirm) {
+                    var data = {membership_id:n};
+                    $http.post(base_url+'delete_membership', data)
+                    .success(function (response) {
+                        if(response.status = true){
+                            swal({
+                                title: "Membership has been Deleted",
+                                type: "success",
+                                text: response.message,
+                                confirmButtonText : "Close this window"
+                            },function(){
+                                $route.reload();
+                            });
+                        }else{
+                            swal({
+                                title: "Here's a message!",
+                                type: "warning",
+                                text: response.message,
+                                confirmButtonText : "Close this window"
+                            });
+                        }
+                        angular.element(document).find('#chIns_overlay').remove();
+                    });
+                } else {
+                    angular.element(document).find('#chIns_overlay').remove();
+                    swal("Cancelled", "Your Membership is safe :)", "error");
+                }
+            }
+        );
+        
+    }
 });
 app.controller('AddMembershipController', ['$scope', 'Upload', '$http', '$route', '$timeout','$location', function ($scope, Upload, $http, $route, $timeout,$location) {
     $scope.isLoading = false;
     angular.element(document).find('#chIns_overlay').remove();
     $http.get(base_url+'get_services')
-       .success(function(data){
-            var data_final = data.data;
-            $scope.servicesInfo = data_final.map(function(item){
-                return {
-                    service_id: item.service_id,
-                    service_name:item.service_name,
-                    quantity: '2'
-                };
-            });
-        })
+   .success(function(data){
+        var data_final = data.data;
+        $scope.servicesInfo = data_final.map(function(item){
+            return {
+                service_id: item.service_id,
+                service_name:item.service_name,
+                quantity: '2'
+            };
+        });
+    })
     $http.get(base_url+'get_branches')
       .success(function(data){
         var data_final = data.data;
@@ -1867,3 +1918,119 @@ app.controller('EditMembershipController', ['$scope', 'Upload', '$timeout', '$ht
     }
 }]);
 /* Branches end */
+
+/* Employess start*/
+app.controller('show_employees', function($scope,$http,$route,DTOptionsBuilder, DTColumnBuilder) {
+    documentBody.append(spinnerDiv);
+    $scope.hideHeader = false;
+    $http.get(base_url+'get_employees').success(function(data) {
+        $scope.employeesData = data.data;
+        console.log($scope.employeesData);
+        $scope.vm = {};
+        $scope.vm.dtOptions = DTOptionsBuilder.newOptions()
+              .withOption('order', [0, 'asc']);
+        angular.element(document).find('#chIns_overlay').remove();
+    });
+    $scope.f2=function(n,index){
+        swal({
+                title: "Are you sure?",
+                text: "Do you want to delete this employee.",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes, delete it!",
+                cancelButtonText: "No, cancel please!",
+                closeOnConfirm: false,
+                closeOnCancel: false
+            },
+            function(isConfirm){
+                if (isConfirm) {
+                    var data = {employee_id:n};
+                    $http.post(base_url+'delete_employee', data)
+                    .success(function (response) {
+                        if(response.status = true){
+                            swal({
+                                title: "Employee has been Deleted",
+                                type: "success",
+                                text: response.message,
+                                confirmButtonText : "Close this window"
+                            },function(){
+                                $route.reload();
+                            });
+                        }else{
+                            swal({
+                                title: "Here's a message!",
+                                type: "warning",
+                                text: response.message,
+                                confirmButtonText : "Close this window"
+                            });
+                        }
+                        angular.element(document).find('#chIns_overlay').remove();
+                    });
+                } else {
+                    angular.element(document).find('#chIns_overlay').remove();
+                    swal("Cancelled", "Your Employee is safe :)", "error");
+                }
+            }
+        );
+        
+    }
+});
+
+app.controller('AddEmployeeController', ['$scope', 'Upload', '$route', '$timeout', '$http', '$location', function ($scope, Upload, $timeout, $route, $http, $location) {
+    $scope.isLoading = false;
+    $scope.role = [
+        { "id": 1, "name": "Manager" },
+        { "id": 2, "name": "Stylist" },
+        { "id": 3, "name": "Cashier" }
+    ];
+    $scope.selected_roles = [];
+    $scope.selected_roles_settings = {
+        template: '<b>{{option.name}}</b>',
+        searchField: 'name',
+        enableSearch: true,
+        //selectionLimit: 4,
+    };
+    $scope.selected_roles_customTexts = {buttonDefaultText: 'Select Branches'};
+    console.log('hi', $scope.selected_roles);
+    
+    $scope.submitEmployeeForm = function() {
+        documentBody.append(spinnerDiv);
+        $scope.isLoading = true;
+        var selected_roles = JSON.parse(angular.toJson($scope.selected_roles));
+        $scope.roles = [];
+        $scope.selected_roles = selected_roles.map(function(item){
+            $scope.roles.push(item.id)
+        });
+        var data = {employee_name:$scope.employee_name, employee_branch:$scope.employee_branch, employee_address:$scope.employee_address, employee_pincode:$scope.employee_pincode, email_id:$scope.email_id, phone:$scope.phone, role: JSON.stringify($scope.roles) }
+        //console.log(data);
+        $http.post(base_url+'add_branch', data)
+        .success(function (response) {
+            $scope.isLoading = false;
+            if(response.status = true){
+                angular.element(document).find('#chIns_overlay').remove();    
+                swal({
+                    title: "Here's a message!",
+                    type: "success",
+                    text: response.data,
+                    confirmButtonText : "Close this window"
+                },function(){
+                    $scope.$apply(function() {
+                        $location.path('/show_branches');
+                    });
+                })
+            }else{
+                swal({
+                    title: "Here's a message!",
+                    type: "warning",
+                    text: response.data.message,
+                    confirmButtonText : "Close this window"
+                });
+            }
+        });
+    }
+    setTimeout(function() {
+        angular.element(document).find('#chIns_overlay').remove();    
+      }, 1000);
+}]);
+/* Employee end*/

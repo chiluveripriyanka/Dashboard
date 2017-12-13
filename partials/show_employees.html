@@ -1,0 +1,148 @@
+<div class="breadcome-area mg-b-30 mg-t-30">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcome-list map-mg-t-40-gl shadow-reset">
+                        <div class="breadcome-heading">
+                            <h2>Employees Table</h2>
+                        </div>
+                        <ul class="breadcome-menu">
+                            <li><a href="#">Home</a> <span class="bread-slash">/</span>
+                            </li>
+                            <li><span class="bread-blod">Employees Data</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<div class="data-table-area mg-b-40">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="sparkline8-list button_margin">
+                        <a href="#/add_employee"><button type="button" class="btn btn-custon-four btn-primary pull-right mg-t-50 mg-b-20">Add Employees</button></a>
+                        <ul class="nav nav-tabs custom-menu-wrap custon-tab-menu-style1">
+                            
+                        </ul>
+                        <div class="sparkline8-graph">
+                            <div class="static-table-list">
+                                <table class="table table-striped" datatable="ng" dt-options="vm.dtOptions">
+                                    <thead>
+                                      <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Phone Number</th>
+                                        <th>Branch</th>
+                                        <th>Address</th>
+                                        <th>Pin Code</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                      <tr ng-repeat="employee in employeesData">
+                                        <td>{{ employee.employee_name }}</td>
+                                        <td>{{ employee.email_id }}</td>
+                                        <td>{{ employee.phone }}</td>
+                                        <td>{{ employee.employee_branch }}</td>
+                                        <td>{{ employee.employee_address }}</td>
+                                        <td>{{ employee.employee_pincode }}</td>
+                                        <td class="v-middle">
+                                            <div class="btn-group">
+                                                <button type="button" class="btn btn-default btn" ng-click="editEmployee(employee.employee_id)"><i class="glyphicon glyphicon-pencil"></i></button> 
+                                                <button type="button" class="btn btn-default btn" ng-click="f2(employee.employee_id,$index)"><i class="glyphicon glyphicon-trash"></i></button> 
+                                            </div>
+                                        </td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- <div modal="showModal" close="cancel()">
+        <div class="modal-header">
+            <h4>Edit Beauty Tip</h4>
+        </div>
+        <div class="modal-body">
+            <div  ng-controller="EditTipController">
+                <div class="all-form-element-inner">
+                    <div>
+                        <form name="editBeautyTipForm" id="editBeautyTipForm"  novalidate enctype="multipart/form-data">
+                            <input type="hidden" name="tip_id" ng-model="tipsByIdData.tip_id">
+                            <div class="form-group-inner">
+                                <div class="row" ng-class="{ 'has-error' : editBeautyTipForm.tip_title.$invalid && !editBeautyTipForm.tip_title.$pristine }">
+                                    <div class="col-lg-3">
+                                        <label class="login2 pull-right pull-right-pro">Tip Title</label>
+                                    </div>
+                                    <div class="col-lg-9">
+                                        <input type="text" class="form-control" name="tip_title" ng-model="tipsByIdData.tip_title" required>
+                                        <p ng-show="editBeautyTipForm.tip_title.$invalid && !editBeautyTipForm.tip_title.$pristine" class="help-block">Enter a Tip Name.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group-inner">
+                                <div class="row"  ng-class="{ 'has-error' : editBeautyTipForm.tip_description.$invalid && !editBeautyTipForm.tip_description.$pristine }">
+                                    <div class="col-lg-3">
+                                        <label class="login2 pull-right pull-right-pro">Tip Description</label>
+                                    </div>
+                                    <div class="col-lg-9">
+                                        <textarea class="form-control" name="tip_description" ng-model="tipsByIdData.tip_description" required cols="5" rows="5" />
+                                        <p ng-show="editBeautyTipForm.tip_description.$invalid && !editBeautyTipForm.tip_description.$pristine" class="help-block">Enter a tip description.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group-inner">
+                                <div class="row mg-b-10" >
+                                    <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+                                        <label class="login2 pull-right pull-right-pro">Tip Image</label>
+                                    </div>
+                                    <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+                                        
+                                        <div class="file-upload-inner file-upload-inner-right ts-forms">
+                                            <div class="input append-small-btn">
+                                                <div class="file-button">
+                                                    Browse
+                                                    <input type="file" onchange="document.getElementById('append-small-btn').value = this.value;" ngf-select ng-model="tipsByIdData.tip_img" name="tip_img"    
+                                                         accept="image/*" ngf-max-size="200000000MB" required
+                                                         ngf-model-invalid="errorFile">
+                                                </div>
+                                                <input type="text" id="append-small-btn" placeholder="no file selected" ng-model="tipsByIdData.tip_img">
+                                                <div class="text-left mg-b-30" ng-show="editBeautyTipForm.file.$error.required">Upload image is required</i><br>
+                                                  <i ng-show="editBeautyTipForm.file.$error.maxSize">File too large 
+                                                      {{errorFile.size / 1000000|number:1}}MB: max 2M</i>
+                                                  <img ng-show="editBeautyTipForm.file.$valid" ngf-thumbnail="picFile" class="thumb"> <button ng-click="picFile = null" ng-show="picFile">Remove</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group-inner">
+                                <div class="login-btn-inner">
+                                    <div class="row">
+                                        <div class="col-lg-3"></div>
+                                        <div class="col-lg-9">
+                                            <div class="login-horizental cancel-wp pull-left">
+                                                <button class="btn btn-white" type="submit" ng-click="cancel()">Cancel</button>
+                                                <button class="btn btn-sm btn-primary login-submit-cs" ng-click="updateTip()">Submit</button>
+                                                  <span class="progress" ng-show="tip_img.progress >= 0">
+                                                    <div style="width:{{tip_img.progress}}%" 
+                                                        ng-bind="tip_img.progress + '%'"></div>
+                                                  </span>
+                                                  <span ng-show="tip_img.result">Upload Successful</span>
+                                                  <span class="err" ng-show="errorMsg">{{errorMsg}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> -->
