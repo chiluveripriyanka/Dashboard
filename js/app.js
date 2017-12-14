@@ -12,8 +12,8 @@ app.run(['$rootScope', '$route', function ($rootScope, $route) {
     });
     console.log(window.location.host,':change in root');
     if(window.location.host=='localhost'){
-        //window.base_url='http://localhost:8000/';
-        window.base_url='http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/';
+        window.base_url='http://localhost:8000/';
+        // window.base_url='http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/';
     }
     else{
         window.base_url='http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/';
@@ -2004,7 +2004,7 @@ app.controller('AddEmployeeController', ['$scope', 'Upload', '$route', '$timeout
         });
         var data = {employee_name:$scope.employee_name, employee_branch:$scope.employee_branch, employee_address:$scope.employee_address, employee_pincode:$scope.employee_pincode, email_id:$scope.email_id, phone:$scope.phone, role: JSON.stringify($scope.roles) }
         //console.log(data);
-        $http.post(base_url+'add_branch', data)
+        $http.post(base_url+'add_employee', data)
         .success(function (response) {
             $scope.isLoading = false;
             if(response.status = true){
@@ -2016,7 +2016,7 @@ app.controller('AddEmployeeController', ['$scope', 'Upload', '$route', '$timeout
                     confirmButtonText : "Close this window"
                 },function(){
                     $scope.$apply(function() {
-                        $location.path('/show_branches');
+                        $location.path('/show_employees');
                     });
                 })
             }else{
