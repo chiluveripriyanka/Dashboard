@@ -229,10 +229,8 @@ app.controller('usersController', function($scope,$http, $route, DTOptionsBuilde
             }
         );
     }
-    $scope.loading = true; // Show loading image
     
     $http.get(base_url+'get_users_list').success(function(data) {
-        $scope.loading = false; // hide loading image on ajax success
         $scope.userData = data.data;
         $scope.vm = {};
         $scope.vm.dtOptions = DTOptionsBuilder.newOptions()
@@ -303,7 +301,6 @@ app.controller('EditUserController', ['$scope', 'Upload', '$http', '$route', '$t
 app.controller('show_services', function($scope,$http, $route, DTOptionsBuilder, DTColumnBuilder) {
     documentBody.append(spinnerDiv);
     $scope.hideHeader = false;
-    $scope.loading = true;
     $scope.f2=function(n,index){
         swal({
                 title: "Are you sure?",
@@ -349,7 +346,6 @@ app.controller('show_services', function($scope,$http, $route, DTOptionsBuilder,
         );
      }
     $http.get(base_url+'get_services').success(function(data) {
-        $scope.loading = false;
         $scope.servicesData = data.data;
         $scope.vm = {};
         $scope.vm.dtOptions = DTOptionsBuilder.newOptions()
@@ -384,17 +380,14 @@ app.controller('show_services', function($scope,$http, $route, DTOptionsBuilder,
 });
 app.controller('AddServicesController', ['$scope', 'Upload', '$timeout', '$location','$http', function ($scope, Upload, $timeout, $location, $http) {
     documentBody.append(spinnerDiv);
-    $scope.isLoading = false;
     $scope.uploadServicePic = function(file) {
         documentBody.append(spinnerDiv);
-        $scope.isLoading = true;
         //console.log($scope.service_name + $scope.service_duration + $scope.service_description + $scope.service_price + $scope.sub_cat_id);
         file.upload = Upload.upload({
           url: base_url+'add_services',
            data: {service_name: $scope.service_name, sub_cat_id: $scope.sub_cat_id, service_img: file, service_description: $scope.service_description, service_price: $scope.service_price,service_duration:$scope.service_duration},
         });
         file.upload.then(function (response) {
-            $scope.isLoading = false;
             $timeout(function () {
                 file.result = response.data;
             });
@@ -570,15 +563,14 @@ app.controller('show_categories', function($scope,$http, $route, DTOptionsBuilde
     };
 });
 app.controller('AddCategoryController', ['$scope', 'Upload', '$timeout', '$location', function ($scope, Upload, $timeout, $location) {
-    $scope.isLoading = false;
+    documentBody.append(spinnerDiv);
     $scope.uploadPic = function(file) {
-        $scope.isLoading = true;
+        documentBody.append(spinnerDiv);
         file.upload = Upload.upload({
           url: base_url+'add_category',
           data: {category_name: $scope.category_name, cat_img: file},
         });
         file.upload.then(function (response) {
-            $scope.isLoading = false;
             $timeout(function () {
                 file.result = response.data;
             });
@@ -601,6 +593,7 @@ app.controller('AddCategoryController', ['$scope', 'Upload', '$timeout', '$locat
                     confirmButtonText : "Close this window"
                 });
             }
+            angular.element(document).find('#chIns_overlay').remove();
         });
     }
     setTimeout(function() {
@@ -670,7 +663,6 @@ app.controller('EditCategoryController', ['$scope', 'Upload', '$http', '$route',
 
 /* Sub Categories start */
 app.controller('show_sub_categories', function($scope,$http,$route, DTOptionsBuilder, DTColumnBuilder) {
-    $scope.hideHeader = false;
     documentBody.append(spinnerDiv);
     $scope.f2=function(n,index){
         swal({
@@ -747,15 +739,14 @@ app.controller('show_sub_categories', function($scope,$http,$route, DTOptionsBui
     };
 });
 app.controller('AddSubCategoryController', ['$scope', 'Upload', '$timeout', '$location','$http', function ($scope, Upload, $timeout, $location, $http) {
-    $scope.isLoading = false;
+    documentBody.append(spinnerDiv);
     $scope.uploadPic = function(file) {
-        $scope.isLoading = true;
+        documentBody.append(spinnerDiv);
         file.upload = Upload.upload({
           url: base_url+'add_sub_category',
           data: {sub_category_name: $scope.sub_category_name, cat_id: $scope.cat_id, sub_cat_img: file},
         });
         file.upload.then(function (response) {
-            $scope.isLoading = false;
             $timeout(function () {
                 file.result = response.data;
             });
@@ -778,6 +769,7 @@ app.controller('AddSubCategoryController', ['$scope', 'Upload', '$timeout', '$lo
                     confirmButtonText : "Close this window"
                 });
             }
+            angular.element(document).find('#chIns_overlay').remove();
         }
         // , function (response) {
         //   if (response.status > 0)
@@ -932,17 +924,14 @@ app.controller('show_beauty_tips', function($scope,$http, $route, DTOptionsBuild
     };
 });
 app.controller('AddBeautyTipController', ['$scope', 'Upload', '$timeout', '$location', function ($scope, Upload, $timeout, $location) {
-    $scope.isLoading = false;
+    documentBody.append(spinnerDiv);
     $scope.uploadTip = function(file) {
         documentBody.append(spinnerDiv);
-        
-        $scope.isLoading = true;
         file.upload = Upload.upload({
           url: base_url+'add_beauty_tips',
           data: {tip_title: $scope.tip_title, tip_description: $scope.tip_description, tip_img: file, tip_category: $scope.tip_category, tip_id: $scope.tip_id, tip_video: $scope.tip_video},
         });
         file.upload.then(function (response) {
-            $scope.isLoading = false;
             $timeout(function () {
                 file.result = response.data;
             });
@@ -967,6 +956,7 @@ app.controller('AddBeautyTipController', ['$scope', 'Upload', '$timeout', '$loca
                     confirmButtonText : "Close this window"
                 });
             }
+            angular.element(document).find('#chIns_overlay').remove();
         });
     }
     setTimeout(function() {
@@ -1136,7 +1126,7 @@ app.controller('show_packages', function($scope,$http, $route, DTOptionsBuilder,
     };
 });
 app.controller('AddPackagesController', function($scope, $http, $location) {  
-    $scope.isLoading = false;
+    documentBody.append(spinnerDiv);
     $http.get(base_url+'get_services')
       .success(function(data){
         var data_final = data.data;
@@ -1156,7 +1146,7 @@ app.controller('AddPackagesController', function($scope, $http, $location) {
     };
     $scope.selected_services_customTexts = {buttonDefaultText: 'Select Services'};
     $scope.submitPackageForm = function() {
-        $scope.isLoading = true;
+        documentBody.append(spinnerDiv);
         if ($scope.addPackageForm.$valid) {
             //var services = $scope.selected_services;
             // var package_services = [];
@@ -1195,6 +1185,7 @@ app.controller('AddPackagesController', function($scope, $http, $location) {
                         confirmButtonText : "Close this window"
                     });
                 }
+                angular.element(document).find('#chIns_overlay').remove();
             })
         }
     };
@@ -1219,7 +1210,6 @@ app.controller('EditPackageController', ['$scope', '$timeout', '$http', '$route'
         console.log(data);
         $http.post(base_url+'add_package', data)
         .success(function (response) {
-            $scope.isLoading = false;
             if(response.status = true){
                 swal({
                     title: "Here's a message!",
@@ -1279,15 +1269,14 @@ app.controller('show_products', function($scope,$http,DTOptionsBuilder, DTColumn
 });
 app.controller('AddProductsController', ['$scope', 'Upload', '$timeout','$http', '$location', function ($scope, Upload, $timeout,$http, $location) {
     // $scope.addProductForm={"product_description":"","product_name":"","product_price":"","product_offer_price":""};
-    $scope.isLoading = false;
+    documentBody.append(spinnerDiv);
     $scope.submitProductForm = function(file) {
-        $scope.isLoading = true;
+        documentBody.append(spinnerDiv);
         file.upload = Upload.upload({
           url: base_url+'add_product',
           data: {product_name: $scope.product_name, product_price: $scope.product_price, product_offer_price: $scope.product_offer_price, product_description: $scope.product_description, product_img: $scope.product_img,}
         });
         file.upload.then(function (response) {
-            $scope.isLoading = false;
             $timeout(function () {
                 file.result = response.data;
             });
@@ -1310,6 +1299,7 @@ app.controller('AddProductsController', ['$scope', 'Upload', '$timeout','$http',
                     confirmButtonText : "Close this window"
                 });
             }
+            angular.element(document).find('#chIns_overlay').remove();
         });
     }
     setTimeout(function() {
@@ -1414,16 +1404,14 @@ app.controller('show_promotions', function($scope,$http,DTOptionsBuilder, DTColu
     
 });
 app.controller('AddPromotionsController', ['$scope', 'Upload', '$timeout', '$location', function ($scope, Upload, $timeout, $location) {
-    $scope.isLoading = false;
+    documentBody.append(spinnerDiv);
     $scope.addPromotion = function(file) {
         documentBody.append(spinnerDiv);
-        $scope.isLoading = true;
         file.upload = Upload.upload({
           url: base_url+'add_promotions',
           data: {promotion_name: $scope.promotion_name, promotion_img: file, promotion_description :$scope.promotion_description, promotion_type: $scope.promotion_type, from_date: $scope.from_date, end_date: $scope.end_date,promotion_for:$scope.promotion_for },
         });
         file.upload.then(function (response) {
-            $scope.isLoading = false;
             $timeout(function () {
                 file.result = response.data;
             });
@@ -1450,6 +1438,7 @@ app.controller('AddPromotionsController', ['$scope', 'Upload', '$timeout', '$loc
                     confirmButtonText : "Close this window"
                 });
             }
+            angular.element(document).find('#chIns_overlay').remove();
         });
     }
     setTimeout(function() {
@@ -1561,14 +1550,12 @@ app.controller('show_branches', function($scope,$http,DTOptionsBuilder, DTColumn
       }, 1000);
 });
 app.controller('AddBranchController', ['$scope', 'Upload', '$route', '$timeout', '$http', '$location', function ($scope, Upload, $timeout, $route, $http, $location) {
-    $scope.isLoading = false;
+    documentBody.append(spinnerDiv);
     $scope.submitBranchForm = function() {
         documentBody.append(spinnerDiv);
-        $scope.isLoading = true;
         var data = {branch_name:$scope.branch_name, branch_address:$scope.branch_address, branch_area:$scope.branch_area, branch_location:$scope.branch_location, branch_contact_number:$scope.branch_contact_number, branch_parent_id:$scope.branch_parent_id }
         $http.post(base_url+'add_branch', data)
         .success(function (response) {
-            $scope.isLoading = false;
             if(response.status = true){
                 angular.element(document).find('#chIns_overlay').remove();    
                 swal({
@@ -1589,19 +1576,18 @@ app.controller('AddBranchController', ['$scope', 'Upload', '$route', '$timeout',
                     confirmButtonText : "Close this window"
                 });
             }
+            angular.element(document).find('#chIns_overlay').remove();
         });
     }
     setTimeout(function() {
         angular.element(document).find('#chIns_overlay').remove();    
-      }, 1000);
+    }, 1000);
 }]);
 app.controller('EditBranchController', ['$scope', 'Upload', '$http', '$route', '$timeout', function ($scope, Upload, $http, $route, $timeout) {
     $scope.updateBranchForm = function() {
         var data = {branch_id:$scope.branchesByIdData.branch_id, branch_address: $scope.branchesByIdData.branch_address, branch_name:$scope.branchesByIdData.branch_name, branch_location:$scope.branchesByIdData.branch_location,branch_area:$scope.branchesByIdData.branch_area, branch_contact_number:$scope.branchesByIdData.branch_contact_number, branch_parent_id:$scope.branchesByIdData.branch_parent_id}
-        console.log(data);
         $http.post(base_url+'add_branch', data)
         .success(function (response) {
-            $scope.isLoading = false;
             if(response.status = true){
                 swal({
                     title: "Here's a message!",
@@ -1747,8 +1733,7 @@ app.controller('show_memberships', function($scope,$http,$route,DTOptionsBuilder
     }
 });
 app.controller('AddMembershipController', ['$scope', 'Upload', '$http', '$route', '$timeout','$location', function ($scope, Upload, $http, $route, $timeout,$location) {
-    $scope.isLoading = false;
-    angular.element(document).find('#chIns_overlay').remove();
+    documentBody.append(spinnerDiv);
     $http.get(base_url+'get_services')
    .success(function(data){
         var data_final = data.data;
@@ -1787,7 +1772,7 @@ app.controller('AddMembershipController', ['$scope', 'Upload', '$http', '$route'
     };
     $scope.branch_ids_customTexts = {buttonDefaultText: 'Select Branches'};
     $scope.addMembership = function(file) {
-        $scope.isLoading = true;
+        documentBody.append(spinnerDiv);
         // var services = $scope.membership_services;
         var membership_services = JSON.parse(angular.toJson($scope.membership_services));
         // membership_services.push($scope.membership_services);
@@ -1839,6 +1824,9 @@ app.controller('AddMembershipController', ['$scope', 'Upload', '$http', '$route'
                     angular.element(document).find('#chIns_overlay').remove();
                 });
     }
+    setTimeout(function() {
+        angular.element(document).find('#chIns_overlay').remove();    
+    }, 1000);
 }]);
 app.controller('EditMembershipController', ['$scope', 'Upload', '$timeout', '$http', '$route', function ($scope, Upload, $timeout, $http, $route) {
     $scope.updateMembershipForm = function() {
@@ -2022,8 +2010,8 @@ app.controller('show_employees', function($scope,$http,$route,DTOptionsBuilder, 
 });
 
 app.controller('AddEmployeeController', ['$scope', 'Upload', '$route', '$timeout', '$http', '$location', function ($scope, Upload, $timeout, $route, $http, $location) {
-    $scope.isLoading = false;
-    $scope.role = [
+    documentBody.append(spinnerDiv);$
+    scope.role = [
         { "id": 1, "name": "Manager" },
         { "id": 2, "name": "Stylist" },
         { "id": 3, "name": "Cashier" }
@@ -2038,7 +2026,6 @@ app.controller('AddEmployeeController', ['$scope', 'Upload', '$route', '$timeout
     $scope.selected_roles_customTexts = {buttonDefaultText: 'Select Roles'};
     $scope.submitEmployeeForm = function() {
         documentBody.append(spinnerDiv);
-        $scope.isLoading = true;
         var selected_roles = JSON.parse(angular.toJson($scope.selected_roles));
         $scope.roles = [];
         $scope.selected_roles = selected_roles.map(function(item){
@@ -2047,7 +2034,6 @@ app.controller('AddEmployeeController', ['$scope', 'Upload', '$route', '$timeout
         var data = {employee_name:$scope.employee_name, employee_branch:$scope.employee_branch, employee_address:$scope.employee_address, employee_pincode:$scope.employee_pincode, email_id:$scope.email_id, phone:$scope.phone, role: JSON.stringify($scope.roles) }
         $http.post(base_url+'add_employee', data)
         .success(function (response) {
-            $scope.isLoading = false;
             if(response.status = true){
                 angular.element(document).find('#chIns_overlay').remove();    
                 swal({
@@ -2068,6 +2054,7 @@ app.controller('AddEmployeeController', ['$scope', 'Upload', '$route', '$timeout
                     confirmButtonText : "Close this window"
                 });
             }
+            angular.element(document).find('#chIns_overlay').remove();
         });
     }
     setTimeout(function() {

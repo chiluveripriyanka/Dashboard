@@ -168,9 +168,6 @@
                                                                                         <div class="login-horizental cancel-wp pull-left">
                                                                                             <button class="btn btn-white" type="submit">Cancel</button>
                                                                                             <button class="btn btn-sm btn-primary login-submit-cs" ng-disabled="!addPromotionForm.$valid" ng-click="addPromotion(promotion_img)">Submit</button>
-                                                                                            <span ng-show="isLoading" class="ml20">
-                                                                                                <img src="assets/img/loading.gif" class="loading_image"/>
-                                                                                            </span>
                                                                                               <span class="progress" ng-show="promotion_img.progress >= 0">
                                                                                                 <div style="width:{{promotion_img.progress}}%" 
                                                                                                     ng-bind="promotion_img.progress + '%'"></div>

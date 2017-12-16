@@ -104,9 +104,6 @@
                                                                                     <div class="login-horizental cancel-wp pull-left">
                                                                                         <button class="btn btn-white" type="submit">Cancel</button>
                                                                                         <button class="btn btn-sm btn-primary login-submit-cs" ng-disabled="!addSubCategoryForm.$valid" ng-click="uploadPic(cat_img)">Submit</button>
-                                                                                        <span ng-show="isLoading" class="ml20">
-                                                                                                <img src="assets/img/loading.gif" class="loading_image"/>
-                                                                                            </span>
                                                                                           <span class="progress" ng-show="cat_img.progress >= 0">
                                                                                             <div style="width:{{cat_img.progress}}%" 
                                                                                                 ng-bind="cat_img.progress + '%'"></div>
