@@ -12,8 +12,8 @@ app.run(['$rootScope', '$route', function ($rootScope, $route) {
     });
     console.log(window.location.host,':change in root');
     if(window.location.host=='localhost'){
-        window.base_url='http://localhost:8000/';
-        // window.base_url='http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/';
+        //window.base_url='http://localhost:8000/';
+         window.base_url='http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/';
     }
     else{
         window.base_url='http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/';
@@ -1975,6 +1975,50 @@ app.controller('show_employees', function($scope,$http,$route,DTOptionsBuilder, 
         );
         
     }
+    $scope.isLoading = false;
+    $scope.role = [
+        { "id": 1, "name": "Manager" },
+        { "id": 2, "name": "Stylist" },
+        { "id": 3, "name": "Cashier" }
+    ];
+    $scope.selected_roles = [];
+    $scope.selected_roles_settings = {
+        template: '<b>{{option.name}}</b>',
+        searchField: 'name',
+        enableSearch: true,
+        //selectionLimit: 4,
+    };
+    $scope.selected_roles_customTexts = {buttonDefaultText: 'Select Roles'};
+    $scope.editEmployee = function(id) {
+        var selected_roles = JSON.parse(angular.toJson($scope.selected_roles));
+        $scope.roles = [];
+        $scope.selected_roles = selected_roles.map(function(item){
+            $scope.roles.push(item.id)
+        });
+        $scope.showModal = true;
+        for (i in $scope.employeesData) {
+            if ($scope.employeesData[i].employee_id == id) {
+                $scope.employeesByIdData = {
+                    employee_id:$scope.employeesData[i].employee_id,
+                    employee_name:$scope.employeesData[i].employee_name, 
+                    employee_branch:$scope.employeesData[i].employee_branch, 
+                    employee_address:$scope.employeesData[i].employee_address, 
+                    employee_pincode:$scope.employeesData[i].employee_pincode, 
+                    email_id:$scope.employeesData[i].email_id, 
+                    phone:$scope.employeesData[i].phone, 
+                    role: JSON.stringify($scope.roles)
+                };
+                console.log($scope.employeesByIdData);
+            }
+        }
+    };
+    $scope.ok = function() {
+      $scope.showModal = false;
+    };
+
+    $scope.cancel = function() {
+      $scope.showModal = false;
+    };
 });
 
 app.controller('AddEmployeeController', ['$scope', 'Upload', '$route', '$timeout', '$http', '$location', function ($scope, Upload, $timeout, $route, $http, $location) {
@@ -1991,9 +2035,7 @@ app.controller('AddEmployeeController', ['$scope', 'Upload', '$route', '$timeout
         enableSearch: true,
         //selectionLimit: 4,
     };
-    $scope.selected_roles_customTexts = {buttonDefaultText: 'Select Branches'};
-    console.log('hi', $scope.selected_roles);
-    
+    $scope.selected_roles_customTexts = {buttonDefaultText: 'Select Roles'};
     $scope.submitEmployeeForm = function() {
         documentBody.append(spinnerDiv);
         $scope.isLoading = true;
@@ -2003,7 +2045,6 @@ app.controller('AddEmployeeController', ['$scope', 'Upload', '$route', '$timeout
             $scope.roles.push(item.id)
         });
         var data = {employee_name:$scope.employee_name, employee_branch:$scope.employee_branch, employee_address:$scope.employee_address, employee_pincode:$scope.employee_pincode, email_id:$scope.email_id, phone:$scope.phone, role: JSON.stringify($scope.roles) }
-        //console.log(data);
         $http.post(base_url+'add_employee', data)
         .success(function (response) {
             $scope.isLoading = false;
@@ -2032,5 +2073,37 @@ app.controller('AddEmployeeController', ['$scope', 'Upload', '$route', '$timeout
     setTimeout(function() {
         angular.element(document).find('#chIns_overlay').remove();    
       }, 1000);
+}]);
+
+app.controller('EditEmployeeController', ['$scope', 'Upload', '$http', '$route', '$timeout', function ($scope, Upload, $http, $route, $timeout) {
+    $scope.updateEmployeeForm = function() {
+        var selected_roles = JSON.parse(angular.toJson($scope.selected_roles));
+        $scope.roles = [];
+        $scope.selected_roles = selected_roles.map(function(item){
+            $scope.roles.push(item.id)
+        });
+        var data = {employee_id:$scope.employeesByIdData.employee_id, employee_name: $scope.employeesByIdData.employee_name, employee_branch:$scope.employeesByIdData.employee_branch, employee_address:$scope.employeesByIdData.employee_address,employee_pincode:$scope.employeesByIdData.employee_pincode, email_id:$scope.employeesByIdData.email_id, phone:$scope.employeesByIdData.phone, role: JSON.stringify($scope.roles)}
+        $http.post(base_url+'add_employee', data)
+        .success(function (response) {
+            $scope.isLoading = false;
+            if(response.status = true){
+                swal({
+                    title: "Here's a message!",
+                    type: "success",
+                    text: response.data,
+                    confirmButtonText : "Close this window"
+                },function(){
+                    $route.reload();
+                })
+            }else{
+                swal({
+                    title: "Here's a message!",
+                    type: "warning",
+                    text: response.data.message,
+                    confirmButtonText : "Close this window"
+                });
+            }
+        })
+    }
 }]);
 /* Employee end*/

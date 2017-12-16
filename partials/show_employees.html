@@ -64,60 +64,94 @@
             </div>
         </div>
     </div>
-    <!-- <div modal="showModal" close="cancel()">
+    <div modal="showModal" close="cancel()">
         <div class="modal-header">
-            <h4>Edit Beauty Tip</h4>
+            <h4>Edit EMployee</h4>
         </div>
         <div class="modal-body">
-            <div  ng-controller="EditTipController">
+            <div  ng-controller="EditEmployeeController">
                 <div class="all-form-element-inner">
                     <div>
-                        <form name="editBeautyTipForm" id="editBeautyTipForm"  novalidate enctype="multipart/form-data">
-                            <input type="hidden" name="tip_id" ng-model="tipsByIdData.tip_id">
+                        <form name="editEmployeeForm" id="editEmployeeForm" novalidate enctype="multipart/form-data">
+                            <input type="hidden" ng-model="employeesByIdData.employee_id" name="employee_id">
                             <div class="form-group-inner">
-                                <div class="row" ng-class="{ 'has-error' : editBeautyTipForm.tip_title.$invalid && !editBeautyTipForm.tip_title.$pristine }">
+                                <div class="row" ng-class="{ 'has-error' : editEmployeeForm.employee_name.$invalid && !editEmployeeForm.employee_name.$pristine }">
                                     <div class="col-lg-3">
-                                        <label class="login2 pull-right pull-right-pro">Tip Title</label>
+                                        <label class="login2 pull-right pull-right-pro">Name</label>
                                     </div>
                                     <div class="col-lg-9">
-                                        <input type="text" class="form-control" name="tip_title" ng-model="tipsByIdData.tip_title" required>
-                                        <p ng-show="editBeautyTipForm.tip_title.$invalid && !editBeautyTipForm.tip_title.$pristine" class="help-block">Enter a Tip Name.</p>
+                                        <input type="text" class="form-control" name="employee_name" ng-model="employeesByIdData.employee_name" required>
+                                        <p ng-show="editEmployeeForm.employee_name.$invalid && !editEmployeeForm.employee_name.$pristine" class="help-block">Enter a Employee name.</p>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group-inner">
-                                <div class="row"  ng-class="{ 'has-error' : editBeautyTipForm.tip_description.$invalid && !editBeautyTipForm.tip_description.$pristine }">
-                                    <div class="col-lg-3">
-                                        <label class="login2 pull-right pull-right-pro">Tip Description</label>
-                                    </div>
-                                    <div class="col-lg-9">
-                                        <textarea class="form-control" name="tip_description" ng-model="tipsByIdData.tip_description" required cols="5" rows="5" />
-                                        <p ng-show="editBeautyTipForm.tip_description.$invalid && !editBeautyTipForm.tip_description.$pristine" class="help-block">Enter a tip description.</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group-inner">
-                                <div class="row mg-b-10" >
-                                    <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-                                        <label class="login2 pull-right pull-right-pro">Tip Image</label>
-                                    </div>
-                                    <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
-                                        
-                                        <div class="file-upload-inner file-upload-inner-right ts-forms">
-                                            <div class="input append-small-btn">
-                                                <div class="file-button">
-                                                    Browse
-                                                    <input type="file" onchange="document.getElementById('append-small-btn').value = this.value;" ngf-select ng-model="tipsByIdData.tip_img" name="tip_img"    
-                                                         accept="image/*" ngf-max-size="200000000MB" required
-                                                         ngf-model-invalid="errorFile">
-                                                </div>
-                                                <input type="text" id="append-small-btn" placeholder="no file selected" ng-model="tipsByIdData.tip_img">
-                                                <div class="text-left mg-b-30" ng-show="editBeautyTipForm.file.$error.required">Upload image is required</i><br>
-                                                  <i ng-show="editBeautyTipForm.file.$error.maxSize">File too large 
-                                                      {{errorFile.size / 1000000|number:1}}MB: max 2M</i>
-                                                  <img ng-show="editBeautyTipForm.file.$valid" ngf-thumbnail="picFile" class="thumb"> <button ng-click="picFile = null" ng-show="picFile">Remove</button>
+                                <div class="chosen-select-single">
+                                    <div class="row">
+                                        <div class="col-lg-3">
+                                            <label class="login2 pull-right pull-right-pro"><strong>Role</strong></label>
+                                        </div>
+                                        <div class="col-lg-4 text-left">
+                                            <div ng-dropdown-multiselect="" options="role" selected-model="selected_roles"
+                                                 extra-settings="selected_roles_settings"
+                                                 translation-texts="selected_roles_customTexts" required>
                                             </div>
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group-inner">
+                                <div class="row" ng-class="{ 'has-error' : editEmployeeForm.email_id.$invalid && !editEmployeeForm.email_id.$pristine }">
+                                    <div class="col-lg-3">
+                                        <label class="login2 pull-right pull-right-pro">Email Id </label>
+                                    </div>
+                                    <div class="col-lg-9">
+                                        <input type="email" class="form-control" name="email_id" ng-model="employeesByIdData.email_id" required>
+                                        <p ng-show="editEmployeeForm.email_id.$invalid && !editEmployeeForm.email_id.$pristine" class="help-block">Enter a employee email id.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group-inner">
+                                <div class="row" ng-class="{ 'has-error' : editEmployeeForm.phone.$invalid && !editEmployeeForm.phone.$pristine }">
+                                    <div class="col-lg-3">
+                                        <label class="login2 pull-right pull-right-pro">Contact Number</label>
+                                    </div>
+                                    <div class="col-lg-9">
+                                        <input type="text" class="form-control" name="phone" ng-model="employeesByIdData.phone" required>
+                                        <p ng-show="editEmployeeForm.phone.$invalid && !editEmployeeForm.phone.$pristine" class="help-block">Enter a employee contact number.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group-inner">
+                                <div class="row" ng-class="{ 'has-error' : editEmployeeForm.employee_branch.$invalid && !editEmployeeForm.employee_branch.$pristine }">
+                                    <div class="col-lg-3">
+                                        <label class="login2 pull-right pull-right-pro">Branch</label>
+                                    </div>
+                                    <div class="col-lg-9">
+                                        <input type="text" class="form-control" name="employee_branch" ng-model="employeesByIdData.employee_branch" required>
+                                        <p ng-show="editEmployeeForm.employee_branch.$invalid && !editEmployeeForm.employee_branch.$pristine" class="help-block">Enter a employee branch.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group-inner">
+                                <div class="row" ng-class="{ 'has-error' : editEmployeeForm.employee_address.$invalid && !editEmployeeForm.employee_address.$pristine }">
+                                    <div class="col-lg-3">
+                                        <label class="login2 pull-right pull-right-pro">Address</label>
+                                    </div>
+                                    <div class="col-lg-9">
+                                        <textarea class="form-control" name="employee_address" ng-model="employeesByIdData.employee_address" required cols="5" rows="5" />
+                                    <p ng-show="editEmployeeForm.employee_address.$invalid && !editEmployeeForm.employee_address.$pristine" class="help-block">Enter a employee address.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group-inner">
+                                <div class="row"ng-class="{ 'has-error' : editEmployeeForm.employee_pincode.$invalid && !editEmployeeForm.employee_pincode.$pristine }">
+                                    <div class="col-lg-3">
+                                        <label class="login2 pull-right pull-right-pro">Pincode</label>
+                                    </div>
+                                    <div class="col-lg-9">
+                                        <input type="text" class="form-control" name="employee_pincode" ng-model="employeesByIdData.employee_pincode" required>
+                                        <p ng-show="editEmployeeForm.employee_pincode.$invalid && !editEmployeeForm.employee_pincode.$pristine" class="help-block">Enter a employee pincode.</p>
                                     </div>
                                 </div>
                             </div>
@@ -128,13 +162,10 @@
                                         <div class="col-lg-9">
                                             <div class="login-horizental cancel-wp pull-left">
                                                 <button class="btn btn-white" type="submit" ng-click="cancel()">Cancel</button>
-                                                <button class="btn btn-sm btn-primary login-submit-cs" ng-click="updateTip()">Submit</button>
-                                                  <span class="progress" ng-show="tip_img.progress >= 0">
-                                                    <div style="width:{{tip_img.progress}}%" 
-                                                        ng-bind="tip_img.progress + '%'"></div>
-                                                  </span>
-                                                  <span ng-show="tip_img.result">Upload Successful</span>
-                                                  <span class="err" ng-show="errorMsg">{{errorMsg}}</span>
+                                                <button type="submit" class="btn btn-sm btn-primary login-submit-cs" ng-disabled="editEmployeeForm.$invalid" ng-click="updateEmployeeForm()">Submit</button>
+                                                <span ng-show="isLoading" class="ml20">
+                                                    <img src="assets/img/loading.gif" class="loading_image"/>
+                                                </span>
                                             </div>
                                         </div>
                                     </div>
@@ -145,4 +176,4 @@
                 </div>
             </div>
         </div>
-    </div> -->
+    </div>
