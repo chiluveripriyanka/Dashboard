@@ -1,0 +1,187 @@
+<div class="breadcome-area mg-b-30 mg-t-30">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcome-list map-mg-t-40-gl shadow-reset">
+                        <div class="breadcome-heading">
+                            <h2>Coupons Table</h2>
+                        </div>
+                        <ul class="breadcome-menu">
+                            <li><a href="#">Home</a> <span class="bread-slash">/</span>
+                            </li>
+                            <li><span class="bread-blod">Coupons Data</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<div class="data-table-area mg-b-40">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="sparkline8-list button_margin">
+                        <a href="#/add_coupons"><button type="button" class="btn btn-custon-four btn-primary pull-right mg-t-50 mg-b-20">Add Coupons</button></a>
+                        <ul class="nav nav-tabs custom-menu-wrap custon-tab-menu-style1">
+                            
+                        </ul>
+                        <div class="sparkline8-graph">
+                            <div class="static-table-list">
+                                <table class="table table-striped" datatable="ng" dt-options="vm.dtOptions">
+                                    <thead>
+                                      <tr>
+                                        <th>Coupon Name</th>
+                                        <th>Coupon Description</th>
+                                        <th>Coupon Code</th>
+                                        <th>Coupon Expiry Date</th>
+                                        <th>Coupon Image</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                      <tr ng-repeat="coupon in coupansData">
+                                        <td>{{ coupon.coupon_name }}</td>
+                                        <td>{{ coupon.coupon_description }}</td>
+                                        <td>{{ coupon.coupon_code }}</td>
+                                        <td>{{ coupon.expiry_date }}</td>
+                                        <td><img width="50" ng-src="http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/uploads/{{coupon.coupon_img}}" /></td>
+                                        <td class="v-middle">
+                                            <div class="btn-group">
+                                                <button type="button" class="btn btn-default btn" ng-click="editCoupon(coupon.coupon_id)"><i class="glyphicon glyphicon-pencil"></i></button> 
+                                                <button type="button" class="btn btn-default btn" ng-click="f2(coupon.coupon_id,$index)"><i class="glyphicon glyphicon-trash"></i></button> 
+                                            </div>
+                                        </td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div modal="showModal" close="cancel()">
+        <div class="modal-header">
+            <h4>Edit Coupon</h4>
+        </div>
+        <div class="modal-body">
+            <div ng-controller="EditCouponController">
+                <div class="all-form-element-inner">
+                    <div>
+                        <form name="editCouponForm" id="editCouponForm" novalidate enctype="multipart/form-data">
+                            <input type="hidden" name="coupon_id" ng-model="coupansByIdData.coupon_id">
+                            <div class="form-group-inner">
+                                <div class="row"ng-class="{ 'has-error' : editCouponForm.coupon_name.$invalid && !editCouponForm.coupon_name.$pristine }">
+                                    <div class="col-lg-3">
+                                        <label class="login2 pull-right pull-right-pro">Coupon Name</label>
+                                    </div>
+                                    <div class="col-lg-9">
+                                        <input type="text" class="form-control" name="coupon_name" ng-model="coupansByIdData.coupon_name" required>
+                                        <p ng-show="editCouponForm.coupon_name.$invalid && !editCouponForm.coupon_name.$pristine" class="help-block">Enter a Coupon Name.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group-inner">
+                                <div class="row mg-b-10" >
+                                    <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+                                        <label class="login2 pull-right pull-right-pro">Image</label>
+                                    </div>
+                                    <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+                                        
+                                        <div class="file-upload-inner file-upload-inner-right ts-forms">
+                                            <div class="input append-small-btn">
+                                                <div class="file-button">
+                                                    Browse
+                                                    <input type="file" onchange="document.getElementById('append-small-btn').value = this.value;" ngf-select ng-model="coupansByIdData.coupon_img" name="coupon_img"    
+                                                         accept="image/*" ngf-max-size="2MB" required
+                                                         ngf-model-invalid="errorFile">
+                                                </div>
+                                                <input type="text" ng-model="coupansByIdData.coupon_img" id="append-small-btn" placeholder="no file selected">
+                                                
+                                                <img width="50" class="mg-t-10" ng-src="http://ec2-54-88-194-105.compute-1.amazonaws.com:3000/uploads/{{coupansByIdData.coupon_img}}" />
+                                                <div class="text-left mg-b-30" ng-show="editCouponForm.file.$error.required">Upload image is required</i><br>
+                                                  <i ng-show="editCouponForm.file.$error.maxSize">File too large 
+                                                      {{errorFile.size / 1000000|number:1}}MB: max 2M</i>
+                                                  <img ng-show="editCouponForm.file.$valid" ngf-thumbnail="picFile" class="thumb"> <button ng-click="picFile = null" ng-show="picFile">Remove</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group-inner">
+                                <div class="row"ng-class="{ 'has-error' : editCouponForm.coupon_code.$invalid && !editCouponForm.coupon_code.$pristine }">
+                                    <div class="col-lg-3">
+                                        <label class="login2 pull-right pull-right-pro">Coupon Code</label>
+                                    </div>
+                                    <div class="col-lg-9">
+                                        <input type="text" class="form-control" name="coupon_code" ng-model="coupansByIdData.coupon_code" required>
+                                        <p ng-show="editCouponForm.coupon_code.$invalid && !editCouponForm.coupon_code.$pristine" class="help-block">Enter a Coupon Code.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group-inner">
+                                <div class="row" ng-class="{ 'has-error' : addSampleTestimonialForm.coupon_description.$invalid && !addSampleTestimonialForm.coupon_description.$pristine }">
+                                    <div class="col-lg-3">
+                                        <label class="login2 pull-right pull-right-pro">Coupon Description</label>
+                                    </div>
+                                    <div class="col-lg-9">
+                                        <textarea class="form-control" name="coupon_description" ng-model="coupansByIdData.coupon_description" required cols="5" rows="5" />
+                                    <p ng-show="addSampleTestimonialForm.coupon_description.$invalid && !addSampleTestimonialForm.coupon_description.$pristine" class="help-block">Enter a oupon description.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group-inner">
+                                <div class="row"ng-class="{ 'has-error' : editCouponForm.coupon_discount.$invalid && !editCouponForm.coupon_discount.$pristine }">
+                                    <div class="col-lg-3">
+                                        <label class="login2 pull-right pull-right-pro">Coupon Discount</label>
+                                    </div>
+                                    <div class="col-lg-9">
+                                        <input type="text" class="form-control" name="coupon_discount" ng-model="coupansByIdData.coupon_discount" required>
+                                        <p ng-show="editCouponForm.coupon_discount.$invalid && !editCouponForm.coupon_discount.$pristine" class="help-block">Enter a Coupon Discount.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="date-picker-inner">
+                                <div class="form-group-inner data-custon-pick" id="data_1">
+                                    <div class="row">
+                                        <div class="col-lg-3">
+                                            <label class="login2 pull-right pull-right-pro"><strong>Coupon Expiry Date</strong></label>
+                                        </div>
+                                        <div class="col-lg-9">
+                                            <div class="input-group date">
+                                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                                <input type="text" class="form-control" value="10/04/2017"  name="expiry_date" ng-model="coupansByIdData.expiry_date" required>
+                                            </div>
+                                        </div>
+                                        <p ng-show="editCouponForm.expiry_date.$invalid && !editCouponForm.expiry_date.$pristine" class="help-block">Select coupon expiry date.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group-inner">
+                                <div class="login-btn-inner">
+                                    <div class="row">
+                                        <div class="col-lg-3"></div>
+                                        <div class="col-lg-9">
+                                            <div class="login-horizental cancel-wp pull-left">
+                                                <button class="btn btn-white" ng-click="cancel()">Cancel</button>
+                                                <button class="btn btn-sm btn-primary login-submit-cs" ng-disabled="!editCouponForm.$valid"  ng-click="updateCouponForm()">Submit</button>
+                                                <span class="progress" ng-show="coupon_img.progress >= 0">
+                                                    <div style="width:{{coupon_img.progress}}%" 
+                                                        ng-bind="coupon_img.progress + '%'"></div>
+                                                </span>   
+                                                <span ng-show="coupon_img.result">Upload Successful</span>
+                                                <span class="err" ng-show="errorMsg">{{errorMsg}}</span>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

@@ -1,0 +1,172 @@
+    <!-- Breadcome start-->
+    <div class="breadcome-area mg-b-30 mg-t-30">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcome-list map-mg-t-40-gl shadow-reset">
+                        <div class="breadcome-heading">
+                            <h2>Add Coupans</h2>
+                        </div>
+                        <ul class="breadcome-menu">
+                            <li><a href="#">Home</a> <span class="bread-slash">/</span>
+                            </li>
+                            <li><span class="bread-blod">Add Coupans</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Breadcome End-->
+    <!-- tabs start-->
+    <div class="admintab-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="admintab-wrap mg-b-40 button_margin">
+                        <!-- <a href="#/add_edit_sub_categories"><button type="button" class="btn btn-custon-four btn-primary pull-right mg-t-50 mg-b-20 mg-l-20">Add/Edit Sub Categories</button></a> -->
+                        <a href="#/show_coupons"><button type="button" class="btn btn-custon-four btn-primary pull-right mg-t-50 mg-b-20">Show Coupans</button></a>
+                        <ul class="nav nav-tabs custom-menu-wrap custon-tab-menu-style1">
+                            
+                            <!-- <li><a data-toggle="tab" href="#edit_category"><span class="adminpro-icon adminpro-analytics-arrow tab-custon-ic"></span>Edit Category</a>
+                            </li> -->
+                        </ul>
+                        <div class="tab-content">
+                            <div id="add_category" class="tab-pane in active animated flipInX custon-tab-style1">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="sparkline12-list mg-t-30">
+                                            <div class="sparkline12-graph">
+                                                <div class="basic-login-form-ad">
+                                                    <div class="row">
+                                                        <div class="col-lg-8">
+                                                            <div  ng-controller="AddCouponController">
+                                                                <div class="all-form-element-inner">
+                                                                    <form name="addCouponForm" id="addCouponForm" ng-submit="submitCategoryForm()" novalidate enctype="multipart/form-data">
+                                                                        <div class="form-group-inner">
+                                                                            <div class="row"ng-class="{ 'has-error' : addCouponForm.coupon_name.$invalid && !addCouponForm.coupon_name.$pristine }">
+                                                                                <div class="col-lg-3">
+                                                                                    <label class="login2 pull-right pull-right-pro">Coupon Name</label>
+                                                                                </div>
+                                                                                <div class="col-lg-9">
+                                                                                    <input type="text" class="form-control" name="coupon_name" ng-model="coupon_name" required>
+                                                                                    <p ng-show="addCouponForm.coupon_name.$invalid && !addCouponForm.coupon_name.$pristine" class="help-block">Enter a Coupon Name.</p>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-group-inner">
+                                                                            <div class="row mg-b-10" >
+                                                                                <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+                                                                                    <label class="login2 pull-right pull-right-pro">Image</label>
+                                                                                </div>
+                                                                                <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+                                                                                    
+                                                                                    <div class="file-upload-inner file-upload-inner-right ts-forms">
+                                                                                        <div class="input append-small-btn">
+                                                                                            <div class="file-button">
+                                                                                                Browse
+                                                                                                <input type="file" onchange="document.getElementById('append-small-btn').value = this.value;" ngf-select ng-model="coupon_img" name="coupon_img"    
+                                                                                                     accept="image/*" ngf-max-size="2MB" required
+                                                                                                     ngf-model-invalid="errorFile">
+                                                                                            </div>
+                                                                                            <input type="text" id="append-small-btn" placeholder="no file selected">
+                                                                                            <div class="text-left mg-b-30" ng-show="addCouponForm.file.$error.required">Upload image is required</i><br>
+                                                                                              <i ng-show="addCouponForm.file.$error.maxSize">File too large 
+                                                                                                  {{errorFile.size / 1000000|number:1}}MB: max 2M</i>
+                                                                                              <img ng-show="addCouponForm.file.$valid" ngf-thumbnail="picFile" class="thumb"> <button ng-click="picFile = null" ng-show="picFile">Remove</button>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-group-inner">
+                                                                            <div class="row"ng-class="{ 'has-error' : addCouponForm.coupon_code.$invalid && !addCouponForm.coupon_code.$pristine }">
+                                                                                <div class="col-lg-3">
+                                                                                    <label class="login2 pull-right pull-right-pro">Coupon Code</label>
+                                                                                </div>
+                                                                                <div class="col-lg-9">
+                                                                                    <input type="text" class="form-control" name="coupon_code" ng-model="coupon_code" required>
+                                                                                    <p ng-show="addCouponForm.coupon_code.$invalid && !addCouponForm.coupon_code.$pristine" class="help-block">Enter a Coupon Code.</p>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-group-inner">
+                                                                            <div class="row" ng-class="{ 'has-error' : addSampleTestimonialForm.coupon_description.$invalid && !addSampleTestimonialForm.coupon_description.$pristine }">
+                                                                                <div class="col-lg-3">
+                                                                                    <label class="login2 pull-right pull-right-pro">Coupon Description</label>
+                                                                                </div>
+                                                                                <div class="col-lg-9">
+                                                                                    <textarea class="form-control" name="coupon_description" ng-model="coupon_description" required cols="5" rows="5" />
+                                                                                <p ng-show="addSampleTestimonialForm.coupon_description.$invalid && !addSampleTestimonialForm.coupon_description.$pristine" class="help-block">Enter a oupon description.</p>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-group-inner">
+                                                                            <div class="row"ng-class="{ 'has-error' : addCouponForm.coupon_discount.$invalid && !addCouponForm.coupon_discount.$pristine }">
+                                                                                <div class="col-lg-3">
+                                                                                    <label class="login2 pull-right pull-right-pro">Coupon Discount</label>
+                                                                                </div>
+                                                                                <div class="col-lg-9">
+                                                                                    <input type="text" class="form-control" name="coupon_discount" ng-model="coupon_discount" required>
+                                                                                    <p ng-show="addCouponForm.coupon_discount.$invalid && !addCouponForm.coupon_discount.$pristine" class="help-block">Enter a Coupon Discount.</p>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="date-picker-inner">
+                                                                            <div class="form-group-inner data-custon-pick" id="data_1">
+                                                                                <div class="row">
+                                                                                    <div class="col-lg-3">
+                                                                                        <label class="login2 pull-right pull-right-pro"><strong>Coupon Expiry Date</strong></label>
+                                                                                    </div>
+                                                                                    <div class="col-lg-9">
+                                                                                        <div class="input-group date">
+                                                                                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                                                                            <input type="text" class="form-control" value="10/04/2017"  name="expiry_date" ng-model="expiry_date" required>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <p ng-show="addCouponForm.expiry_date.$invalid && !addCouponForm.expiry_date.$pristine" class="help-block">Select coupon expiry date.</p>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-group-inner">
+                                                                            <div class="login-btn-inner">
+                                                                                <div class="row">
+                                                                                    <div class="col-lg-3"></div>
+                                                                                    <div class="col-lg-9">
+                                                                                        <div class="login-horizental cancel-wp pull-left">
+                                                                                            <button class="btn btn-white" type="submit">Cancel</button>
+                                                                                            <button class="btn btn-sm btn-primary login-submit-cs" ng-disabled="!addCouponForm.$valid" ng-click="submitCouponsForm(coupon_img)">Submit</button>
+                                                                                            <span class="progress" ng-show="coupon_img.progress >= 0">
+                                                                                                <div style="width:{{coupon_img.progress}}%" 
+                                                                                                    ng-bind="coupon_img.progress + '%'"></div>
+                                                                                            </span>   
+                                                                                            <span ng-show="coupon_img.result">Upload Successful</span>
+                                                                                            <span class="err" ng-show="errorMsg">{{errorMsg}}</span>
+
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+   <!-- datapicker JS
+        ============================================ -->
+    <script src="assets/js/datapicker/bootstrap-datepicker.js"></script>
+    <script src="assets/js/datapicker/datepicker-active.js"></script>

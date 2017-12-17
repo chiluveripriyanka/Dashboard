@@ -78,6 +78,14 @@ app.config(function ($routeProvider) {
         templateUrl : "partials/show_employees.html",
         controller: "show_employees"
     })
+    .when("/show_sample_testimonials",{
+        templateUrl : "partials/show_sample_testimonials.html",
+        controller: "show_sample_testimonials"
+    })
+    .when("/show_coupons",{
+        templateUrl : "partials/show_coupons.html",
+        controller: "show_coupons"
+    })
     .when("/add_categories",{
         templateUrl : "partials/add_categories.html",
         controller: "AddCategoryController"
@@ -117,6 +125,14 @@ app.config(function ($routeProvider) {
     .when("/add_employee",{
         templateUrl: "partials/add_employee.html",
         controller: "AddEmployeeController"
+    })
+    .when("/add_sample_testimonial", {
+        templateUrl: "partials/add_sample_testimonial.html",
+        controller: "AddSampleTestimonialController"
+    })
+    .when("/add_coupons", {
+        templateUrl: "partials/add_coupon.html",
+        controller: "AddCouponController"
     })
     .otherwise({
         redirectTo : "/"
@@ -268,6 +284,7 @@ app.controller('usersController', function($scope,$http, $route, DTOptionsBuilde
 });
 app.controller('EditUserController', ['$scope', 'Upload', '$http', '$route', '$timeout', function ($scope, Upload, $http, $route, $timeout) {
     $scope.updateUser = function() {
+        documentBody.append(spinnerDiv);
         if($scope.usersByIdData.gender == 'M'){
             var gender = 'Male';
         }else if($scope.usersByIdData.gender == 'F'){
@@ -294,6 +311,7 @@ app.controller('EditUserController', ['$scope', 'Upload', '$http', '$route', '$t
                     confirmButtonText : "Close this window"
                 });
             }
+            angular.element(document).find('#chIns_overlay').remove();
         })
     }
 }]);
@@ -427,6 +445,7 @@ app.controller('EditServiceController', ['$scope', 'Upload', '$timeout', '$http'
         angular.element(document).find('#chIns_overlay').remove();
     });
     $scope.updateServiceForm = function() {
+        documentBody.append(spinnerDiv);
         var file = $scope.servicesByIdData.service_img;
         file.upload = Upload.upload({
           url: base_url+'add_services',
@@ -454,10 +473,11 @@ app.controller('EditServiceController', ['$scope', 'Upload', '$timeout', '$http'
                         confirmButtonText : "Close this window"
                     });
                 }
+                angular.element(document).find('#chIns_overlay').remove();
             });
         }
         else{
-            console.log('fomra ata', formData);
+            var formData = new FormData();
             formData.append('service_img', $scope.servicesByIdData.service_img);
             formData.append('sub_cat_id', $scope.servicesByIdData.sub_cat_id);
             formData.append('service_name', $scope.servicesByIdData.service_name);
@@ -479,6 +499,7 @@ app.controller('EditServiceController', ['$scope', 'Upload', '$timeout', '$http'
                         $route.reload();
                     })
                 }
+                angular.element(document).find('#chIns_overlay').remove();
             })
         }
     }
@@ -601,7 +622,9 @@ app.controller('AddCategoryController', ['$scope', 'Upload', '$timeout', '$locat
       }, 1000);
 }]);
 app.controller('EditCategoryController', ['$scope', 'Upload', '$http', '$route', '$timeout', function ($scope, Upload, $http, $route, $timeout) {
+    documentBody.append(spinnerDiv);
     $scope.updateCategoryForm = function() {
+        documentBody.append(spinnerDiv);
         var file = $scope.categoriesByIdData.cat_img;
         file.upload = Upload.upload({
           url: base_url+'add_category',
@@ -629,6 +652,7 @@ app.controller('EditCategoryController', ['$scope', 'Upload', '$http', '$route',
                         confirmButtonText : "Close this window"
                     });
                 }
+                angular.element(document).find('#chIns_overlay').remove();
             });
         }
         else{
@@ -652,7 +676,9 @@ app.controller('EditCategoryController', ['$scope', 'Upload', '$http', '$route',
                         $route.reload();
                     })
                 }
+                angular.element(document).find('#chIns_overlay').remove();
             })
+            
         }
     }
     setTimeout(function() {
@@ -788,6 +814,7 @@ app.controller('AddSubCategoryController', ['$scope', 'Upload', '$timeout', '$lo
 }]);
 app.controller('EditSubCategoryController', ['$scope', 'Upload', '$timeout', '$http', '$route', function ($scope, Upload, $timeout, $http, $route) {
     $scope.updateSubCategoryForm = function() {
+        documentBody.append(spinnerDiv);
         var file = $scope.subCategoriesByIdData.sub_cat_img;
         file.upload = Upload.upload({
           url: base_url+'add_sub_category',
@@ -815,6 +842,7 @@ app.controller('EditSubCategoryController', ['$scope', 'Upload', '$timeout', '$h
                         confirmButtonText : "Close this window"
                     });
                 }
+                angular.element(document).find('#chIns_overlay').remove();
             });
         }
         else{
@@ -839,6 +867,7 @@ app.controller('EditSubCategoryController', ['$scope', 'Upload', '$timeout', '$h
                     })
                 }
             })
+            angular.element(document).find('#chIns_overlay').remove();
         }
     }
 }]);
@@ -964,7 +993,9 @@ app.controller('AddBeautyTipController', ['$scope', 'Upload', '$timeout', '$loca
       }, 1000);
 }]);
 app.controller('EditTipController', ['$scope', 'Upload', '$timeout', '$http', '$route', function ($scope, Upload, $timeout, $http, $route) {
+    documentBody.append(spinnerDiv);
     $scope.updateTip = function() {
+        documentBody.append(spinnerDiv);
         var file = $scope.tipsByIdData.tip_img;
         file.upload = Upload.upload({
           url: base_url+'add_beauty_tips',
@@ -992,6 +1023,7 @@ app.controller('EditTipController', ['$scope', 'Upload', '$timeout', '$http', '$
                         confirmButtonText : "Close this window"
                     });
                 }
+                angular.element(document).find('#chIns_overlay').remove();
             });
         }
         else{
@@ -1016,6 +1048,7 @@ app.controller('EditTipController', ['$scope', 'Upload', '$timeout', '$http', '$
                         $route.reload();
                     })
                 }
+                angular.element(document).find('#chIns_overlay').remove();
             })
         }
     }
@@ -1193,9 +1226,9 @@ app.controller('AddPackagesController', function($scope, $http, $location) {
         angular.element(document).find('#chIns_overlay').remove();    
       }, 1000);
 });
-
 app.controller('EditPackageController', ['$scope', '$timeout', '$http', '$route', function ($scope, $timeout, $http, $route) {
     $scope.updatePackageForm = function() {
+        documentBody.append(spinnerDiv);
         var data= {
                 package_id: $scope.packagesByIdData.package_id,
                 package_name: $scope.packagesByIdData.package_name,
@@ -1207,7 +1240,6 @@ app.controller('EditPackageController', ['$scope', '$timeout', '$http', '$route'
                 package_start_date: $scope.packagesByIdData.package_start_date,
                 package_end_date: $scope.packagesByIdData.package_end_date
         };
-        console.log(data);
         $http.post(base_url+'add_package', data)
         .success(function (response) {
             if(response.status = true){
@@ -1227,6 +1259,7 @@ app.controller('EditPackageController', ['$scope', '$timeout', '$http', '$route'
                     confirmButtonText : "Close this window"
                 });
             }
+            angular.element(document).find('#chIns_overlay').remove();
         })
     }
 }]);
@@ -1307,7 +1340,9 @@ app.controller('AddProductsController', ['$scope', 'Upload', '$timeout','$http',
       }, 1000);
 }]);
 app.controller('EditProductController', ['$scope', 'Upload', '$timeout', '$http', '$route', function ($scope, Upload, $timeout, $http, $route) {
+    documentBody.append(spinnerDiv);
     $scope.updateProductForm = function() {
+        documentBody.append(spinnerDiv);
         var file = $scope.productsByIdData.product_img;
         file.upload = Upload.upload({
           url: base_url+'add_product',
@@ -1335,6 +1370,7 @@ app.controller('EditProductController', ['$scope', 'Upload', '$timeout', '$http'
                         confirmButtonText : "Close this window"
                     });
                 }
+                angular.element(document).find('#chIns_overlay').remove();
             });
         }
         else{
@@ -1350,7 +1386,6 @@ app.controller('EditProductController', ['$scope', 'Upload', '$timeout', '$http'
                 headers: {'Content-Type': undefined}
             })
             .success(function (response) {
-                console.log(response);
                 if(response.status = true){
                     swal({
                         title: "Here's a message!",
@@ -1361,7 +1396,9 @@ app.controller('EditProductController', ['$scope', 'Upload', '$timeout', '$http'
                         $route.reload();
                     })
                 }
+                angular.element(document).find('#chIns_overlay').remove();
             })
+            
         }
     }
 }]);
@@ -1448,6 +1485,7 @@ app.controller('AddPromotionsController', ['$scope', 'Upload', '$timeout', '$loc
 
 app.controller('EditPromotionController', ['$scope', 'Upload', '$timeout', '$http', '$route', function ($scope, Upload, $timeout, $http, $route) {
     $scope.updatePromotionForm = function() {
+        documentBody.append(spinnerDiv);
         var file = $scope.promotionsByIdData.promotion_img;
         file.upload = Upload.upload({
             url: base_url+'add_promotions',
@@ -1475,6 +1513,7 @@ app.controller('EditPromotionController', ['$scope', 'Upload', '$timeout', '$htt
                         confirmButtonText : "Close this window"
                     });
                 }
+                angular.element(document).find('#chIns_overlay').remove();
             });
         }
         else{
@@ -1502,6 +1541,7 @@ app.controller('EditPromotionController', ['$scope', 'Upload', '$timeout', '$htt
                         $route.reload();
                     })
                 }
+                angular.element(document).find('#chIns_overlay').remove();
             })
         }
     }
@@ -1584,7 +1624,9 @@ app.controller('AddBranchController', ['$scope', 'Upload', '$route', '$timeout',
     }, 1000);
 }]);
 app.controller('EditBranchController', ['$scope', 'Upload', '$http', '$route', '$timeout', function ($scope, Upload, $http, $route, $timeout) {
+    documentBody.append(spinnerDiv);
     $scope.updateBranchForm = function() {
+        documentBody.append(spinnerDiv);
         var data = {branch_id:$scope.branchesByIdData.branch_id, branch_address: $scope.branchesByIdData.branch_address, branch_name:$scope.branchesByIdData.branch_name, branch_location:$scope.branchesByIdData.branch_location,branch_area:$scope.branchesByIdData.branch_area, branch_contact_number:$scope.branchesByIdData.branch_contact_number, branch_parent_id:$scope.branchesByIdData.branch_parent_id}
         $http.post(base_url+'add_branch', data)
         .success(function (response) {
@@ -1605,6 +1647,7 @@ app.controller('EditBranchController', ['$scope', 'Upload', '$http', '$route', '
                     confirmButtonText : "Close this window"
                 });
             }
+            angular.element(document).find('#chIns_overlay').remove();
         })
     }
 }]);
@@ -1829,7 +1872,9 @@ app.controller('AddMembershipController', ['$scope', 'Upload', '$http', '$route'
     }, 1000);
 }]);
 app.controller('EditMembershipController', ['$scope', 'Upload', '$timeout', '$http', '$route', function ($scope, Upload, $timeout, $http, $route) {
+    documentBody.append(spinnerDiv);
     $scope.updateMembershipForm = function() {
+        documentBody.append(spinnerDiv);
         var membership_services = JSON.parse(angular.toJson($scope.membership_services));
         var branch_ids = JSON.parse(angular.toJson($scope.branch_ids));
         var file = $scope.membershipsByIdData.membership_img;
@@ -1870,6 +1915,7 @@ app.controller('EditMembershipController', ['$scope', 'Upload', '$timeout', '$ht
                         confirmButtonText : "Close this window"
                     });
                 }
+                angular.element(document).find('#chIns_overlay').remove();
             });
         }
         else{
@@ -1901,6 +1947,7 @@ app.controller('EditMembershipController', ['$scope', 'Upload', '$timeout', '$ht
                         $route.reload();
                     })
                 }
+                angular.element(document).find('#chIns_overlay').remove();
             })
         }
     }
@@ -2064,6 +2111,7 @@ app.controller('AddEmployeeController', ['$scope', 'Upload', '$route', '$timeout
 
 app.controller('EditEmployeeController', ['$scope', 'Upload', '$http', '$route', '$timeout', function ($scope, Upload, $http, $route, $timeout) {
     $scope.updateEmployeeForm = function() {
+        documentBody.append(spinnerDiv);
         var selected_roles = JSON.parse(angular.toJson($scope.selected_roles));
         $scope.roles = [];
         $scope.selected_roles = selected_roles.map(function(item){
@@ -2090,7 +2138,338 @@ app.controller('EditEmployeeController', ['$scope', 'Upload', '$http', '$route',
                     confirmButtonText : "Close this window"
                 });
             }
+            angular.element(document).find('#chIns_overlay').remove();
         })
     }
 }]);
-/* Employee end*/
+/* Employee end */
+
+/* Sample Testimonials start */
+app.controller('show_sample_testimonials', function($scope,$http,$route,DTOptionsBuilder, DTColumnBuilder) {
+    documentBody.append(spinnerDiv);
+    $scope.hideHeader = false;
+    $http.get(base_url+'getSampleTestimonial').success(function(data) {
+        $scope.sampleTestimonialsData = data.data;
+        $scope.vm = {};
+        $scope.vm.dtOptions = DTOptionsBuilder.newOptions()
+              .withOption('order', [0, 'asc']);
+        angular.element(document).find('#chIns_overlay').remove();
+    });
+    $scope.f2=function(n,index){
+        swal({
+                title: "Are you sure?",
+                text: "Do you want to delete this sample testimonial.",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes, delete it!",
+                cancelButtonText: "No, cancel please!",
+                closeOnConfirm: false,
+                closeOnCancel: false
+            },
+            function(isConfirm){
+                if (isConfirm) {
+                    var data = {sample_testimonial_id:n};
+                    $http.post(base_url+'delete_sample_testimonials', data)
+                    .success(function (response) {
+                        if(response.status = true){
+                            swal({
+                                title: "Sample Testimonial has been Deleted",
+                                type: "success",
+                                text: response.message,
+                                confirmButtonText : "Close this window"
+                            },function(){
+                                $route.reload();
+                            });
+                        }else{
+                            swal({
+                                title: "Here's a message!",
+                                type: "warning",
+                                text: response.message,
+                                confirmButtonText : "Close this window"
+                            });
+                        }
+                        angular.element(document).find('#chIns_overlay').remove();
+                    });
+                } else {
+                    angular.element(document).find('#chIns_overlay').remove();
+                    swal("Cancelled", "Your Sample Testimonial is safe :)", "error");
+                }
+            }
+        );
+        
+    }
+    $scope.editSampleTestimonial = function(id) {
+        $scope.showModal = true;
+        for (i in $scope.sampleTestimonialsData) {
+            if ($scope.sampleTestimonialsData[i].sample_testimonial_id == id) {
+                $scope.sampleTestimonialsByIdData = {
+                    sample_testimonial_id:$scope.sampleTestimonialsData[i].sample_testimonial_id,
+                    title:$scope.sampleTestimonialsData[i].title,
+                    description:$scope.sampleTestimonialsData[i].description, 
+                };
+            }
+        }
+    };
+    $scope.ok = function() {
+      $scope.showModal = false;
+    };
+
+    $scope.cancel = function() {
+      $scope.showModal = false;
+    };
+});
+app.controller('AddSampleTestimonialController', ['$scope', 'Upload', '$route', '$timeout', '$http', '$location', function ($scope, Upload, $timeout, $route, $http, $location) {
+    documentBody.append(spinnerDiv);
+    $scope.submitSampleTestimonialForm = function() {
+        documentBody.append(spinnerDiv);
+        var data = {testimonial_id: 0, title:$scope.title, description:$scope.description}
+        $http.post(base_url+'addSampleTestimonial', data)
+        .success(function (response) {
+            if(response.status = true){
+                angular.element(document).find('#chIns_overlay').remove();    
+                swal({
+                    title: "Here's a message!",
+                    type: "success",
+                    text: response.message,
+                    confirmButtonText : "Close this window"
+                },function(){
+                    $scope.$apply(function() {
+                        $location.path('/show_sample_testimonials');
+                    });
+                })
+            }else{
+                swal({
+                    title: "Here's a message!",
+                    type: "warning",
+                    text: response.message,
+                    confirmButtonText : "Close this window"
+                });
+            }
+            angular.element(document).find('#chIns_overlay').remove();
+        });
+    }
+    setTimeout(function() {
+        angular.element(document).find('#chIns_overlay').remove();    
+    }, 1000);
+}]);
+app.controller('EditSampleTestimonialController', ['$scope', 'Upload', '$http', '$route', '$timeout', function ($scope, Upload, $http, $route, $timeout) {
+    $scope.updateSampleTestimonial = function() {
+        documentBody.append(spinnerDiv);
+        var data = {testimonial_id: $scope.sampleTestimonialsByIdData.sample_testimonial_id, title:$scope.sampleTestimonialsByIdData.title, description:$scope.sampleTestimonialsByIdData.description}
+        $http.post(base_url+'addSampleTestimonial', data)
+        .success(function (response) {
+            if(response.status = true){
+                swal({
+                    title: "Here's a message!",
+                    type: "success",
+                    text: response.message,
+                    confirmButtonText : "Close this window"
+                },function(){
+                    $route.reload();
+                })
+            }else{
+                swal({
+                    title: "Here's a message!",
+                    type: "warning",
+                    text: response.message,
+                    confirmButtonText : "Close this window"
+                });
+            }
+            angular.element(document).find('#chIns_overlay').remove();
+        })
+    }
+}]);
+/* Sample Testimonials end */
+
+/* Coupons start*/
+app.controller('show_coupons', function($scope,$http,$route,DTOptionsBuilder, DTColumnBuilder) {
+    documentBody.append(spinnerDiv);
+    $scope.hideHeader = false;
+    $http.get(base_url+'get_coupons').success(function(data) {
+        $scope.coupansData = data.data;
+        $scope.vm = {};
+        $scope.vm.dtOptions = DTOptionsBuilder.newOptions()
+              .withOption('order', [0, 'asc']);
+        angular.element(document).find('#chIns_overlay').remove();
+    });
+    $scope.f2=function(n,index){
+        swal({
+                title: "Are you sure?",
+                text: "Do you want to delete this coupon.",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes, delete it!",
+                cancelButtonText: "No, cancel please!",
+                closeOnConfirm: false,
+                closeOnCancel: false
+            },
+            function(isConfirm){
+                if (isConfirm) {
+                    var data = {coupon_id:n};
+                    $http.post(base_url+'delete_coupon', data)
+                    .success(function (response) {
+                        if(response.status = true){
+                            swal({
+                                title: "Coupon has been Deleted",
+                                type: "success",
+                                text: response.message,
+                                confirmButtonText : "Close this window"
+                            },function(){
+                                $route.reload();
+                            });
+                        }else{
+                            swal({
+                                title: "Here's a message!",
+                                type: "warning",
+                                text: response.message,
+                                confirmButtonText : "Close this window"
+                            });
+                        }
+                        angular.element(document).find('#chIns_overlay').remove();
+                    });
+                } else {
+                    angular.element(document).find('#chIns_overlay').remove();
+                    swal("Cancelled", "Your Coupon is safe :)", "error");
+                }
+            }
+        );
+        
+    }
+    $scope.editCoupon = function(id) {
+        $scope.showModal = true;
+        for (i in $scope.coupansData) {
+            if ($scope.coupansData[i].coupon_id == id) {
+                $scope.coupansByIdData = {
+                    coupon_id:$scope.coupansData[i].coupon_id,
+                    coupon_name:$scope.coupansData[i].coupon_name,
+                    coupon_description:$scope.coupansData[i].coupon_description,
+                    coupon_code:$scope.coupansData[i].coupon_code, 
+                    expiry_date: $scope.coupansData[i].expiry_date,
+                    coupon_img: $scope.coupansData[i].coupon_img,
+                };
+            }
+        }
+    };
+    $scope.ok = function() {
+      $scope.showModal = false;
+    };
+
+    $scope.cancel = function() {
+      $scope.showModal = false;
+    };
+});
+app.controller('AddCouponController', ['$scope', 'Upload', '$timeout','$http', '$location', function ($scope, Upload, $timeout,$http, $location) {
+    var data = {coupon_name: $scope.coupon_name, coupon_img: $scope.coupon_img, coupon_code: $scope.coupon_code, coupon_description: $scope.coupon_description, coupon_discount: $scope.coupon_discount, expiry_date:$scope.expiry_date}
+    documentBody.append(spinnerDiv);
+    $scope.submitCouponsForm = function(file) {
+        documentBody.append(spinnerDiv);
+        file.upload = Upload.upload({
+          url: base_url+'add_coupons',
+          data: {coupon_id: 0, coupon_name: $scope.coupon_name, coupon_img: $scope.coupon_img, coupon_code: $scope.coupon_code, coupon_description: $scope.coupon_description, coupon_discount: $scope.coupon_discount, expiry_date:$scope.expiry_date}
+        });
+        file.upload.then(function (response) {
+            $timeout(function () {
+                file.result = response.data;
+            });
+            if(response.data.status = true){
+                swal({
+                    title: "Here's a message!",
+                    type: "success",
+                    text: response.data.message,
+                    confirmButtonText : "Close this window"
+                },function(){
+                    $scope.$apply(function() {
+                        $location.path('/show_coupons');
+                    });
+                })
+            }else{
+                swal({
+                    title: "Here's a message!",
+                    type: "warning",
+                    text: response.data.message,
+                    confirmButtonText : "Close this window"
+                });
+            }
+            angular.element(document).find('#chIns_overlay').remove();
+        });
+    }
+    setTimeout(function() {
+        angular.element(document).find('#chIns_overlay').remove();    
+      }, 1000);
+}]);
+app.controller('EditCouponController', ['$scope', 'Upload', '$timeout', '$http', '$route', function ($scope, Upload, $timeout, $http, $route) {
+    documentBody.append(spinnerDiv);
+    $scope.updateCouponForm = function() {
+        var file = $scope.coupansByIdData.coupon_img;
+        documentBody.append(spinnerDiv);
+        var data = {
+            coupon_id:$scope.coupansByIdData.coupon_id,
+            coupon_name:$scope.coupansByIdData.coupon_name, 
+            coupon_description:$scope.coupansByIdData.coupon_description,
+            coupon_code:$scope.coupansByIdData.coupon_code,
+            coupon_discount:$scope.coupansByIdData.coupon_discount,  
+            expiry_date: $scope.coupansByIdData.expiry_date,
+            coupon_img: file
+        }
+        file.upload = Upload.upload({
+          url: base_url+'add_coupons',
+          data: data
+        });
+        if(file.upload){
+            file.upload.then(function (response) {
+                $timeout(function () {
+                    file.result = response.data;
+                });
+                if(response.data.status = true){
+                    swal({
+                        title: "Here's a message!",
+                        type: "success",
+                        text: response.data.message,
+                        confirmButtonText : "Close this window"
+                    },function(){
+                        $route.reload();
+                    })
+                }else{
+                    swal({
+                        title: "Here's a message!",
+                        type: "warning",
+                        text: response.data.message,
+                        confirmButtonText : "Close this window"
+                    });
+                }
+                angular.element(document).find('#chIns_overlay').remove();
+            });
+        }
+        else{
+            var formData = new FormData();
+            formData.append('coupon_id', $scope.coupansByIdData.coupon_id);
+            formData.append('coupon_name', $scope.coupansByIdData.coupon_name);
+            formData.append('coupon_description', $scope.coupansByIdData.coupon_description);
+            formData.append('coupon_code', $scope.coupansByIdData.coupon_code);
+            formData.append('coupon_discount', $scope.coupansByIdData.coupon_discount);
+            formData.append('expiry_date', $scope.coupansByIdData.expiry_date);
+            formData.append('coupon_img', $scope.coupansByIdData.coupon_img);
+            $http.post(base_url+'add_coupons', formData, {
+                transformRequest: angular.identity,
+                headers: {'Content-Type': undefined}
+            })
+            .success(function (response) {
+                if(response.status = true){
+                    swal({
+                        title: "Here's a message!",
+                        type: "success",
+                        text: response.message,
+                        confirmButtonText : "Close this window"
+                    },function(){
+                        $route.reload();
+                    })
+                }
+                angular.element(document).find('#chIns_overlay').remove();
+            })
+            
+        }
+    }
+}]);
+/* Coupons end */
